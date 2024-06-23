@@ -1,0 +1,51 @@
+[gd_resource type="ShaderMaterial" load_steps=11 format=3 uid="uid://irykuv476qc0"]
+
+[ext_resource type="Shader" path="res://scripts/map/sun.gdshader" id="1_e54ov"]
+
+[sub_resource type="Gradient" id="Gradient_dctso"]
+offsets = PackedFloat32Array(0, 0.0478261, 0.56087)
+colors = PackedColorArray(0, 0, 0, 1, 0.165217, 0.165217, 0.165217, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rnccb"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jnn63"]
+seamless = true
+color_ramp = SubResource("Gradient_dctso")
+noise = SubResource("FastNoiseLite_rnccb")
+
+[sub_resource type="Gradient" id="Gradient_vp6a2"]
+offsets = PackedFloat32Array(0.317391, 0.695652, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.269565, 0.269565, 0.269565, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bfraf"]
+noise_type = 2
+frequency = 0.0086
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_puigm"]
+seamless = true
+color_ramp = SubResource("Gradient_vp6a2")
+noise = SubResource("FastNoiseLite_bfraf")
+
+[sub_resource type="Gradient" id="Gradient_sh5xp"]
+offsets = PackedFloat32Array(0.330435, 0.704348, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.414815, 0.414815, 0.414815, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_08bh2"]
+noise_type = 2
+frequency = 0.0086
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_26a84"]
+seamless = true
+color_ramp = SubResource("Gradient_sh5xp")
+noise = SubResource("FastNoiseLite_08bh2")
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_e54ov")
+shader_parameter/star_radius = 0.8
+shader_parameter/baseColor = Color(1, 0.283333, 0, 1)
+shader_parameter/highColor = Color(0.966667, 1, 0, 1)
+shader_parameter/noise1 = SubResource("NoiseTexture2D_jnn63")
+shader_parameter/noise2 = SubResource("NoiseTexture2D_puigm")
+shader_parameter/noise3 = SubResource("NoiseTexture2D_26a84")

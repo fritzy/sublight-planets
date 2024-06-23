@@ -1,0 +1,35 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://dnliiupubh0od"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7j2sm"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.666667, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xl7ip"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.266667, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x6uyi"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lng6x"]
+bg_color = Color(0, 0.266667, 0, 1)
+
+[resource]
+Button/colors/font_color = Color(0, 0.6, 0, 1)
+Button/colors/font_focus_color = Color(0, 0.866667, 0, 1)
+Button/colors/font_hover_color = Color(0, 0.4, 0, 1)
+Button/colors/font_hover_pressed_color = Color(0, 1, 0, 1)
+Button/colors/font_pressed_color = Color(0, 1, 0, 1)
+Button/styles/disabled = null
+Button/styles/focus = SubResource("StyleBoxFlat_7j2sm")
+Button/styles/hover = SubResource("StyleBoxFlat_xl7ip")
+Button/styles/normal = SubResource("StyleBoxFlat_x6uyi")
+Button/styles/pressed = SubResource("StyleBoxFlat_lng6x")

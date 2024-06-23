@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://cwqg0sl15l843"]
+
+[ext_resource type="Script" path="res://scripts/map/map.gd" id="1_f5fyp"]
+[ext_resource type="Material" uid="uid://b3380yfw66310" path="res://scripts/map/crt_material.tres" id="2_xgqds"]
+[ext_resource type="Script" path="res://scripts/map/stars.gd" id="2_xym0a"]
+[ext_resource type="Script" path="res://scripts/map/map_system.gd" id="3_s26l1"]
+[ext_resource type="PackedScene" uid="uid://bsjnfr1fd24rx" path="res://scripts/map/sun.tscn" id="5_tdq6a"]
+
+[node name="Map" type="Node2D"]
+script = ExtResource("1_f5fyp")
+
+[node name="MapSystem" type="CanvasGroup" parent="."]
+material = ExtResource("2_xgqds")
+script = ExtResource("3_s26l1")
+
+[node name="StarSystem" type="Node2D" parent="MapSystem"]
+
+[node name="Camera" type="Camera2D" parent="MapSystem/StarSystem"]
+unique_name_in_owner = true
+
+[node name="Stars" type="Node2D" parent="MapSystem/StarSystem/Camera"]
+modulate = Color(0, 1, 0, 1)
+script = ExtResource("2_xym0a")
+
+[node name="Sun" parent="MapSystem/StarSystem" instance=ExtResource("5_tdq6a")]
+unique_name_in_owner = true
+radius = 0.805
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+material = ExtResource("2_xgqds")
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -68.0
+offset_top = -30.5
+offset_bottom = 30.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="PlanetButtons" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="SunButton" type="Button" parent="CanvasLayer/MarginContainer/PlanetButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "Sun"
