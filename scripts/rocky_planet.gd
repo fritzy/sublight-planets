@@ -11,12 +11,20 @@ extends Node2D
 @onready var cloud_slider = %CloudSlider
 @onready var mtn_snow_slider = %MtnSnowSlider
 @onready var cloud_dense_slider = %CloudSlider2
+@onready var cloud_color = %CloudColor
+@onready var rand_color_button = %RandColorButton
+@onready var rand_params_button = %RandParamsButton
 
 @onready var reset_button = %ResetButton
+
+@onready var earth_button = %EarthButton
+@onready var mars_button = %MarsButton
+@onready var random_button = %RandomButton
 
 var surface_gradient: Gradient;
 var cloud_gradient: Gradient;
 var cloud2_gradient: Gradient;
+var ice_gradient: Gradient;
 
 var cloud_density := 0.5:
 	set(value):
@@ -27,6 +35,7 @@ var cloud_density := 0.5:
 @onready var planet: ShaderMaterial = $Planet.material
 
 func _ready() -> void:
+
 
 	surface_gradient = Gradient.new()
 	surface_gradient.offsets = PackedFloat32Array([0.157, 0.357, 0.622, 0.891])
@@ -40,39 +49,49 @@ func _ready() -> void:
 	cloud2_gradient.offsets = PackedFloat32Array([0.477, 0.719])
 	cloud2_gradient.colors = PackedColorArray([Color.BLACK, Color.WHITE])
 
-	shine_slider.value = planet.get_shader_parameter('shine_offset')
+	ice_gradient = Gradient.new()
+	ice_gradient.offsets = PackedFloat32Array([0.503, 0.784, 1.0])
+	ice_gradient.colors = PackedColorArray([Color.BLACK, Color(0.34, 0.34, 0.34), Color.WHITE])
+	
+	regenerate()
+	update_inputs()
+
 	shine_slider.value_changed.connect(_set_shine)
-	ice_slider.value = planet.get_shader_parameter('ice_coverage')
 	ice_slider.value_changed.connect(_set_ice)
-	sky_color.color = planet.get_shader_parameter('ocean_color')
 	sky_color.color_changed.connect(_set_sky_color)
-	ground_color.color = planet.get_shader_parameter('ground_color')
 	ground_color.color_changed.connect(_set_ground_color)
-	desert_color.color = planet.get_shader_parameter('desert_color')
+	cloud_color.color_changed.connect(func(color): planet.set_shader_parameter('cloud_color', color))
 	desert_color.color_changed.connect(_set_desert_color)
-	ocean_depth_slider.value = planet.get_shader_parameter('ocean_depth')
 	ocean_depth_slider.value_changed.connect(_set_ocean_depth)
-
-	atmos_slider.value = planet.get_shader_parameter('atmosphere_opacity')
 	atmos_slider.value_changed.connect(func(value): planet.set_shader_parameter('atmosphere_opacity', value))
-
-	cloud_slider.value = planet.get_shader_parameter('cloud_opacity')
 	cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
-
-	cloud_dense_slider.value = cloud_density
-	cloud_dense_slider.value_changed.connect(func(value): cloud_density = value)
-
-	mtn_snow_slider.value = planet.get_shader_parameter('mtn_snow_height')
+	cloud_dense_slider.drag_ended.connect(func(value): cloud_density = cloud_dense_slider.value)
 	mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
-
 	reset_button.pressed.connect(regenerate)
+	desert_button.toggled.connect(_desert_toggled)
+	rand_color_button.pressed.connect(randomize_colors)
+	rand_params_button.pressed.connect(randomize_params)
+	earth_button.pressed.connect(generate_earth)
+	mars_button.pressed.connect(generate_mars)
+	random_button.pressed.connect(generate_random)
 
+func update_inputs() -> void:
+	shine_slider.value = planet.get_shader_parameter('shine_offset')
+	ice_slider.value = planet.get_shader_parameter('ice_coverage')
+	sky_color.color = planet.get_shader_parameter('ocean_color')
+	ground_color.color = planet.get_shader_parameter('ground_color')
+	cloud_color.color = planet.get_shader_parameter('cloud_color')
+	desert_color.color = planet.get_shader_parameter('desert_color')
+	ocean_depth_slider.value = planet.get_shader_parameter('ocean_depth')
+	atmos_slider.value = planet.get_shader_parameter('atmosphere_opacity')
+	cloud_slider.value = planet.get_shader_parameter('cloud_opacity')
+	cloud_dense_slider.value = cloud_density
+	mtn_snow_slider.value = planet.get_shader_parameter('mtn_snow_height')
 	var dpatches: float = planet.get_shader_parameter('desert_patches')
 	if dpatches > 0.1:
 		desert_button.button_pressed = true
 	else:
 		desert_button.button_pressed = false
-	desert_button.toggled.connect(_desert_toggled)
 
 func _set_shine(value) -> void:
 	planet.set_shader_parameter('shine_offset', shine_slider.value)
@@ -98,10 +117,85 @@ func _desert_toggled(value) -> void:
 	else:
 		planet.set_shader_parameter('desert_patches', 0.0)
 
+func randomize_colors() -> void:
+	var pickers = [%GroundColor, %DesertColor, %SkyColor, %CloudColor]
+	for picker in pickers:
+		picker.color = Color(randf(), randf(), randf())
+		picker.color_changed.emit(picker.color)
+
+func randomize_params() -> void:
+	var sliders = [%ShineSlider, %OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
+	for slider in sliders:
+		slider.value = randf_range(slider.min_value, slider.max_value)
+	var toggles = [%DesertButton]
+	for toggle in toggles:
+		toggle.button_pressed = bool(randi_range(0, 1))
+
 func regenerate() -> void:
 	regenerate_ground()
 	regenerate_desert()
 	regenerate_clouds()
+	regenerate_ice()
+
+func _unhandled_input(event) -> void:
+	if event.is_action_pressed('ui_accept'):
+		print_shader_params()
+
+func print_shader_params() -> void:
+	var list = planet.get_property_list()
+	for item in list:
+		if item.name.begins_with('shader_parameter/') and not item.name.ends_with('texture') and not item.name.ends_with('texture2'):
+			var parts = item.name.split('/')
+			prints(parts[1], '=', planet.get_shader_parameter(parts[1]))
+
+func generate_earth() -> void:
+	var values := {
+		shine_offset = 0.716,
+		ocean_depth = 0.62,
+		speed = 0.1,
+		ice_coverage = 0.671,
+		cloud_opacity = 0.8,
+		desert_patches = 1.0,
+		atmosphere_opacity = 0.54,
+		mtn_snow_height = 0.886,
+		desert_color = Color(0.7256, 0.5762, 0.1574, 1),
+		ground_color = Color(0.3594, 0.7091, 0.1637, 1),
+		ocean_color = Color(0.0032, 0.318, 0.792, 1),
+		cloud_color = Color(1, 1, 1, 1),
+	}
+	cloud_density = 0.5
+	set_shader_values(values)
+	update_inputs()
+	regenerate()
+
+func generate_mars() -> void:
+	var values := {
+		shine_offset = 0.41,
+		ocean_depth = 0,
+		speed = 0.1,
+		ice_coverage = 0.64,
+		cloud_opacity = 0.1,
+		desert_patches = 0,
+		atmosphere_opacity = 0.14,
+		mtn_snow_height = 1.09380529158938,
+		desert_color = Color(0.7256, 0.4637, 0.1574, 1),
+		ground_color = Color(0.7091, 0.1765, 0.1637, 1),
+		ocean_color = Color(0.6602, 0.4768, 0.0877, 1),
+		cloud_color = Color(0.8762, 0.918, 0.1542, 1),
+	}
+	cloud_density = 0.5
+	set_shader_values(values)
+	update_inputs()
+	regenerate()
+
+func generate_random() -> void:
+	randomize_params()
+	randomize_colors()
+	regenerate()
+
+func set_shader_values(values: Dictionary) -> void:
+	for param in values:
+		planet.set_shader_parameter(param, values[param])
 
 func regenerate_ground() -> void:
 	var texture := NoiseTexture2D.new()
@@ -113,7 +207,7 @@ func regenerate_ground() -> void:
 	noise.seed = randi()
 	texture.noise = noise
 	await texture.changed
-	planet.set_shader_parameter('surface', texture)
+	planet.set_shader_parameter('surface_texture', texture)
 
 func regenerate_desert() -> void:
 	var texture := NoiseTexture2D.new()
@@ -154,3 +248,15 @@ func regenerate_clouds() -> void:
 	texture2.noise = noise2
 	await texture2.changed
 	planet.set_shader_parameter('cloud_texture2', texture2)
+
+func regenerate_ice() -> void:
+	var texture := NoiseTexture2D.new()
+	texture.seamless = true
+	texture.color_ramp = ice_gradient
+	var noise = FastNoiseLite.new()
+	noise.noise_type = FastNoiseLite.TYPE_CELLULAR
+	noise.frequency = 0.0524
+	noise.seed = randi()
+	texture.noise = noise
+	await texture.changed
+	planet.set_shader_parameter('ice_texture', texture)

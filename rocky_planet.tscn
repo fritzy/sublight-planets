@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bb834fy7j5c0q"]
+[gd_scene load_steps=18 format=3 uid="uid://bb834fy7j5c0q"]
 
 [ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
 [ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
@@ -34,18 +34,18 @@ frequency = 0.0087
 seamless = true
 noise = SubResource("FastNoiseLite_y4xar")
 
-[sub_resource type="Gradient" id="Gradient_kxvt7"]
-offsets = PackedFloat32Array(0.156522, 0.356522, 0.621739, 0.891304)
-colors = PackedColorArray(0, 0, 0, 1, 0.341571, 0.341571, 0.341571, 1, 0.695792, 0.695792, 0.695792, 1, 1, 1, 1, 1)
+[sub_resource type="Gradient" id="Gradient_edghu"]
+offsets = PackedFloat32Array(0.502513, 0.78392, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.343434, 0.343434, 0.343434, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ecfpe"]
-seed = 6
-frequency = 0.0054
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fjh6d"]
+noise_type = 2
+frequency = 0.0524
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_noirv"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_saofp"]
 seamless = true
-color_ramp = SubResource("Gradient_kxvt7")
-noise = SubResource("FastNoiseLite_ecfpe")
+color_ramp = SubResource("Gradient_edghu")
+noise = SubResource("FastNoiseLite_fjh6d")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
 shader = ExtResource("1_qey08")
@@ -60,13 +60,18 @@ shader_parameter/mtn_snow_height = 0.886
 shader_parameter/desert_color = Color(0.725585, 0.576183, 0.157407, 1)
 shader_parameter/ground_color = Color(0.359365, 0.709098, 0.163673, 1)
 shader_parameter/ocean_color = Color(0.00316864, 0.317994, 0.792011, 1)
-shader_parameter/surface = SubResource("NoiseTexture2D_noirv")
+shader_parameter/cloud_color = Color(1, 1, 1, 1)
 shader_parameter/desert_texture = SubResource("NoiseTexture2D_suiyf")
 shader_parameter/cloud_texture = SubResource("NoiseTexture2D_1ii2a")
 shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_nryou")
+shader_parameter/ice_texture = SubResource("NoiseTexture2D_saofp")
+
+[sub_resource type="Theme" id="Theme_23yx4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50wve"]
 bg_color = Color(0.103743, 0.103744, 0.103744, 1)
+
+[sub_resource type="Theme" id="Theme_funtb"]
 
 [node name="RockyPlanet" type="Node2D"]
 script = ExtResource("1_08tb2")
@@ -105,6 +110,7 @@ offset_top = -103.5
 offset_right = 256.0
 offset_bottom = 103.5
 grow_vertical = 2
+theme = SubResource("Theme_23yx4")
 theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer"]
@@ -114,99 +120,107 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="ShineLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="ShineLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Light Offset"
 
-[node name="ShineSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="ShineSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
 
-[node name="OceanLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="OceanLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Ocean
 "
 
-[node name="OceanDepthSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="OceanDepthSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
 
-[node name="IceLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="IceLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Ice
 "
 
-[node name="IceSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="IceSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
 
-[node name="Label2" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="Label2" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Atmosphere"
 
-[node name="AtmosSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="AtmosSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
 
-[node name="Label3" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="Label3" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Clouds
 "
 
-[node name="CloudSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="CloudSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.0
 step = 0.1
 
-[node name="Label4" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="Label4" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Cloud Dense
 "
 
-[node name="CloudSlider2" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="CloudSlider2" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.0
-step = 0.1
+step = 0.02
 
-[node name="MtnSnowLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="MtnSnowLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Mtn Snow
 "
 
-[node name="MtnSnowSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="MtnSnowSlider" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.2
 step = -0.02
 value = 1.0
 
-[node name="DesertLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="DesertLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Deserts"
 
-[node name="DesertButton" type="CheckButton" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
+[node name="DesertButton" type="CheckButton" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="RandParamsButton" type="Button" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Random Parameters"
 
 [node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer"]
 custom_minimum_size = Vector2(256, 0)
@@ -220,6 +234,7 @@ offset_top = -76.0
 offset_bottom = 76.0
 grow_horizontal = 0
 grow_vertical = 2
+theme = SubResource("Theme_funtb")
 theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer2"]
@@ -229,45 +244,104 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer2/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="GroundCLabel" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="GroundCLabel" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Ground"
 
-[node name="GroundColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="GroundColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DesertCLabel" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="DesertCLabel" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Desert
 "
 
-[node name="DesertColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="DesertColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="SkyCLabel" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="SkyCLabel" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Sky"
 
-[node name="SkyColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="SkyColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Control" type="Control" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="CloudCLabel2" type="Label" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Cloud"
+
+[node name="CloudColor" type="ColorPickerButton" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ResetButton" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/GridContainer"]
+[node name="RandColorButton" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Random Color"
+
+[node name="ResetButton" type="Button" parent="CanvasLayer/PanelContainer2/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Regenerate
 "
+
+[node name="PanelContainer4" type="PanelContainer" parent="CanvasLayer"]
+custom_minimum_size = Vector2(256, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -67.0
+offset_right = 128.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme = SubResource("Theme_funtb")
+theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer4"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer4/MarginContainer"]
+layout_mode = 2
+
+[node name="EarthButton" type="Button" parent="CanvasLayer/PanelContainer4/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Earth"
+
+[node name="MarsButton" type="Button" parent="CanvasLayer/PanelContainer4/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mars"
+
+[node name="RandomButton" type="Button" parent="CanvasLayer/PanelContainer4/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Random"
 
 [node name="PanelContainer3" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 1

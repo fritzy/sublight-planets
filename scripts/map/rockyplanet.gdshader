@@ -1,8 +1,9 @@
 shader_type canvas_item;
-uniform sampler2D surface: repeat_enable;
+uniform sampler2D surface_texture: repeat_enable;
 uniform sampler2D desert_texture: repeat_enable;
 uniform sampler2D cloud_texture: repeat_enable;
 uniform sampler2D cloud_texture2: repeat_enable;
+uniform sampler2D ice_texture: repeat_enable;
 uniform float shine_offset: hint_range(0.0, 1.0) = 0.5;
 uniform float ocean_depth: hint_range(0.0, 1.0) = 0.5;
 uniform float speed: hint_range(0.0, 0.3) = 0.1;
@@ -14,6 +15,7 @@ uniform float mtn_snow_height: hint_range(0.0, 1.2) = 0.886;
 uniform vec4 desert_color: source_color;
 uniform vec4 ground_color: source_color = vec4(0.0, 1.0, 0.0, 1.0);
 uniform vec4 ocean_color: source_color = vec4(0.0, 0.0, 1.0, 1.0);
+uniform vec4 cloud_color: source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 // for each pixel, this is run with the pixel's UV coord
 void fragment() {
@@ -28,7 +30,9 @@ void fragment() {
 	// distance from shiny spot
 	float light_dist = distance(UV, vec2(shine_offset, 0.5));
 	// sample surface texture for land height
-	float height = texture(surface, sphere_uv + vec2(speed, 0.0) * TIME).r;
+	float height = texture(surface_texture, sphere_uv + vec2(speed, 0.0) * TIME).r;
+	// ice
+	float ice_cracks = texture(ice_texture, sphere_uv + vec2(speed, 0.0) * TIME).r;
 	// sample desert texture for desert splotches
 	float deserts = texture(desert_texture, sphere_uv + vec2(speed, 0.0) * TIME).r;
 	// sample cloud texture
@@ -73,7 +77,7 @@ void fragment() {
 	// if this is ground draw our mixed ground color
 	color = mix(color, ground_sand_mix, ground);
 	// if this is snow/ice apply it to the color
-	color = mix(color, vec3(1.0, 1.0, 1.0) * 1.7 + shine / 1.3, snowt);
+	color = mix(color, vec3(2.0 - ice_cracks), snowt);
 	// if this is a desert splotch, draw that color
 	color = mix(color, desert_color.rgb + deserts * 1.1, desert
 		* mod(ocean + 1.0, 2.0)
@@ -90,7 +94,7 @@ void fragment() {
 		cloud_alpha = 0.0;
 	}
 
-	color = mix(color, vec3(1.0, 1.0, 1.0) * 2.0, cloud_overlap * cloud_alpha * cloud_opacity);
+	color = mix(color, cloud_color.rgb * 3.0, cloud_overlap * cloud_alpha * cloud_opacity);
 	// reverse shadow for atmosphere, more intense at the edges
 	float fade2 = clamp(0.75 - pow(dist * 2.5, 18.5), 0.0, 1.0);
 	// apply the atmosophere to the color

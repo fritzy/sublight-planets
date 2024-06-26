@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Sublight-p1"
-run/main_scene="res://scripts/map/map.tscn"
+config/name="Sublight Planets"
+run/main_scene="res://rocky_planet.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
