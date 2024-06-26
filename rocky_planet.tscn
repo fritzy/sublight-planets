@@ -1,0 +1,150 @@
+[gd_scene load_steps=15 format=3 uid="uid://bb834fy7j5c0q"]
+
+[ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
+[ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
+
+[sub_resource type="Gradient" id="Gradient_0ytmj"]
+offsets = PackedFloat32Array(0.542714, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_svqfy"]
+noise_type = 2
+frequency = 0.0193
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ii2a"]
+seamless = true
+color_ramp = SubResource("Gradient_0ytmj")
+noise = SubResource("FastNoiseLite_svqfy")
+
+[sub_resource type="Gradient" id="Gradient_sapp1"]
+offsets = PackedFloat32Array(0.477387, 0.718593)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dax4i"]
+noise_type = 0
+frequency = 0.0039
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nryou"]
+seamless = true
+color_ramp = SubResource("Gradient_sapp1")
+noise = SubResource("FastNoiseLite_dax4i")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_y4xar"]
+frequency = 0.0087
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_suiyf"]
+seamless = true
+noise = SubResource("FastNoiseLite_y4xar")
+
+[sub_resource type="Gradient" id="Gradient_kxvt7"]
+offsets = PackedFloat32Array(0.156522, 0.356522, 0.621739, 0.891304)
+colors = PackedColorArray(0, 0, 0, 1, 0.341571, 0.341571, 0.341571, 1, 0.695792, 0.695792, 0.695792, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ecfpe"]
+seed = 6
+frequency = 0.0054
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_noirv"]
+seamless = true
+color_ramp = SubResource("Gradient_kxvt7")
+noise = SubResource("FastNoiseLite_ecfpe")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
+shader = ExtResource("1_qey08")
+shader_parameter/shine_offset = 0.5
+shader_parameter/ocean_depth = 0.5
+shader_parameter/speed = 0.1
+shader_parameter/ice_coverage = 0.36
+shader_parameter/cloud_opacity = 1.0
+shader_parameter/atmosphere_opacity = 1.0
+shader_parameter/desert_color = Color(1, 0.73735, 0.340391, 1)
+shader_parameter/ground_color = Color(0, 0.476484, 3.85046e-07, 1)
+shader_parameter/ocean_color = Color(0, 0, 1, 1)
+shader_parameter/surface = SubResource("NoiseTexture2D_noirv")
+shader_parameter/desert_texture = SubResource("NoiseTexture2D_suiyf")
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_1ii2a")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_nryou")
+
+[node name="RockyPlanet" type="Node2D"]
+script = ExtResource("1_08tb2")
+
+[node name="Sliders" type="VBoxContainer" parent="."]
+offset_left = -232.0
+offset_top = 254.0
+offset_right = 280.0
+offset_bottom = 294.0
+
+[node name="IceSlider" type="HSlider" parent="Sliders"]
+custom_minimum_size = Vector2(512, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="ShineSlider" type="HSlider" parent="Sliders"]
+custom_minimum_size = Vector2(512, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="OceanDepthSlider" type="HSlider" parent="Sliders"]
+custom_minimum_size = Vector2(512, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="Planet" type="Button" parent="."]
+material = SubResource("ShaderMaterial_0fwbt")
+custom_minimum_size = Vector2(512, 512)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -255.0
+offset_right = 256.0
+offset_bottom = 257.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="GroundColor" type="ColorPicker" parent="."]
+offset_left = 292.0
+offset_top = -255.0
+offset_right = 590.0
+offset_bottom = 45.0
+scale = Vector2(0.75, 0.75)
+edit_alpha = false
+picker_shape = 2
+can_add_swatches = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="SkyColor" type="ColorPicker" parent="."]
+offset_left = 292.0
+offset_top = -15.0
+offset_right = 590.0
+offset_bottom = 285.0
+scale = Vector2(0.75, 0.75)
+edit_alpha = false
+picker_shape = 2
+can_add_swatches = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="DesertColor" type="ColorPicker" parent="."]
+offset_left = -549.0
+offset_top = -252.0
+offset_right = -251.0
+offset_bottom = 48.0
+scale = Vector2(0.75, 0.75)
+edit_alpha = false
+picker_shape = 2
+can_add_swatches = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
