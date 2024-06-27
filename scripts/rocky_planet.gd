@@ -52,8 +52,10 @@ func _ready() -> void:
 	ice_gradient = Gradient.new()
 	ice_gradient.offsets = PackedFloat32Array([0.503, 0.784, 1.0])
 	ice_gradient.colors = PackedColorArray([Color.BLACK, Color(0.34, 0.34, 0.34), Color.WHITE])
+
+	%NotifyPanel.position.y = -%NotifyPanel.size.y
 	
-	regenerate()
+	generate_earth()
 	update_inputs()
 
 	shine_slider.value_changed.connect(_set_shine)
@@ -74,6 +76,10 @@ func _ready() -> void:
 	earth_button.pressed.connect(generate_earth)
 	mars_button.pressed.connect(generate_mars)
 	random_button.pressed.connect(generate_random)
+	%VisibilityButton.toggled.connect(toggle_panel_visiblity)
+	%CameraButton.pressed.connect(take_screenshot)
+
+	show_notification("Sublight Planet Generator")
 
 func update_inputs() -> void:
 	shine_slider.value = planet.get_shader_parameter('shine_offset')
@@ -92,6 +98,53 @@ func update_inputs() -> void:
 		desert_button.button_pressed = true
 	else:
 		desert_button.button_pressed = false
+	
+func take_screenshot() -> void:
+	if %VisibilityButton.button_pressed:
+		%DisplayPanel.visible = false
+		%NotifyPanel.visible = false
+		await get_tree().create_timer(0.5).timeout
+	var image := get_viewport().get_texture().get_image()
+	if OS.has_feature('web'):
+		var buf := image.save_png_to_buffer()
+		JavaScriptBridge.download_buffer(buf, 'sublight-screenshot.png', 'image/png')
+		show_notification('Downloading screenshot "sublight-screenshot.png"')
+	else:
+		var save_path = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
+		var dir = DirAccess.open(save_path)
+		var files = []
+		if dir:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if not dir.current_is_dir():
+					#print("Found file: " + file_name)
+					if file_name.begins_with('sublight-screenshot-'):
+						files.push_back(file_name)
+				file_name = dir.get_next()
+		var id = 1;
+		if files.size() > 0:
+			files.sort()
+			var file_name = files.pop_back()
+			var parts = file_name.split('-');
+			# it's okay to have trailing characters
+			id = parts[2].to_int() + 1
+		var img_file_name = "%s/%s" % [OS.get_system_dir(OS.SYSTEM_DIR_PICTURES), 'sublight-screenshot-%d.png' % id]
+		image.save_png(img_file_name)
+		%NotifyPanel.visible = true
+		show_notification("Saved screenshot: %s" % img_file_name)
+	await get_tree().create_timer(1.0).timeout
+	%DisplayPanel.visible = true
+	%NotifyPanel.visible = true
+
+func toggle_panel_visiblity(toggle: bool) -> void:
+	%PresetPanel.visible = not toggle
+	%ParamPanel.visible = not toggle
+	%ColorPanel.visible = not toggle
+	# panel not sizing correctly after visiblity toggle
+	%ColorPanel.set_size(%ColorPanel.get_minimum_size())
+	%ParamPanel.set_size(%ParamPanel.get_minimum_size())
+	%PresetPanel.set_size(%PresetPanel.get_minimum_size())
 
 func _set_shine(value) -> void:
 	planet.set_shader_parameter('shine_offset', shine_slider.value)
@@ -154,7 +207,7 @@ func generate_earth() -> void:
 		ocean_depth = 0.62,
 		speed = 0.1,
 		ice_coverage = 0.671,
-		cloud_opacity = 0.8,
+		cloud_opacity = 0.6,
 		desert_patches = 1.0,
 		atmosphere_opacity = 0.54,
 		mtn_snow_height = 0.886,
@@ -260,3 +313,10 @@ func regenerate_ice() -> void:
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('ice_texture', texture)
+
+func show_notification(text: String) -> void:
+	%NotifyLabel.text = text
+	print(text)
+	var tween := create_tween()
+	tween.tween_property(%NotifyPanel, 'position:y', 0.0, 0.5)
+	tween.tween_property(%NotifyPanel, 'position:y', -%NotifyPanel.size.y, 0.5).set_delay(3.0)

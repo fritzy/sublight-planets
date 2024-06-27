@@ -36,8 +36,8 @@ void fragment() {
 	// sample desert texture for desert splotches
 	float deserts = texture(desert_texture, sphere_uv + vec2(speed, 0.0) * TIME).r;
 	// sample cloud texture
-	float clouds = texture(cloud_texture, sphere_uv + vec2(speed * 0.4, 0.0) * TIME).r;
-	float clouds2 = texture(cloud_texture2, sphere_uv + vec2(speed * 0.6, 0.0) * TIME).r;
+	float clouds = texture(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME).r;
+	float clouds2 = texture(cloud_texture2, sphere_uv + vec2(speed * 1.1, 0.0) * TIME).r;
 	// start with white
 	vec3 color = vec3(1.0, 1.0, 1.0);
 	// planet shadow amount
