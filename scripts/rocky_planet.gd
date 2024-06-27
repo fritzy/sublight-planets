@@ -316,8 +316,9 @@ func generate_earth() -> void:
 		desert_patches = 1,
 		atmosphere_opacity = 0.54,
 		mtn_snow_height = 0.91327431813806,
-		desert_color = Color(0.4375, 0.4246, 0.0359, 1),
-		ground_color = Color(0.0639, 0.6055, 0.0935, 1),
+	
+		desert_color = Color(0.2813, 0.2745, 0.0714, 1),
+		ground_color = Color(0.2247, 0.5586, 0.243, 1),
 		ocean_color = Color(0.0649, 0.2464, 0.5195, 1),
 		cloud_color = Color(1, 1, 1, 1),
 	}

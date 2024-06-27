@@ -86,7 +86,7 @@ void fragment() {
 	// if this is ground draw our mixed ground color
 	color = mix(color, ground_sand_mix + shine * 0.2, 1.0 - ocean);
 	// if this is snow/ice apply it to the color
-	color = mix(color, vec3(1.0 - ice_cracks * 0.5), snowt);
+	color = mix(color, vec3(1.0 - ice_cracks * 0.5) + shine * 0.08, snowt);
 	// if this is a desert splotch, draw that color
 	color = mix(color, desert_color.rgb * deserts + 0.4, desert
 		* mod(ocean + 1.0, 2.0)
@@ -99,7 +99,6 @@ void fragment() {
 	// apply cloud color based on cloud sample, cut off at cloud radius
 
 	float fade3 = smoothstep(0.6, 0.05, light_dist);
-	
 
 	float cloud_overlap = (clouds2 - clouds + 0.5);
 	if (cloud_overlap < 0.54) {
