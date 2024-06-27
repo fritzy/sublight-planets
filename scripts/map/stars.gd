@@ -1,4 +1,4 @@
-extends Node2D
+class_name StarField extends Node2D
 
 func _process(_delta: float) -> void:
 	var xscale: float = 1.0 / %Camera.zoom.x
@@ -18,12 +18,13 @@ func _draw() -> void:
 	#position.x = rect.position.x - rect.size.x / 2
 	#position.y =rect.position.y - rect.size.y / 2
 	draw_rect(rect, Color.BLACK)
-	for i in range(500):
+	for i in range(2500):
 		var x := random.randf() * rect.size.x
 		var y := 0.0
 		for yi in range(3):
 			y += random.randf() * rect.size.y / 3.0 
-		draw_rect(Rect2(x, y, 2, 2), Color.WHITE)
+		var color := Color(1.0, 1.0, 1.0, 0.2 + randf() * 0.7)
+		draw_rect(Rect2(x, y, 2, 2), color)
 
 
 	#draw_arc(Vector2(100.0, 100.0), 300.0, 0.0, TAU, 30, Color.BLACK)

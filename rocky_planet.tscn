@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bb834fy7j5c0q"]
+[gd_scene load_steps=24 format=3 uid="uid://bb834fy7j5c0q"]
 
 [ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
 [ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="4_mu5de"]
 [ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="5_o5fgk"]
 [ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="6_0g8as"]
+[ext_resource type="Script" path="res://scripts/map/stars.gd" id="7_wthn5"]
 
 [sub_resource type="Gradient" id="Gradient_0ytmj"]
 offsets = PackedFloat32Array(0.542714, 1)
@@ -87,6 +88,9 @@ bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 [node name="RockyPlanet" type="Node2D"]
 script = ExtResource("1_08tb2")
 
+[node name="StarField" type="Node2D" parent="."]
+script = ExtResource("7_wthn5")
+
 [node name="Sliders" type="VBoxContainer" parent="."]
 offset_left = -232.0
 offset_top = 254.0
@@ -94,6 +98,7 @@ offset_right = 280.0
 offset_bottom = 294.0
 
 [node name="Planet" type="Button" parent="."]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0fwbt")
 custom_minimum_size = Vector2(512, 512)
 anchors_preset = 8
@@ -108,7 +113,8 @@ offset_bottom = 257.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -141,11 +147,13 @@ theme_override_constants/h_separation = 10
 columns = 2
 
 [node name="ShineLabel" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+visible = false
 layout_mode = 2
 text = "Light Offset"
 
 [node name="ShineSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
@@ -234,6 +242,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Random Parameters"
 
+[node name="ResetButton" type="Button" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Regenerate Noise"
+
 [node name="ColorPanel" type="PanelContainer" parent="CanvasLayer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
@@ -305,11 +318,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Random Color"
 
-[node name="ResetButton" type="Button" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer"]
+[node name="ShareButton" type="Button" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-text = "Regenerate
-"
+text = "Share Planet"
 
 [node name="PresetPanel" type="PanelContainer" parent="CanvasLayer"]
 unique_name_in_owner = true
@@ -319,10 +332,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -128.0
-offset_top = -67.0
-offset_right = 128.0
-offset_bottom = -16.0
+offset_left = -140.0
+offset_top = -80.0
+offset_right = 140.0
+offset_bottom = -29.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
@@ -418,3 +431,26 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Loading..."
 horizontal_alignment = 1
+
+[node name="CreditsPanel" type="PanelContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -394.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/CreditsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/CreditsPanel/MarginContainer"]
+layout_mode = 2
+text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"

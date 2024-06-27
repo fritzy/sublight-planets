@@ -21,10 +21,32 @@ extends Node2D
 @onready var mars_button = %MarsButton
 @onready var random_button = %RandomButton
 
+var mouse_over: bool = false;
+
 var surface_gradient: Gradient;
 var cloud_gradient: Gradient;
 var cloud2_gradient: Gradient;
 var ice_gradient: Gradient;
+var texture_seed := randi()
+
+const packed_fields = [
+	'shine_offset',
+	'ocean_depth',
+	'speed',
+	'ice_coverage',
+	'cloud_opacity',
+	'desert_patches',
+	'atmosphere_opacity',
+	'mtn_snow_height',
+	'desert_color',
+	'ground_color',
+	'ocean_color',
+	'cloud_color',
+]
+const packed_version = 1.0
+const packed_planet_type = 1.0
+
+var current_values: PackedFloat32Array = [];
 
 var cloud_density := 0.5:
 	set(value):
@@ -55,8 +77,11 @@ func _ready() -> void:
 
 	%NotifyPanel.position.y = -%NotifyPanel.size.y
 	
-	generate_earth()
-	update_inputs()
+	if OS.has_feature('web'):
+		load_from_url()
+	else:
+		generate_earth()
+		update_inputs()
 
 	shine_slider.value_changed.connect(_set_shine)
 	ice_slider.value_changed.connect(_set_ice)
@@ -69,7 +94,7 @@ func _ready() -> void:
 	cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
 	cloud_dense_slider.drag_ended.connect(func(value): cloud_density = cloud_dense_slider.value)
 	mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
-	reset_button.pressed.connect(regenerate)
+	reset_button.pressed.connect(func(): regenerate(true))
 	desert_button.toggled.connect(_desert_toggled)
 	rand_color_button.pressed.connect(randomize_colors)
 	rand_params_button.pressed.connect(randomize_params)
@@ -78,8 +103,11 @@ func _ready() -> void:
 	random_button.pressed.connect(generate_random)
 	%VisibilityButton.toggled.connect(toggle_panel_visiblity)
 	%CameraButton.pressed.connect(take_screenshot)
+	%Planet.mouse_entered.connect(func(): mouse_over = true)
+	%Planet.mouse_exited.connect(func(): mouse_over = false)
+	%ShareButton.pressed.connect(copy_planet_link)
 
-	show_notification("Sublight Planet Generator")
+	show_notification("Welcome to Sublight Planets by @fritzy")
 
 func update_inputs() -> void:
 	shine_slider.value = planet.get_shader_parameter('shine_offset')
@@ -98,6 +126,64 @@ func update_inputs() -> void:
 		desert_button.button_pressed = true
 	else:
 		desert_button.button_pressed = false
+
+func load_from_url() -> void:
+	var window = JavaScriptBridge.get_interface('window')
+	var data = window.getPlanetData()
+	print(data)
+	if data:
+		load_packed_value(data)
+	else:
+		print("no data")
+		generate_earth()
+		update_inputs()
+
+
+func copy_planet_link() -> void:
+	var data = save_packed_value().uri_encode()
+	var link = "https://fritzy.itch.io/sublight-planets?planet_data=%s" % data
+	DisplayServer.clipboard_set(link)
+	var window = JavaScriptBridge.get_interface('window')
+	window.navigator.clipboard.readText()
+	show_notification("Copied this planet link to clipboard for sharing!")
+
+func refresh_data() -> void:
+	var data = save_packed_value()
+	%DataInput.text = data
+
+func save_packed_value() -> String:
+	var saved_value: PackedFloat32Array = []
+	var values := get_shader_params()
+	saved_value.push_back(packed_version) # version
+	saved_value.push_back(packed_planet_type) # planet
+	saved_value.push_back(texture_seed) # planet
+	for field in packed_fields:
+		if field.ends_with('_color'):
+			saved_value.push_back(values[field].r)
+			saved_value.push_back(values[field].g)
+			saved_value.push_back(values[field].b)
+		else:
+			saved_value.push_back(values[field])
+	return Marshalls.raw_to_base64(saved_value.to_byte_array())
+
+func load_packed_value(data) -> void:
+	var bytearray := Marshalls.base64_to_raw(data)
+	var floats := Array(bytearray.to_float32_array())
+	var values = {}
+	var version = floats.pop_front()
+	var planet_type = floats.pop_front()
+	texture_seed = int(floats.pop_front())
+	var value
+	for field in packed_fields:
+		if field.ends_with('_color'):
+			value = Color(floats.pop_front(), floats.pop_front(), floats.pop_front())
+		else:
+			value = floats.pop_front()
+		values[field] = value
+		#planet.set_shader_parameter(field, value)
+	set_shader_values(values)
+	update_inputs()
+	regenerate()
 	
 func take_screenshot() -> void:
 	if %VisibilityButton.button_pressed:
@@ -152,6 +238,13 @@ func _set_shine(value) -> void:
 func _set_ice(value) -> void:
 	planet.set_shader_parameter('ice_coverage', ice_slider.value)
 
+func _input(event):
+	# Mouse in viewport coordinates.
+	if mouse_over and %Planet.button_pressed and (event is InputEventMouseMotion or event is InputEventMouseButton):
+		var pos = %Planet.get_local_mouse_position()
+		var width = %Planet.size.x
+		planet.set_shader_parameter('shine_offset', pos.x / width)
+
 func _set_sky_color(value) -> void:
 	planet.set_shader_parameter('ocean_color', value)
 
@@ -177,14 +270,16 @@ func randomize_colors() -> void:
 		picker.color_changed.emit(picker.color)
 
 func randomize_params() -> void:
-	var sliders = [%ShineSlider, %OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
+	var sliders = [%OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
 	for slider in sliders:
 		slider.value = randf_range(slider.min_value, slider.max_value)
 	var toggles = [%DesertButton]
 	for toggle in toggles:
 		toggle.button_pressed = bool(randi_range(0, 1))
 
-func regenerate() -> void:
+func regenerate(new_seed: bool = false) -> void:
+	if new_seed:
+		texture_seed = randi()
 	regenerate_ground()
 	regenerate_desert()
 	regenerate_clouds()
@@ -193,6 +288,16 @@ func regenerate() -> void:
 func _unhandled_input(event) -> void:
 	if event.is_action_pressed('ui_accept'):
 		print_shader_params()
+
+func get_shader_params() -> Dictionary:
+	var out: Dictionary = {}
+	var list = planet.get_property_list()
+	for item in list:
+		if item.name.begins_with('shader_parameter/') and not item.name.ends_with('texture') and not item.name.ends_with('texture2'):
+			var parts = item.name.split('/')
+			var value = planet.get_shader_parameter(parts[1])
+			out[parts[1]] = value
+	return out
 
 func print_shader_params() -> void:
 	var list = planet.get_property_list()
@@ -203,23 +308,23 @@ func print_shader_params() -> void:
 
 func generate_earth() -> void:
 	var values := {
-		shine_offset = 0.716,
-		ocean_depth = 0.62,
+		shine_offset = 0.6,
+		ocean_depth = 0.66,
 		speed = 0.1,
-		ice_coverage = 0.671,
-		cloud_opacity = 0.6,
-		desert_patches = 1.0,
+		ice_coverage = 0.55,
+		cloud_opacity = 0.7,
+		desert_patches = 1,
 		atmosphere_opacity = 0.54,
-		mtn_snow_height = 0.886,
-		desert_color = Color(0.7256, 0.5762, 0.1574, 1),
-		ground_color = Color(0.3594, 0.7091, 0.1637, 1),
-		ocean_color = Color(0.0032, 0.318, 0.792, 1),
+		mtn_snow_height = 0.91327431813806,
+		desert_color = Color(0.4375, 0.4246, 0.0359, 1),
+		ground_color = Color(0.0639, 0.6055, 0.0935, 1),
+		ocean_color = Color(0.0649, 0.2464, 0.5195, 1),
 		cloud_color = Color(1, 1, 1, 1),
 	}
 	cloud_density = 0.5
 	set_shader_values(values)
 	update_inputs()
-	regenerate()
+	regenerate(true)
 
 func generate_mars() -> void:
 	var values := {
@@ -239,12 +344,12 @@ func generate_mars() -> void:
 	cloud_density = 0.5
 	set_shader_values(values)
 	update_inputs()
-	regenerate()
+	regenerate(true)
 
 func generate_random() -> void:
 	randomize_params()
 	randomize_colors()
-	regenerate()
+	regenerate(true)
 
 func set_shader_values(values: Dictionary) -> void:
 	for param in values:
@@ -257,7 +362,7 @@ func regenerate_ground() -> void:
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	noise.frequency = 0.0054
-	noise.seed = randi()
+	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('surface_texture', texture)
@@ -268,7 +373,7 @@ func regenerate_desert() -> void:
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	noise.frequency = 0.0087
-	noise.seed = randi()
+	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('desert_texture', texture)
@@ -281,7 +386,7 @@ func regenerate_clouds() -> void:
 	noise.noise_type = FastNoiseLite.TYPE_CELLULAR
 	# 0.0193
 	noise.frequency = 0.0386 * (1.0 - cloud_density)
-	noise.seed = randi()
+	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('cloud_texture', texture)
@@ -297,7 +402,7 @@ func regenerate_clouds() -> void:
 	noise2.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	# 0.0039
 	noise2.frequency = noise.frequency * 0.2027253
-	noise2.seed = randi()
+	noise2.seed = texture_seed
 	texture2.noise = noise2
 	await texture2.changed
 	planet.set_shader_parameter('cloud_texture2', texture2)
@@ -309,7 +414,7 @@ func regenerate_ice() -> void:
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_CELLULAR
 	noise.frequency = 0.0524
-	noise.seed = randi()
+	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('ice_texture', texture)
