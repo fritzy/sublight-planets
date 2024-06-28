@@ -75,7 +75,7 @@ shader_parameter/shine_offset = Vector2(0.6, 0.5)
 shader_parameter/ocean_depth = 0.504
 shader_parameter/speed = 0.021
 shader_parameter/ice_coverage = 0.368
-shader_parameter/cloud_opacity = 0.0
+shader_parameter/cloud_opacity = 0.736
 shader_parameter/desert_patches = 1.0
 shader_parameter/atmosphere_opacity = 1.0
 shader_parameter/mtn_snow_height = 1.048
@@ -107,6 +107,7 @@ bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 script = ExtResource("1_08tb2")
 
 [node name="StarField" type="Node2D" parent="."]
+visible = false
 script = ExtResource("7_wthn5")
 
 [node name="Planet" type="Button" parent="."]

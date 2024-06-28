@@ -48,6 +48,11 @@ vec3 normal_diffuse(vec3 normal, vec2 light_pos, vec2 uv) {
 	return diff * vec3(1.0, 1.0, 1.0);
 }
 
+vec3 diffuse_light(sampler2D texture, vec2 texture_uv, vec2 uv, float scale, vec2 light_pos) {
+	vec3 normal = poor_mans_normal(texture, texture_uv, scale);
+	return normal_diffuse(normal, light_pos, uv);
+}
+
 // for each pixel, this is run with the pixel's UV coord
 void fragment() {
 	// -- sample the texture for a sphere
@@ -120,7 +125,7 @@ void fragment() {
 	vec3 ground_sand_mix = mix(
 			mix(
 				ground_mod.rgb * 0.7 + (ground_mod.rgb * rescaled_height * .5),
-				(desert_color.rgb * 0.7 + (desert_color.rgb * rescaled_height * .5)),
+				(desert_color.rgb * 0.7 + (desert_color.rgb * rescaled_height * .7)),
 				step(rescaled_height, sand_height)
 			),
 			vec3(0.4) + 0.4 * height,
@@ -128,11 +133,12 @@ void fragment() {
 		);
 	
 			
-
 	// if this is ocean, draw it with extra shine
 	//color = mix(color, ocean_color.rgb + shine * 3.4, ocean);
-	color = mix(color, ocean_color.rgb + shine * 0.7, ocean);
+	vec3 ocean_diffuse = diffuse_light(desert_texture, off_pos, UV, 0.9, light_pos);
+	color = mix(color, ocean_color.rgb + (shine * ocean_diffuse) + shine * 0.6, ocean);
 
+	// combine ground and mountain normals to generate highlights
 	vec3 ground_normal = poor_mans_normal(cloud_texture, off_pos, 0.4);
 	ground_normal += poor_mans_normal(surface_texture, off_pos, 0.4) * 1.5;
 	vec3 ground_diffuse = normal_diffuse(ground_normal, light_pos, UV);
@@ -143,29 +149,36 @@ void fragment() {
 	color += color * ground_diffuse * ground * (shine * 0.5 + planet_shadow);
 	// if this is snow/ice apply it to the color
 	
-	vec3 ice_normal = poor_mans_normal(ice_texture, off_pos, -0.4);
-	//ice_normal.rgb = 1.0 - ice_normal;
-	vec3 ice_diffuse = normal_diffuse(ice_normal, light_pos, UV);
+	vec3 ice_diffuse = diffuse_light(ice_texture, off_pos, UV, -0.4, light_pos);
 	color = mix(color, vec3(1.0 - ice_cracks * 0.5), snowt);
 	color = color + (shine * 2.0 + planet_shadow) * ice_diffuse * snowt;
 
 	// if this is a desert splotch, draw that color
+	float is_desert_patch =  desert_patches * desert * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0);
 	color = mix(
 		color,
-		desert_color.rgb * 0.7 + (desert_color.rgb * rescaled_height * 0.5),
-		desert * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches
+		desert_color.rgb * 0.7 + (desert_color.rgb * rescaled_height * 0.7),
+		is_desert_patch
 	);
+	vec3 desert_diffuse = diffuse_light(desert_texture, off_pos, UV, 0.3, light_pos);
+	// don't use shine on desert light diffusing, just use the planet shadow
+	color += (planet_shadow) * desert_diffuse * desert_patches * desert * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0);
 	// cut off the color at the land radius
 	color = color * land_alpha;
-	//float intensity = fade;
+
 	// apply cloud color based on cloud sample, cut off at cloud radius
-
-
 	float cloud_overlap = (clouds2 - clouds + 0.5);
 	if (cloud_overlap < 0.54) {
 		cloud_alpha = 0.0;
 	}
-	color = mix(color, min(cloud_color.rgb + shine * 0.4, vec3(1.0)) * 1.0, min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0));
+	//color = mix(color, min(cloud_color.rgb + shine * 0.4, vec3(1.0)) * 1.0, min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0));
+	vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);
+	vec3 cloud_diffuse2 = diffuse_light(cloud_texture2, off_pos, UV, 0.4, light_pos);
+	vec3 total_cloud_diffuse = (cloud_diffuse1 + cloud_diffuse2);
+	color = mix(color,
+		min(cloud_color.rgb + (shine * 0.2) + ((shine + planet_shadow) * total_cloud_diffuse * -0.5), vec3(1.0)) * 1.0,
+		min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0)
+		);
 
 	// reverse shadow for atmosphere, more intense at the edges
 	float atmos_intensity = smoothstep(0.3, 0.5, dist) * 1.2;
