@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 @onready var shine_slider = %ShineSlider
@@ -110,7 +111,7 @@ func _ready() -> void:
 	show_notification("Welcome to Sublight Planets by @fritzy")
 
 func update_inputs() -> void:
-	shine_slider.value = planet.get_shader_parameter('shine_offset')
+	#shine_slider.value = planet.get_shader_parameter('shine_offset')
 	ice_slider.value = planet.get_shader_parameter('ice_coverage')
 	sky_color.color = planet.get_shader_parameter('ocean_color')
 	ground_color.color = planet.get_shader_parameter('ground_color')
@@ -243,7 +244,8 @@ func _input(event):
 	if mouse_over and %Planet.button_pressed and (event is InputEventMouseMotion or event is InputEventMouseButton):
 		var pos = %Planet.get_local_mouse_position()
 		var width = %Planet.size.x
-		planet.set_shader_parameter('shine_offset', pos.x / width)
+		var height = %Planet.size.y
+		planet.set_shader_parameter('shine_offset', Vector2(pos.x / width, pos.y / height))
 
 func _set_sky_color(value) -> void:
 	planet.set_shader_parameter('ocean_color', value)
@@ -308,7 +310,7 @@ func print_shader_params() -> void:
 
 func generate_earth() -> void:
 	var values := {
-		shine_offset = 0.6,
+		shine_offset = Vector2(0.6, 0.5),
 		ocean_depth = 0.66,
 		speed = 0.1,
 		ice_coverage = 0.55,
@@ -317,8 +319,8 @@ func generate_earth() -> void:
 		atmosphere_opacity = 0.54,
 		mtn_snow_height = 0.91327431813806,
 	
-		desert_color = Color(0.2813, 0.2745, 0.0714, 1),
-		ground_color = Color(0.2247, 0.5586, 0.243, 1),
+		desert_color = Color(0.6445, 0.6358, 0.3751, 1),
+		ground_color = Color(0.1262, 0.3438, 0.1381, 1),
 		ocean_color = Color(0.0649, 0.2464, 0.5195, 1),
 		cloud_color = Color(1, 1, 1, 1),
 	}
@@ -329,7 +331,7 @@ func generate_earth() -> void:
 
 func generate_mars() -> void:
 	var values := {
-		shine_offset = 0.41,
+		shine_offset = Vector2(0.41, 0.5),
 		ocean_depth = 0,
 		speed = 0.1,
 		ice_coverage = 0.64,

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bb834fy7j5c0q"]
+[gd_scene load_steps=27 format=3 uid="uid://bb834fy7j5c0q"]
 
 [ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
 [ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
@@ -8,68 +8,86 @@
 [ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="6_0g8as"]
 [ext_resource type="Script" path="res://scripts/map/stars.gd" id="7_wthn5"]
 
-[sub_resource type="Gradient" id="Gradient_0ytmj"]
-offsets = PackedFloat32Array(0.542714, 1)
+[sub_resource type="Gradient" id="Gradient_h37yc"]
+offsets = PackedFloat32Array(0.543, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_svqfy"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mbvbm"]
 noise_type = 2
+seed = 781863108
 frequency = 0.0193
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ii2a"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k88wk"]
 seamless = true
-color_ramp = SubResource("Gradient_0ytmj")
-noise = SubResource("FastNoiseLite_svqfy")
+color_ramp = SubResource("Gradient_h37yc")
+noise = SubResource("FastNoiseLite_mbvbm")
 
-[sub_resource type="Gradient" id="Gradient_sapp1"]
-offsets = PackedFloat32Array(0.477387, 0.718593)
+[sub_resource type="Gradient" id="Gradient_jeb3u"]
+offsets = PackedFloat32Array(0.45, 0.719)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_dax4i"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r4ea2"]
 noise_type = 0
-frequency = 0.0039
+seed = 781863108
+frequency = 0.0039126
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nryou"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kv4tp"]
 seamless = true
-color_ramp = SubResource("Gradient_sapp1")
-noise = SubResource("FastNoiseLite_dax4i")
+color_ramp = SubResource("Gradient_jeb3u")
+noise = SubResource("FastNoiseLite_r4ea2")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_y4xar"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7ccf3"]
+seed = 781863108
 frequency = 0.0087
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_suiyf"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_diil1"]
 seamless = true
-noise = SubResource("FastNoiseLite_y4xar")
+noise = SubResource("FastNoiseLite_7ccf3")
 
-[sub_resource type="Gradient" id="Gradient_edghu"]
-offsets = PackedFloat32Array(0.502513, 0.78392, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.343434, 0.343434, 0.343434, 1, 1, 1, 1, 1)
+[sub_resource type="Gradient" id="Gradient_8a6d7"]
+offsets = PackedFloat32Array(0.503, 0.784, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_fjh6d"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kqexk"]
 noise_type = 2
+seed = 781863108
 frequency = 0.0524
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_saofp"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cw5j5"]
 seamless = true
-color_ramp = SubResource("Gradient_edghu")
-noise = SubResource("FastNoiseLite_fjh6d")
+color_ramp = SubResource("Gradient_8a6d7")
+noise = SubResource("FastNoiseLite_kqexk")
+
+[sub_resource type="Gradient" id="Gradient_bwctf"]
+offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
+colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 0.69, 0.69, 0.69, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dy5uo"]
+seed = 781863108
+frequency = 0.0054
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nd4l8"]
+seamless = true
+color_ramp = SubResource("Gradient_bwctf")
+noise = SubResource("FastNoiseLite_dy5uo")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
 shader = ExtResource("1_qey08")
-shader_parameter/shine_offset = 0.716
-shader_parameter/ocean_depth = 0.52
-shader_parameter/speed = 0.1
-shader_parameter/ice_coverage = 0.671
-shader_parameter/cloud_opacity = 1.0
+shader_parameter/shine_offset = Vector2(0.6, 0.5)
+shader_parameter/ocean_depth = 0.0
+shader_parameter/speed = 0.021
+shader_parameter/ice_coverage = 0.368
+shader_parameter/cloud_opacity = 0.0
 shader_parameter/desert_patches = 1.0
 shader_parameter/atmosphere_opacity = 0.54
-shader_parameter/mtn_snow_height = 0.886
-shader_parameter/desert_color = Color(0.725585, 0.576183, 0.157407, 1)
-shader_parameter/ground_color = Color(0.359365, 0.709098, 0.163673, 1)
-shader_parameter/ocean_color = Color(0.00316864, 0.317994, 0.792011, 1)
+shader_parameter/mtn_snow_height = 1.048
+shader_parameter/desert_color = Color(0.6445, 0.6358, 0.3751, 1)
+shader_parameter/ground_color = Color(0.148523, 0.384291, 0.160943, 1)
+shader_parameter/ocean_color = Color(0.0649, 0.2464, 0.5195, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
-shader_parameter/desert_texture = SubResource("NoiseTexture2D_suiyf")
-shader_parameter/cloud_texture = SubResource("NoiseTexture2D_1ii2a")
-shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_nryou")
-shader_parameter/ice_texture = SubResource("NoiseTexture2D_saofp")
+shader_parameter/surface_texture = SubResource("NoiseTexture2D_nd4l8")
+shader_parameter/desert_texture = SubResource("NoiseTexture2D_diil1")
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_k88wk")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_kv4tp")
+shader_parameter/ice_texture = SubResource("NoiseTexture2D_cw5j5")
 
 [sub_resource type="Theme" id="Theme_23yx4"]
 
@@ -91,12 +109,6 @@ script = ExtResource("1_08tb2")
 [node name="StarField" type="Node2D" parent="."]
 script = ExtResource("7_wthn5")
 
-[node name="Sliders" type="VBoxContainer" parent="."]
-offset_left = -232.0
-offset_top = 254.0
-offset_right = 280.0
-offset_bottom = 294.0
-
 [node name="Planet" type="Button" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0fwbt")
@@ -116,9 +128,9 @@ grow_vertical = 2
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UILayer" type="CanvasLayer" parent="."]
 
-[node name="ParamPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="ParamPanel" type="PanelContainer" parent="UILayer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 anchors_preset = 4
@@ -131,123 +143,128 @@ grow_vertical = 2
 theme = SubResource("Theme_23yx4")
 theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ParamPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/ParamPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ParamPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/ParamPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="ShineLabel" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="ShineLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 visible = false
 layout_mode = 2
 text = "Light Offset"
 
-[node name="ShineSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="ShineSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
+value = 0.6
 
-[node name="OceanLabel" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="OceanLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Ocean
-"
+text = "Sea Level"
 
-[node name="OceanDepthSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="OceanDepthSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
+value = 0.66
 
-[node name="IceLabel" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="IceLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Ice
-"
+text = "Pole Ice"
 
-[node name="IceSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="IceSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
+value = 0.55
 
-[node name="Label2" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="Label2" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Atmosphere"
 
-[node name="AtmosSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="AtmosSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
+value = 0.54
 
-[node name="Label3" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="Label3" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Clouds
 "
 
-[node name="CloudSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="CloudSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.0
 step = 0.1
+value = 0.7
 
-[node name="Label4" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="Label4" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Cloud Dense
 "
 
-[node name="CloudSlider2" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="CloudSlider2" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.0
 step = 0.02
+value = 0.5
 
-[node name="MtnSnowLabel" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="MtnSnowLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Mtn Snow
 "
 
-[node name="MtnSnowSlider" type="HSlider" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="MtnSnowSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 1.2
 step = -0.02
-value = 1.0
+value = 0.913274
 
-[node name="DesertLabel" type="Label" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="DesertLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Deserts"
 
-[node name="DesertButton" type="CheckButton" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="DesertButton" type="CheckButton" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+button_pressed = true
 
-[node name="RandParamsButton" type="Button" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer"]
+[node name="RandParamsButton" type="Button" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Random Parameters"
 
-[node name="ResetButton" type="Button" parent="CanvasLayer/ParamPanel/MarginContainer/VBoxContainer"]
+[node name="ResetButton" type="Button" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Regenerate Noise"
 
-[node name="ColorPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="ColorPanel" type="PanelContainer" parent="UILayer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 anchors_preset = 6
@@ -263,68 +280,71 @@ grow_vertical = 2
 theme = SubResource("Theme_funtb")
 theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/ColorPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/ColorPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="GroundCLabel" type="Label" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="GroundCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Ground"
 
-[node name="GroundColor" type="ColorPickerButton" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="GroundColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+color = Color(0.2247, 0.5586, 0.243, 1)
 
-[node name="DesertCLabel" type="Label" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="DesertCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Desert
-"
+text = "Sand"
 
-[node name="DesertColor" type="ColorPickerButton" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="DesertColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+color = Color(0.6445, 0.6358, 0.3751, 1)
 
-[node name="SkyCLabel" type="Label" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="SkyCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Sky"
 
-[node name="SkyColor" type="ColorPickerButton" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="SkyColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+color = Color(0.0649, 0.2464, 0.5195, 1)
 
-[node name="CloudCLabel2" type="Label" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="CloudCLabel2" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Cloud"
 
-[node name="CloudColor" type="ColorPickerButton" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="CloudColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+color = Color(1, 1, 1, 1)
 
-[node name="RandColorButton" type="Button" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer"]
+[node name="RandColorButton" type="Button" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Random Color"
 
-[node name="ShareButton" type="Button" parent="CanvasLayer/ColorPanel/MarginContainer/VBoxContainer"]
+[node name="ShareButton" type="Button" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Share Planet"
 
-[node name="PresetPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="PresetPanel" type="PanelContainer" parent="UILayer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 anchors_preset = 7
@@ -342,35 +362,35 @@ size_flags_vertical = 8
 theme = SubResource("Theme_funtb")
 theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PresetPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/PresetPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PresetPanel/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/PresetPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="EarthButton" type="Button" parent="CanvasLayer/PresetPanel/MarginContainer/HBoxContainer"]
+[node name="EarthButton" type="Button" parent="UILayer/PresetPanel/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Earth"
 
-[node name="MarsButton" type="Button" parent="CanvasLayer/PresetPanel/MarginContainer/HBoxContainer"]
+[node name="MarsButton" type="Button" parent="UILayer/PresetPanel/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Mars"
 
-[node name="RandomButton" type="Button" parent="CanvasLayer/PresetPanel/MarginContainer/HBoxContainer"]
+[node name="RandomButton" type="Button" parent="UILayer/PresetPanel/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Random"
 
-[node name="DisplayPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="DisplayPanel" type="PanelContainer" parent="UILayer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 anchors_preset = 1
@@ -384,11 +404,11 @@ size_flags_vertical = 0
 tooltip_text = "Hide Controls"
 theme_override_styles/panel = SubResource("StyleBoxFlat_2w0b5")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/DisplayPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/DisplayPanel"]
 clip_contents = true
 layout_mode = 2
 
-[node name="VisibilityButton" type="TextureButton" parent="CanvasLayer/DisplayPanel/HBoxContainer"]
+[node name="VisibilityButton" type="TextureButton" parent="UILayer/DisplayPanel/HBoxContainer"]
 unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(50, 50)
@@ -399,7 +419,7 @@ texture_pressed = ExtResource("4_mu5de")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="CameraButton" type="TextureButton" parent="CanvasLayer/DisplayPanel/HBoxContainer"]
+[node name="CameraButton" type="TextureButton" parent="UILayer/DisplayPanel/HBoxContainer"]
 unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(50, 50)
@@ -409,30 +429,30 @@ texture_pressed = ExtResource("6_0g8as")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="NotifyPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="NotifyPanel" type="PanelContainer" parent="UILayer"]
 unique_name_in_owner = true
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -48.0
-offset_right = 48.0
-offset_bottom = 40.0
+offset_left = -160.5
+offset_top = -40.0
+offset_right = 160.5
 grow_horizontal = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/NotifyPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/NotifyPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 5
 
-[node name="NotifyLabel" type="Label" parent="CanvasLayer/NotifyPanel/MarginContainer"]
+[node name="NotifyLabel" type="Label" parent="UILayer/NotifyPanel/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Loading..."
+text = "Welcome to Sublight Planets by @fritzy"
 horizontal_alignment = 1
 
-[node name="CreditsPanel" type="PanelContainer" parent="CanvasLayer"]
+[node name="CreditsPanel" type="PanelContainer" parent="UILayer"]
 unique_name_in_owner = true
 anchors_preset = 3
 anchor_left = 1.0
@@ -444,13 +464,34 @@ offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/CreditsPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/CreditsPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 5
 
-[node name="Label" type="Label" parent="CanvasLayer/CreditsPanel/MarginContainer"]
+[node name="Label" type="Label" parent="UILayer/CreditsPanel/MarginContainer"]
 layout_mode = 2
 text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"
+
+[node name="URLPanel" type="PanelContainer" parent="UILayer"]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 253.0
+offset_bottom = -7.0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UILayer/URLPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="UILayer/URLPanel/MarginContainer"]
+layout_mode = 2
+text = "fritzy.itch.io/sublight-planets"
