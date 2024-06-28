@@ -19,6 +19,13 @@ uniform vec4 cloud_color: source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 const float repro_rad = 2.0;
 
+vec2 clamp_distance(vec2 point1, vec2 point2) {
+	vec2 start = point2 - point1;
+	float l = length(start);
+	float cl = min(l, 0.5);
+	return (normalize(start) * cl) + point1;
+}
+
 vec3 poor_mans_normal(sampler2D texture, vec2 uv, float scale) {
 	float ups = 0.003;
 	float vps = 0.003;
@@ -43,7 +50,6 @@ vec3 normal_diffuse(vec3 normal, vec2 light_pos, vec2 uv) {
 
 // for each pixel, this is run with the pixel's UV coord
 void fragment() {
-
 	// -- sample the texture for a sphere
 	vec2 sphere_uv = vec2(repro_rad * (UV.x - 0.5), repro_rad * (UV.y - 0.5));
 	sphere_uv.x = asin(sphere_uv.x / sqrt(1.0 - sphere_uv.y * sphere_uv.y)) * repro_rad / PI;
@@ -53,7 +59,7 @@ void fragment() {
 	float disty = abs(sphere_uv.y);
 	vec2 off_pos = sphere_uv + vec2(speed, 0.0) * TIME;
 	// distance from shiny spot
-	vec2 light_pos = shine_offset;
+	vec2 light_pos = clamp_distance(vec2(0.5, 0.5), shine_offset);
 	float light_dist = distance(UV, light_pos);
 	// sample surface texture for land height
 	float height = texture(surface_texture, off_pos).r;
@@ -86,7 +92,7 @@ void fragment() {
 	// determine if this is an ocean pixel, 0.0 or 1.0
 	float ocean = mix(1.0, 0.0, step(ocean_depth, height));
 	// determine if this is a ground pixel , 0.0 or 1.0
-	float ground = mix(1.0, 0.0, step(height, ocean_depth - .01));
+	float ground = mix(1.0, 0.0, step(height, ocean_depth));
 	// determine if this is desert using desert range from uv.y center
 	// and desert texture sample
 
@@ -106,7 +112,7 @@ void fragment() {
 	// mix the ground color with the desert color
 	// normalize land based on remaining height from sea level
 	vec3 ground_mod = (ground_color.rgb * 1.0) + (smoothstep(0.2, 0.55, abs(disty - 0.5)) * desert_color.rgb * 0.5);
-	float land_height = (height - ocean_depth) / (1.0 - ocean_depth);
+	float land_height = (height - ocean_depth) / (1.0 - ocean_depth - 0.0001);
 	//land_height -= desert * sand_height * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches;
 	float sand_height = smoothstep(0.15, 0.0, land_height);// + smoothstep(0.3, 0.55, abs(disty - 0.5));
 	//land_height = desert * sand_height * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches;
@@ -162,15 +168,14 @@ void fragment() {
 	color = mix(color, min(cloud_color.rgb + shine * 0.4, vec3(1.0)) * 1.0, min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0));
 
 	// reverse shadow for atmosphere, more intense at the edges
-	float atmos_intensity = smoothstep(0.3, 0.5, dist);
+	float atmos_intensity = smoothstep(0.3, 0.5, dist) * 1.2;
 
 	// apply the atmosophere to the color
-	color = color + (ocean_color.rgb * atmos_intensity * atmosphere_opacity);
+	color = color + (ocean_color.rgb * atmos_intensity * 2.0 * atmosphere_opacity);
 
-	
 	color *= planet_shadow;
 
 	// final color of the pixel
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
-	//COLOR.rgb = vec3(diffuse);
+	//COLOR.rgb = vec3(atmos_intensity);
 }

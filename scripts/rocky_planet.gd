@@ -49,10 +49,7 @@ const packed_planet_type = 1.0
 
 var current_values: PackedFloat32Array = [];
 
-var cloud_density := 0.5:
-	set(value):
-		cloud_density = value
-		regenerate_clouds()
+var cloud_density := 0.5
 
 
 @onready var planet: ShaderMaterial = $Planet.material
@@ -93,7 +90,9 @@ func _ready() -> void:
 	ocean_depth_slider.value_changed.connect(_set_ocean_depth)
 	atmos_slider.value_changed.connect(func(value): planet.set_shader_parameter('atmosphere_opacity', value))
 	cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
-	cloud_dense_slider.drag_ended.connect(func(value): cloud_density = cloud_dense_slider.value)
+	cloud_dense_slider.drag_ended.connect(func(value):
+		cloud_density = cloud_dense_slider.value
+		regenerate_clouds())
 	mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
 	reset_button.pressed.connect(func(): regenerate(true))
 	desert_button.toggled.connect(_desert_toggled)
@@ -275,6 +274,8 @@ func randomize_params() -> void:
 	var sliders = [%OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
 	for slider in sliders:
 		slider.value = randf_range(slider.min_value, slider.max_value)
+	cloud_density = %CloudSlider2.value
+	regenerate_clouds()
 	var toggles = [%DesertButton]
 	for toggle in toggles:
 		toggle.button_pressed = bool(randi_range(0, 1))
@@ -311,13 +312,13 @@ func print_shader_params() -> void:
 func generate_earth() -> void:
 	var values := {
 		shine_offset = Vector2(0.6, 0.5),
-		ocean_depth = 0.66,
+		ocean_depth = 0.54,
 		speed = 0.1,
 		ice_coverage = 0.55,
 		cloud_opacity = 0.7,
 		desert_patches = 1,
 		atmosphere_opacity = 0.54,
-		mtn_snow_height = 0.91327431813806,
+		mtn_snow_height = 1.0,
 	
 		desert_color = Color(0.6445, 0.6358, 0.3751, 1),
 		ground_color = Color(0.1262, 0.3438, 0.1381, 1),
@@ -382,13 +383,16 @@ func regenerate_desert() -> void:
 	planet.set_shader_parameter('desert_texture', texture)
 
 func regenerate_clouds() -> void:
+	var density = min(cloud_density, 0.9)
+	prints("regenerating clouds", density)
 	var texture := NoiseTexture2D.new()
 	texture.seamless = true
 	texture.color_ramp = cloud_gradient
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_CELLULAR
 	# 0.0193
-	noise.frequency = 0.0386 * (1.0 - cloud_density)
+	var next_noise: float = 0.0383 * (1.0 - density)
+	noise.frequency = 0.0383 * max(1.0 - density, 0.5)
 	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
@@ -397,14 +401,14 @@ func regenerate_clouds() -> void:
 	var texture2 := NoiseTexture2D.new()
 	texture2.seamless = true
 	cloud2_gradient = Gradient.new()
-	cloud2_gradient.offsets = PackedFloat32Array([min(0.9 * (1.0 - cloud_density), 0.70), 0.719])
+	cloud2_gradient.offsets = PackedFloat32Array([min(0.9 * (1.0 - density), 0.7), 0.719])
 	print(cloud2_gradient.offsets)
 	cloud2_gradient.colors = PackedColorArray([Color.BLACK, Color.WHITE])
 	texture2.color_ramp = cloud2_gradient
 	var noise2 = FastNoiseLite.new()
 	noise2.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	# 0.0039
-	noise2.frequency = noise.frequency * 0.2027253
+	noise2.frequency = next_noise * 0.2027253
 	noise2.seed = texture_seed
 	texture2.noise = noise2
 	await texture2.changed
