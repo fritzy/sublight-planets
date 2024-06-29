@@ -318,10 +318,10 @@ func generate_earth() -> void:
 		cloud_opacity = 0.7,
 		desert_patches = 1,
 		atmosphere_opacity = 0.54,
-		mtn_snow_height = 1.0,
+		mtn_snow_height = 1.24,
 	
 		desert_color = Color(0.6445, 0.6358, 0.3751, 1),
-		ground_color = Color(0.1262, 0.3438, 0.1381, 1),
+		ground_color = Color(0.1616, 0.4648, 0.1782, 1),
 		ocean_color = Color(0.0649, 0.2464, 0.5195, 1),
 		cloud_color = Color(1, 1, 1, 1),
 	}
@@ -335,11 +335,11 @@ func generate_mars() -> void:
 		shine_offset = Vector2(0.41, 0.5),
 		ocean_depth = 0,
 		speed = 0.1,
-		ice_coverage = 0.64,
+		ice_coverage = 0.44,
 		cloud_opacity = 0.1,
 		desert_patches = 0,
 		atmosphere_opacity = 0.14,
-		mtn_snow_height = 1.09380529158938,
+		mtn_snow_height = 2.0,
 		desert_color = Color(0.7256, 0.4637, 0.1574, 1),
 		ground_color = Color(0.7091, 0.1765, 0.1637, 1),
 		ocean_color = Color(0.6602, 0.4768, 0.0877, 1),
@@ -366,10 +366,15 @@ func regenerate_ground() -> void:
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	noise.frequency = 0.0054
+	#noise.frequency = 0.0054
 	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('surface_texture', texture)
+	var normal: NoiseTexture2D = texture.duplicate()
+	normal.as_normal_map = true
+	await normal.changed
+	planet.set_shader_parameter('surface_normal', normal)
 
 func regenerate_desert() -> void:
 	var texture := NoiseTexture2D.new()

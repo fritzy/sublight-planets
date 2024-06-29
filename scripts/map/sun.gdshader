@@ -44,7 +44,7 @@ void fragment() {
 	COLOR = vec4(color3.r, color3.g, color3.b, alpha); // * n2sample;
 	// fade and flicker
 	COLOR.rgb *= fade * 10.0 + (n1intensity * 0.7);
-	
+
 	// get average color
 	float avg = (COLOR.r + COLOR.g + COLOR.b) / 3.0;
 	// green
