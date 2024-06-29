@@ -1,4 +1,3 @@
-@tool
 extends Node2D
 
 @onready var shine_slider = %ShineSlider
@@ -25,6 +24,7 @@ extends Node2D
 var mouse_over: bool = false;
 
 var surface_gradient: Gradient;
+var mtn_gradient: Gradient;
 var cloud_gradient: Gradient;
 var cloud2_gradient: Gradient;
 var ice_gradient: Gradient;
@@ -49,8 +49,6 @@ const packed_planet_type = 1.0
 
 var current_values: PackedFloat32Array = [];
 
-var cloud_density := 0.5
-
 
 @onready var planet: ShaderMaterial = $Planet.material
 
@@ -60,6 +58,10 @@ func _ready() -> void:
 	surface_gradient = Gradient.new()
 	surface_gradient.offsets = PackedFloat32Array([0.157, 0.357, 0.622, 0.891])
 	surface_gradient.colors = PackedColorArray([Color.BLACK, Color(0.34, 0.34, 0.34), Color(0.69, 0.69, 0.69), Color.WHITE])
+
+	mtn_gradient = Gradient.new()
+	mtn_gradient.offsets = PackedFloat32Array([0.447, 1.0])
+	mtn_gradient.colors = PackedColorArray([Color.BLACK, Color.WHITE])
 
 	cloud_gradient = Gradient.new()
 	cloud_gradient.offsets = PackedFloat32Array([0.543, 1.0])
@@ -90,9 +92,7 @@ func _ready() -> void:
 	ocean_depth_slider.value_changed.connect(_set_ocean_depth)
 	atmos_slider.value_changed.connect(func(value): planet.set_shader_parameter('atmosphere_opacity', value))
 	cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
-	cloud_dense_slider.drag_ended.connect(func(value):
-		cloud_density = cloud_dense_slider.value
-		regenerate_clouds())
+	cloud_dense_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_density', value))
 	mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
 	reset_button.pressed.connect(func(): regenerate(true))
 	desert_button.toggled.connect(_desert_toggled)
@@ -119,7 +119,6 @@ func update_inputs() -> void:
 	ocean_depth_slider.value = planet.get_shader_parameter('ocean_depth')
 	atmos_slider.value = planet.get_shader_parameter('atmosphere_opacity')
 	cloud_slider.value = planet.get_shader_parameter('cloud_opacity')
-	cloud_dense_slider.value = cloud_density
 	mtn_snow_slider.value = planet.get_shader_parameter('mtn_snow_height')
 	var dpatches: float = planet.get_shader_parameter('desert_patches')
 	if dpatches > 0.1:
@@ -274,7 +273,6 @@ func randomize_params() -> void:
 	var sliders = [%OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
 	for slider in sliders:
 		slider.value = randf_range(slider.min_value, slider.max_value)
-	cloud_density = %CloudSlider2.value
 	regenerate_clouds()
 	var toggles = [%DesertButton]
 	for toggle in toggles:
@@ -312,20 +310,19 @@ func print_shader_params() -> void:
 func generate_earth() -> void:
 	var values := {
 		shine_offset = Vector2(0.6, 0.5),
-		ocean_depth = 0.54,
-		speed = 0.1,
-		ice_coverage = 0.55,
+		ocean_depth = 0.7,
+		speed = 0.05,
+		ice_coverage = 0.51,
+		cloud_density = 0.36,
 		cloud_opacity = 0.7,
 		desert_patches = 1,
-		atmosphere_opacity = 0.54,
-		mtn_snow_height = 1.24,
-	
+		atmosphere_opacity = 0.47,
+		mtn_snow_height = 1.54,
 		desert_color = Color(0.6445, 0.6358, 0.3751, 1),
 		ground_color = Color(0.1616, 0.4648, 0.1782, 1),
-		ocean_color = Color(0.0649, 0.2464, 0.5195, 1),
+		ocean_color = Color(0.0665, 0.2287, 0.4727, 1),
 		cloud_color = Color(1, 1, 1, 1),
 	}
-	cloud_density = 0.5
 	set_shader_values(values)
 	update_inputs()
 	regenerate(true)
@@ -334,18 +331,19 @@ func generate_mars() -> void:
 	var values := {
 		shine_offset = Vector2(0.41, 0.5),
 		ocean_depth = 0,
-		speed = 0.1,
+		speed = 0.05,
 		ice_coverage = 0.44,
 		cloud_opacity = 0.1,
+		cloud_density = 0.5,
 		desert_patches = 0,
 		atmosphere_opacity = 0.14,
 		mtn_snow_height = 2.0,
-		desert_color = Color(0.7256, 0.4637, 0.1574, 1),
-		ground_color = Color(0.7091, 0.1765, 0.1637, 1),
-		ocean_color = Color(0.6602, 0.4768, 0.0877, 1),
-		cloud_color = Color(0.8762, 0.918, 0.1542, 1),
+
+		desert_color = Color(0.4805, 0.1702, 0.0488, 1),
+		ground_color = Color(0.4727, 0.141, 0.0868, 1),
+		ocean_color = Color(0.0665, 0.2287, 0.4727, 1),
+		cloud_color = Color(0.457, 0.3304, 0.0303, 1),
 	}
-	cloud_density = 0.5
 	set_shader_values(values)
 	update_inputs()
 	regenerate(true)
@@ -376,6 +374,21 @@ func regenerate_ground() -> void:
 	await normal.changed
 	planet.set_shader_parameter('surface_normal', normal)
 
+	var mtn_texture := NoiseTexture2D.new()
+	mtn_texture.seamless = true
+	mtn_texture.color_ramp = mtn_gradient
+	var noise2 = FastNoiseLite.new()
+	noise2.noise_type = FastNoiseLite.TYPE_CELLULAR
+	noise2.frequency = 0.0238
+	noise2.seed = texture_seed
+	mtn_texture.noise = noise
+	await mtn_texture.changed
+	planet.set_shader_parameter('mountain_texture', mtn_texture)
+	var mtn_normal: NoiseTexture2D = mtn_texture.duplicate()
+	mtn_normal.as_normal_map = true
+	await mtn_normal.changed
+	planet.set_shader_parameter('mountain_normal', mtn_normal)
+
 func regenerate_desert() -> void:
 	var texture := NoiseTexture2D.new()
 	texture.seamless = true
@@ -388,16 +401,17 @@ func regenerate_desert() -> void:
 	planet.set_shader_parameter('desert_texture', texture)
 
 func regenerate_clouds() -> void:
-	var density = min(cloud_density, 0.9)
+	#var density = min(cloud_density, 0.9)
+	var density = 0.5;
 	prints("regenerating clouds", density)
 	var texture := NoiseTexture2D.new()
 	texture.seamless = true
-	texture.color_ramp = cloud_gradient
+	#texture.color_ramp =l cloud_gradient
 	var noise = FastNoiseLite.new()
-	noise.noise_type = FastNoiseLite.TYPE_CELLULAR
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	# 0.0193
-	var next_noise: float = 0.0383 * (1.0 - density)
-	noise.frequency = 0.0383 * max(1.0 - density, 0.5)
+	#noise.frequency = 0.0383 * max(1.0 - density, 0.5)
+	noise.frequency = 0.0175
 	noise.seed = texture_seed
 	texture.noise = noise
 	await texture.changed
@@ -413,7 +427,7 @@ func regenerate_clouds() -> void:
 	var noise2 = FastNoiseLite.new()
 	noise2.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	# 0.0039
-	noise2.frequency = next_noise * 0.2027253
+	noise2.frequency = 0.0039
 	noise2.seed = texture_seed
 	texture2.noise = noise2
 	await texture2.changed

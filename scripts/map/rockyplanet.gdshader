@@ -9,10 +9,11 @@ uniform sampler2D cloud_texture: repeat_enable;
 uniform sampler2D cloud_texture2: repeat_enable;
 uniform sampler2D ice_texture: repeat_enable;
 uniform vec2 shine_offset = vec2(0.5, 0.5);
-uniform float ocean_depth: hint_range(0.0, 1.0) = 0.5;
+uniform float ocean_depth: hint_range(0.0, 2.0) = 1.0;
 uniform float speed: hint_range(0.0, 0.3) = 0.1;
 uniform float ice_coverage: hint_range(0.0, 1.0) = 0.36;
 uniform float cloud_opacity: hint_range(0.0, 1.0) = 1.0;
+uniform float cloud_density: hint_range(0.0, 1.0) = 0.5;
 uniform float desert_patches: hint_range(0.0, 1.0, 1.0) = 1.0;
 uniform float atmosphere_opacity: hint_range(0.0, 1.0) = 0.7;
 uniform float mtn_snow_height: hint_range(0.0, 2.0) = 1.0;
@@ -73,15 +74,13 @@ vec2 calculate_sphere_uv(vec2 uv) {
 	return sphere_uv;
 }
 
-float calculate_cloud_density(vec2 uv, float cloud_alpha, vec2 offset1, vec2 offset2, vec2 light_pos) {
+float calculate_cloud_density(vec2 uv, float cloud_alpha, vec2 offset1, vec2 offset2) {
 	//vec2 sphere_uv = calculate_sphere_uv(uv);
 	vec2 sphere_uv = uv;
 	float clouds = texture(cloud_texture, sphere_uv + offset1).r;
 	float clouds2 = texture(cloud_texture2, sphere_uv + offset2).r;
-	float cloud_overlap = (clouds2 - clouds + 0.5);
-	if (cloud_overlap < 0.54) {
-		cloud_alpha = 0.0;
-	}
+	float cloud_overlap = (clouds2 - clouds + cloud_density);
+	cloud_alpha = mix(cloud_alpha, 0.0, step(cloud_overlap, 1.0 - cloud_density));
 	return cloud_overlap * cloud_alpha * cloud_opacity;
 }
 
@@ -109,7 +108,7 @@ void fragment() {
 	// sample desert texture for desert splotches
 	float deserts = texture(desert_texture, off_pos).r;
 	// sample cloud texture
-	vec2 cloud_offset1 = vec2(speed * 1.5, 0.0) * TIME;
+	vec2 cloud_offset1 = vec2(speed * 1.4, 0.0) * TIME;
 	vec2 cloud_offset2 = vec2(speed * 1.1, 0.0) * TIME;
 	float clouds = texture(cloud_texture, sphere_uv + cloud_offset1).r;
 	float clouds2 = texture(cloud_texture2, sphere_uv + cloud_offset2).r;
@@ -129,7 +128,7 @@ void fragment() {
 	// cutt off the atmosphere at a radius
 	float atmos_alpha = mix(1.0, 0.0, step(0.5, dist));
 	// determine if this is an ocean pixel, 0.0 or 1.0
-	float ocean = mix(1.0, 0.0, step(ocean_depth, height));
+
 	// determine if this is a ground pixel , 0.0 or 1.0
 	float ground = mix(1.0, 0.0, step(height, ocean_depth));
 	// determine if this is desert using desert range from uv.y center
@@ -138,30 +137,36 @@ void fragment() {
 	float planet_shadow = smoothstep(0.6, 0.05, light_dist);
 
 	// add some mountain ranges
-	height += (mountain) * ground;
+	height += (mountain);
+	float ocean = mix(1.0, 0.0, step(ocean_depth, height));
 
 	float desert = mix(1.0, 0.0, step(deserts + (0.4 - disty), 1.00));
 	// determine if this is snow based on height sample plus distance to poles
 	float snowt = mix(1.0, 0.0,
-		step(pow(disty, 1)
-		 * max(height, ocean * (ocean_depth - height) * 2.0)
+		step(disty
+		 //* max(height, ocean * (ocean_depth - height) * 1.0) 
+		* max(height, ocean * ((ocean_depth + height / 4.0) - ocean_depth))
 		//+ mix(0.0, 0.4, step(mtn_snow_height, height))
 		+ ice_coverage, 0.9));
 
 	// mix the ground color with the desert color
 	// normalize land based on remaining height from sea level
 	vec3 ground_mod = (ground_color.rgb * 1.0) + (smoothstep(0.2, 0.55, abs(disty - 0.5)) * desert_color.rgb * 0.5);
-	float land_height = (height - ocean_depth) / (1.0 - (ocean_depth - 0.0001));
+	
+	float r = (height - ocean_depth) / (2.0 - ocean_depth - 0.0001);
+	float land_height = r;
+	//float land_height = (height * (2.0 - ocean_depth) / 2.0) + ocean_depth;
 	//land_height -= desert * sand_height * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches;
-	float sand_height = smoothstep(0.15, 0.0, land_height);// + smoothstep(0.3, 0.55, abs(disty - 0.5));
+	float sand_height = land_height + 0.2;//smoothstep(0.15, 0.0, land_height);// + smoothstep(0.3, 0.55, abs(disty - 0.5));
 	//land_height = desert * sand_height * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches;
 	float snow_elev = mtn_snow_height * smoothstep(2.0, 0.5, disty);
-	float rescaled_height = mix(0.35, 1.0, land_height);
+	//float rescaled_height = mix(ocean_depth, 1.0, land_height);
+	sand_height = land_height + 0.15;
 	vec3 ground_sand_mix = mix(
 			mix(
-				ground_mod.rgb * 0.7 + (ground_mod.rgb * rescaled_height * .5),
-				(desert_color.rgb * 1.5 + (desert_color.rgb * rescaled_height * .7)),
-				step(rescaled_height, sand_height)
+				(ground_color.rgb * (land_height + 1.0)),
+				(desert_color.rgb * 1.5 + (desert_color.rgb * land_height * .7)),
+				step(height, ocean_depth + 0.06)
 			),
 			vec3(1.0) + 0.4 * height,
 			step(snow_elev, height)
@@ -171,18 +176,18 @@ void fragment() {
 	// if this is ocean, draw it with extra shine
 	//color = mix(color, ocean_color.rgb + shine * 3.4, ocean);
 	vec3 ocean_diffuse = diffuse_light(desert_texture, off_pos, UV, 0.9, light_pos);
-	color = mix(color, ocean_color.rgb + (shine * ocean_diffuse) + shine * 0.6, ocean);
+	color = mix(color, ocean_color.rgb + (shine * ocean_diffuse) + shine * 1.2, ocean);
 
 	// combine ground and mountain normals to generate highlights
 	//vec3 ground_normal = poor_mans_normal(cloud_texture, off_pos, 0.4);
 	//ground_normal += poor_mans_normal(surface_texture, off_pos, 0.4) * 1.5;
-	//vec3 ground_normal = 
+	//vec3 ground_normal =
 	float ground_diffuse = normal_diffuse2(surface_norm, mountain_norm, light_pos, UV);
 
 	// if this is ground draw our mixed ground color (not ocean)
 	color = mix(color, ground_sand_mix + shine * 0.2, 1.0 - ocean);
 	// apply light and shadow
-	color = mix(color, color * ground_diffuse * ground * (shine * 0.8 + planet_shadow * 1.4), 0.38);
+	color = mix(color, color * ground_diffuse * ground * (shine * 0.8 + planet_shadow * 1.0), 0.30);
 	// if this is snow/ice apply it to the color
 
 	vec3 ice_diffuse = diffuse_light(ice_texture, off_pos, UV, -0.4, light_pos);
@@ -199,31 +204,33 @@ void fragment() {
 	vec3 desert_diffuse = diffuse_light(desert_texture, off_pos, UV, 0.3, light_pos);
 	// don't use shine on desert light diffusing, just use the planet shadow
 	color += (planet_shadow) * desert_diffuse * desert_patches * desert * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0);
-	
+
 	vec2 lightDir = light_pos - UV;
-	color -= 0.4 * calculate_cloud_density(sphere_uv + lightDir * 0.1, cloud_alpha, cloud_offset1, cloud_offset2, light_pos);
-	
+	color -= 0.4 * calculate_cloud_density(sphere_uv + lightDir * 0.1, cloud_alpha, cloud_offset1, cloud_offset2);
+
 	// cut off the color at the land radius
 	color = color * land_alpha;
-	
-	
 
+	
 	// apply cloud color based on cloud sample, cut off at cloud radius
-	float cloud_overlap = (clouds2 - clouds + 0.5);
-	if (cloud_overlap < 0.54) {
-		cloud_alpha = 0.0;
-	}
+	float cloud_overlap = (clouds2 - clouds + cloud_density);
+	cloud_alpha = mix(cloud_alpha, 0.0, step(cloud_overlap, 1.0 - cloud_density));
+	//if (cloud_overlap < 1.0 - cloud_density) {
+	//	cloud_alpha = 0.0;
+	//}
+	cloud_overlap += cloud_density;
+	float cloud_thickness = calculate_cloud_density(sphere_uv, cloud_alpha, cloud_offset1, cloud_offset2);
 	//color = mix(color, min(cloud_color.rgb + shine * 0.4, vec3(1.0)) * 1.0, min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0));
 	vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);
 	vec3 cloud_diffuse2 = diffuse_light(cloud_texture2, off_pos, UV, 0.4, light_pos);
 	vec3 total_cloud_diffuse = (cloud_diffuse1 + cloud_diffuse2);
-	
+
 	color = mix(color,
 		min(cloud_color.rgb + (shine * 0.2) + ((shine + planet_shadow) * total_cloud_diffuse * -0.5), vec3(1.0)) * 1.0,
 		min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0)
 		);
 	// reverse shadow for atmosphere, more intense at the edges
-	float atmos_intensity = smoothstep(0.3, 0.5, dist) * 1.2;
+	float atmos_intensity = smoothstep(0.3, 0.5, dist) + 0.1;
 
 	// apply the atmosophere to the color
 	color = color + (ocean_color.rgb * atmos_intensity * 2.0 * atmosphere_opacity);
@@ -232,6 +239,5 @@ void fragment() {
 
 	// final color of the pixel
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
-	//COLOR.rgb = vec3(ground_diffuse) + 0.5;
+	//COLOR.rgb = vec3(land_height);
 }
-
