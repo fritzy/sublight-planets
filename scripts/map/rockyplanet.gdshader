@@ -187,7 +187,7 @@ void fragment() {
 	// if this is ground draw our mixed ground color (not ocean)
 	color = mix(color, ground_sand_mix + shine * 0.2, 1.0 - ocean);
 	// apply light and shadow
-	color = mix(color, color * ground_diffuse * ground * (shine * 0.8 + planet_shadow * 1.0), 0.30);
+	color = mix(color, color * ground_diffuse * ground * (shine * 0.8 + planet_shadow * 4.4), 0.34);
 	// if this is snow/ice apply it to the color
 
 	vec3 ice_diffuse = diffuse_light(ice_texture, off_pos, UV, -0.4, light_pos);

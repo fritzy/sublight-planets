@@ -1,3 +1,4 @@
+
 extends Node2D
 
 @onready var shine_slider = %ShineSlider
@@ -316,11 +317,11 @@ func generate_earth() -> void:
 		cloud_density = 0.36,
 		cloud_opacity = 0.7,
 		desert_patches = 1,
-		atmosphere_opacity = 0.47,
+		atmosphere_opacity = 0.25,
 		mtn_snow_height = 1.54,
 		desert_color = Color(0.6445, 0.6358, 0.3751, 1),
-		ground_color = Color(0.1616, 0.4648, 0.1782, 1),
-		ocean_color = Color(0.0665, 0.2287, 0.4727, 1),
+		ground_color = Color(0.088, 0.3633, 0.1031, 1),
+		ocean_color = Color(0, 0.2667, 0.668, 1),
 		cloud_color = Color(1, 1, 1, 1),
 	}
 	set_shader_values(values)
