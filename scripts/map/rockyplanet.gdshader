@@ -77,8 +77,10 @@ vec2 calculate_sphere_uv(vec2 uv) {
 float calculate_cloud_density(vec2 uv, float cloud_alpha, vec2 offset1, vec2 offset2) {
 	//vec2 sphere_uv = calculate_sphere_uv(uv);
 	vec2 sphere_uv = uv;
-	float clouds = texture(cloud_texture, sphere_uv + offset1).r;
-	float clouds2 = texture(cloud_texture2, sphere_uv + offset2).r;
+	vec2 cloud_swirl_offset1 = offset2 * 1.4;
+	vec2 cloud_swirl = texture(surface_texture, sphere_uv + cloud_swirl_offset1).rg * 0.1;
+	float clouds = texture(cloud_texture, sphere_uv + offset1 + cloud_swirl).r;
+	float clouds2 = texture(cloud_texture2, sphere_uv + offset2 + cloud_swirl).r;
 	float cloud_overlap = (clouds2 - clouds + cloud_density);
 	cloud_alpha = mix(cloud_alpha, 0.0, step(cloud_overlap, 1.0 - cloud_density));
 	return cloud_overlap * cloud_alpha * cloud_opacity;
@@ -110,9 +112,11 @@ void fragment() {
 	// sample cloud texture
 	vec2 cloud_offset1 = vec2(speed * 1.4, 0.0) * TIME;
 	vec2 cloud_offset2 = vec2(speed * 1.1, 0.0) * TIME;
-	float clouds = texture(cloud_texture, sphere_uv + cloud_offset1).r;
-	float clouds2 = texture(cloud_texture2, sphere_uv + cloud_offset2).r;
-
+	vec2 cloud_swirl_offset1 = cloud_offset2 * 1.4;
+	vec2 cloud_swirl = texture(surface_texture, sphere_uv + cloud_swirl_offset1).rg * 0.1;
+	float clouds = texture(cloud_texture, sphere_uv + cloud_offset1 + cloud_swirl).r;
+	float clouds2 = texture(cloud_texture2, sphere_uv + cloud_offset2+cloud_swirl).r;
+	
 	// start with white
 	vec3 color = vec3(1.0, 1.0, 1.0);
 	// planet shadow amount

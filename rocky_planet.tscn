@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bb834fy7j5c0q"]
+[gd_scene load_steps=30 format=3 uid="uid://bb834fy7j5c0q"]
 
 [ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
 [ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
@@ -8,21 +8,112 @@
 [ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="6_0g8as"]
 [ext_resource type="Script" path="res://scripts/map/stars.gd" id="7_wthn5"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_181gd"]
+seed = 528450254
+frequency = 0.0175
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0fjow"]
+seamless = true
+noise = SubResource("FastNoiseLite_181gd")
+
+[sub_resource type="Gradient" id="Gradient_kyri5"]
+offsets = PackedFloat32Array(0.45, 0.719)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_80iqx"]
+noise_type = 0
+seed = 528450254
+frequency = 0.0039
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uc148"]
+seamless = true
+color_ramp = SubResource("Gradient_kyri5")
+noise = SubResource("FastNoiseLite_80iqx")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_co8sr"]
+seed = 528450254
+domain_warp_enabled = true
+domain_warp_amplitude = 8.0
+domain_warp_fractal_lacunarity = 4.0
+domain_warp_fractal_gain = 0.2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4uk1o"]
+seamless = true
+noise = SubResource("FastNoiseLite_co8sr")
+
+[sub_resource type="Gradient" id="Gradient_eufwj"]
+offsets = PackedFloat32Array(0.503, 0.784, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nmsyq"]
+noise_type = 2
+seed = 528450254
+frequency = 0.0524
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4csfx"]
+seamless = true
+color_ramp = SubResource("Gradient_eufwj")
+noise = SubResource("FastNoiseLite_nmsyq")
+
+[sub_resource type="Gradient" id="Gradient_f0ghq"]
+offsets = PackedFloat32Array(0.447, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_aja53"]
+noise_type = 2
+seed = 528450254
+frequency = 0.0238
+fractal_lacunarity = 2.5
+fractal_gain = 0.8
+fractal_weighted_strength = 0.2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_masa2"]
+seamless = true
+as_normal_map = true
+color_ramp = SubResource("Gradient_f0ghq")
+noise = SubResource("FastNoiseLite_aja53")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_aoa13"]
+seamless = true
+noise = SubResource("FastNoiseLite_aja53")
+
+[sub_resource type="Gradient" id="Gradient_l2y51"]
+offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
+colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 0.69, 0.69, 0.69, 1, 1, 1, 1, 1)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lhdko"]
+seamless = true
+as_normal_map = true
+color_ramp = SubResource("Gradient_l2y51")
+noise = SubResource("FastNoiseLite_aja53")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i6ove"]
+seamless = true
+color_ramp = SubResource("Gradient_l2y51")
+noise = SubResource("FastNoiseLite_aja53")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
 shader = ExtResource("1_qey08")
 shader_parameter/shine_offset = Vector2(0.6, 0.5)
-shader_parameter/ocean_depth = 2.0
-shader_parameter/speed = 0.1
-shader_parameter/ice_coverage = 0.0
+shader_parameter/ocean_depth = 0.636
+shader_parameter/speed = 0.05
+shader_parameter/ice_coverage = 0.51
 shader_parameter/cloud_opacity = 0.7
-shader_parameter/cloud_density = 0.724
+shader_parameter/cloud_density = 0.36
 shader_parameter/desert_patches = 1.0
-shader_parameter/atmosphere_opacity = 0.47
-shader_parameter/mtn_snow_height = 2.0
-shader_parameter/desert_color = Color(0.6445, 0.6358, 0.3751, 1)
-shader_parameter/ground_color = Color(0.1616, 0.4648, 0.1782, 1)
-shader_parameter/ocean_color = Color(0.0665, 0.2287, 0.4727, 1)
+shader_parameter/atmosphere_opacity = 0.25
+shader_parameter/mtn_snow_height = 1.54
+shader_parameter/desert_color = Color(0.6328, 0.6218, 0.2917, 1)
+shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
+shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
+shader_parameter/surface_texture = SubResource("NoiseTexture2D_i6ove")
+shader_parameter/surface_normal = SubResource("NoiseTexture2D_lhdko")
+shader_parameter/mountain_texture = SubResource("NoiseTexture2D_aoa13")
+shader_parameter/mountain_normal = SubResource("NoiseTexture2D_masa2")
+shader_parameter/desert_texture = SubResource("NoiseTexture2D_4uk1o")
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_0fjow")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_uc148")
+shader_parameter/ice_texture = SubResource("NoiseTexture2D_4csfx")
 
 [sub_resource type="Theme" id="Theme_23yx4"]
 
@@ -117,7 +208,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 max_value = 2.0
 step = 0.01
-value = 0.54
+value = 0.7
 
 [node name="IceLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -129,7 +220,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
-value = 0.41
+value = 0.51
 
 [node name="Label2" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -141,7 +232,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
-value = 0.47
+value = 0.25
 
 [node name="Label3" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -238,7 +329,7 @@ text = "Ground"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(0.1616, 0.4648, 0.1782, 1)
+color = Color(0.2131, 0.4805, 0.1276, 1)
 
 [node name="DesertCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -247,7 +338,7 @@ text = "Sand"
 [node name="DesertColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-color = Color(0.6445, 0.6358, 0.3751, 1)
+color = Color(0.6328, 0.6218, 0.2917, 1)
 
 [node name="SkyCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -256,7 +347,7 @@ text = "Sky"
 [node name="SkyColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-color = Color(0.0665, 0.2287, 0.4727, 1)
+color = Color(0, 0.2277, 0.5703, 1)
 
 [node name="CloudCLabel2" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2

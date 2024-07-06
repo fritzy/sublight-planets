@@ -1,4 +1,4 @@
-
+@tool
 extends Node2D
 
 @onready var shine_slider = %ShineSlider
@@ -380,9 +380,14 @@ func regenerate_ground() -> void:
 	mtn_texture.color_ramp = mtn_gradient
 	var noise2 = FastNoiseLite.new()
 	noise2.noise_type = FastNoiseLite.TYPE_CELLULAR
+
 	noise2.frequency = 0.0238
+	noise2.fractal_lacunarity = 2.5
+	noise2.fractal_gain = 0.8
+	noise2.fractal_weighted_strength = 0.5
+
 	noise2.seed = texture_seed
-	mtn_texture.noise = noise
+	mtn_texture.noise = noise2
 	await mtn_texture.changed
 	planet.set_shader_parameter('mountain_texture', mtn_texture)
 	var mtn_normal: NoiseTexture2D = mtn_texture.duplicate()
@@ -410,6 +415,7 @@ func regenerate_clouds() -> void:
 	#texture.color_ramp =l cloud_gradient
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	#noise.domain_warp_enabled = true
 	# 0.0193
 	#noise.frequency = 0.0383 * max(1.0 - density, 0.5)
 	noise.frequency = 0.0175
@@ -426,6 +432,7 @@ func regenerate_clouds() -> void:
 	cloud2_gradient.colors = PackedColorArray([Color.BLACK, Color.WHITE])
 	texture2.color_ramp = cloud2_gradient
 	var noise2 = FastNoiseLite.new()
+	noise2.domain_warp_enabled = true
 	noise2.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	# 0.0039
 	noise2.frequency = 0.0039
