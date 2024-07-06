@@ -109,13 +109,10 @@ void fragment() {
 	float ice_cracks = texture(ice_texture, off_pos).r;
 	// sample desert texture for desert splotches
 	float deserts = texture(desert_texture, off_pos).r;
-	// sample cloud texture
+
+	// time offsets for cloud textures
 	vec2 cloud_offset1 = vec2(speed * 1.4, 0.0) * TIME;
 	vec2 cloud_offset2 = vec2(speed * 1.1, 0.0) * TIME;
-	vec2 cloud_swirl_offset1 = cloud_offset2 * 1.4;
-	vec2 cloud_swirl = texture(surface_texture, sphere_uv + cloud_swirl_offset1).rg * 0.1;
-	float clouds = texture(cloud_texture, sphere_uv + cloud_offset1 + cloud_swirl).r;
-	float clouds2 = texture(cloud_texture2, sphere_uv + cloud_offset2+cloud_swirl).r;
 	
 	// start with white
 	vec3 color = vec3(1.0, 1.0, 1.0);
@@ -129,15 +126,14 @@ void fragment() {
 	float land_alpha = mix(1.0, 0.0, step(0.46, dist));
 	// cut off the clouds at a radius
 	float cloud_alpha = mix(1.0, 0.0, step(0.475, dist));
-	// cutt off the atmosphere at a radius
+	// cut off the atmosphere at a radius
 	float atmos_alpha = mix(1.0, 0.0, step(0.5, dist));
 	// determine if this is an ocean pixel, 0.0 or 1.0
 
 	// determine if this is a ground pixel , 0.0 or 1.0
 	float ground = mix(1.0, 0.0, step(height, ocean_depth));
-	// determine if this is desert using desert range from uv.y center
-	// and desert texture sample
 
+	// overall planet shadow / light
 	float planet_shadow = smoothstep(0.6, 0.05, light_dist);
 
 	// add some mountain ranges
@@ -148,9 +144,7 @@ void fragment() {
 	// determine if this is snow based on height sample plus distance to poles
 	float snowt = mix(1.0, 0.0,
 		step(disty
-		 //* max(height, ocean * (ocean_depth - height) * 1.0) 
 		* max(height, ocean * ((ocean_depth + height / 4.0) - ocean_depth))
-		//+ mix(0.0, 0.4, step(mtn_snow_height, height))
 		+ ice_coverage, 0.9));
 
 	// mix the ground color with the desert color
@@ -159,12 +153,8 @@ void fragment() {
 	
 	float r = (height - ocean_depth) / (2.0 - ocean_depth - 0.0001);
 	float land_height = r;
-	//float land_height = (height * (2.0 - ocean_depth) / 2.0) + ocean_depth;
-	//land_height -= desert * sand_height * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches;
-	float sand_height = land_height + 0.2;//smoothstep(0.15, 0.0, land_height);// + smoothstep(0.3, 0.55, abs(disty - 0.5));
-	//land_height = desert * sand_height * mod(ocean + 1.0, 2.0) * mod(snowt + 1.0, 2.0) * desert_patches;
+	float sand_height = land_height + 0.2;
 	float snow_elev = mtn_snow_height * smoothstep(2.0, 0.5, disty);
-	//float rescaled_height = mix(ocean_depth, 1.0, land_height);
 	sand_height = land_height + 0.15;
 	vec3 ground_sand_mix = mix(
 			mix(
@@ -183,9 +173,6 @@ void fragment() {
 	color = mix(color, ocean_color.rgb + (shine * ocean_diffuse) + shine * 1.2, ocean);
 
 	// combine ground and mountain normals to generate highlights
-	//vec3 ground_normal = poor_mans_normal(cloud_texture, off_pos, 0.4);
-	//ground_normal += poor_mans_normal(surface_texture, off_pos, 0.4) * 1.5;
-	//vec3 ground_normal =
 	float ground_diffuse = normal_diffuse2(surface_norm, mountain_norm, light_pos, UV);
 
 	// if this is ground draw our mixed ground color (not ocean)
@@ -216,22 +203,14 @@ void fragment() {
 	color = color * land_alpha;
 
 	
-	// apply cloud color based on cloud sample, cut off at cloud radius
-	float cloud_overlap = (clouds2 - clouds + cloud_density);
-	cloud_alpha = mix(cloud_alpha, 0.0, step(cloud_overlap, 1.0 - cloud_density));
-	//if (cloud_overlap < 1.0 - cloud_density) {
-	//	cloud_alpha = 0.0;
-	//}
-	cloud_overlap += cloud_density;
 	float cloud_thickness = calculate_cloud_density(sphere_uv, cloud_alpha, cloud_offset1, cloud_offset2);
-	//color = mix(color, min(cloud_color.rgb + shine * 0.4, vec3(1.0)) * 1.0, min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0));
 	vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);
 	vec3 cloud_diffuse2 = diffuse_light(cloud_texture2, off_pos, UV, 0.4, light_pos);
 	vec3 total_cloud_diffuse = (cloud_diffuse1 + cloud_diffuse2);
 
 	color = mix(color,
 		min(cloud_color.rgb + (shine * 0.2) + ((shine + planet_shadow) * total_cloud_diffuse * -0.5), vec3(1.0)) * 1.0,
-		min(cloud_overlap * cloud_alpha * cloud_opacity, 1.0)
+		min(cloud_thickness * 1.2, 1.0)
 		);
 	// reverse shadow for atmosphere, more intense at the edges
 	float atmos_intensity = smoothstep(0.3, 0.5, dist) + 0.1;
