@@ -1,97 +1,94 @@
-[gd_scene load_steps=31 format=3 uid="uid://bb834fy7j5c0q"]
+[gd_scene load_steps=24 format=3 uid="uid://bb834fy7j5c0q"]
 
 [ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
 [ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
-[ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://icon_eye_opened.svg" id="3_4ft83"]
-[ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="4_mu5de"]
-[ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="5_o5fgk"]
-[ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="6_0g8as"]
+[ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scripts/rocky_planet_ui.tscn" id="4_1n0ek"]
 [ext_resource type="Script" path="res://scripts/map/stars.gd" id="7_wthn5"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_flnut"]
-seed = 1367942369
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p2oh6"]
+seed = -1467319715
 frequency = 0.0175
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_x2bee"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b8mlt"]
 seamless = true
-noise = SubResource("FastNoiseLite_flnut")
+noise = SubResource("FastNoiseLite_p2oh6")
 
-[sub_resource type="Gradient" id="Gradient_k4je5"]
+[sub_resource type="Gradient" id="Gradient_dcv04"]
 offsets = PackedFloat32Array(0.45, 0.719)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_5ep5e"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fn3vb"]
 noise_type = 0
-seed = 1367942369
+seed = -1467319715
 frequency = 0.0039
 domain_warp_enabled = true
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b3wo1"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_enrlt"]
 seamless = true
-color_ramp = SubResource("Gradient_k4je5")
-noise = SubResource("FastNoiseLite_5ep5e")
+color_ramp = SubResource("Gradient_dcv04")
+noise = SubResource("FastNoiseLite_fn3vb")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_bnybp"]
-seed = 1367942369
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jxfrr"]
+seed = -1467319715
 frequency = 0.0087
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_02g8o"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5plwf"]
 seamless = true
-noise = SubResource("FastNoiseLite_bnybp")
+noise = SubResource("FastNoiseLite_jxfrr")
 
-[sub_resource type="Gradient" id="Gradient_ha33j"]
+[sub_resource type="Gradient" id="Gradient_ocs1a"]
 offsets = PackedFloat32Array(0.503, 0.784, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xfroe"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qu03j"]
 noise_type = 2
-seed = 1367942369
+seed = -1467319715
 frequency = 0.0524
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i3b7a"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vp6yw"]
 seamless = true
-color_ramp = SubResource("Gradient_ha33j")
-noise = SubResource("FastNoiseLite_xfroe")
+color_ramp = SubResource("Gradient_ocs1a")
+noise = SubResource("FastNoiseLite_qu03j")
 
-[sub_resource type="Gradient" id="Gradient_gsg4i"]
+[sub_resource type="Gradient" id="Gradient_fbhmp"]
 offsets = PackedFloat32Array(0.447, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_qow3c"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_c1hri"]
 noise_type = 2
-seed = 1367942369
+seed = -1467319715
 frequency = 0.0238
 fractal_lacunarity = 2.5
 fractal_gain = 0.8
 fractal_weighted_strength = 0.5
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2f3xd"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7yry6"]
 seamless = true
 as_normal_map = true
-color_ramp = SubResource("Gradient_gsg4i")
-noise = SubResource("FastNoiseLite_qow3c")
+color_ramp = SubResource("Gradient_fbhmp")
+noise = SubResource("FastNoiseLite_c1hri")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7ce7q"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xuucj"]
 seamless = true
-color_ramp = SubResource("Gradient_gsg4i")
-noise = SubResource("FastNoiseLite_qow3c")
+color_ramp = SubResource("Gradient_fbhmp")
+noise = SubResource("FastNoiseLite_c1hri")
 
-[sub_resource type="Gradient" id="Gradient_v081h"]
+[sub_resource type="Gradient" id="Gradient_venf7"]
 offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
 colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 0.69, 0.69, 0.69, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_r83i5"]
-seed = 1367942369
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_d5in4"]
+seed = -1467319715
 frequency = 0.0054
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kjtuo"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_npfks"]
 seamless = true
 as_normal_map = true
-color_ramp = SubResource("Gradient_v081h")
-noise = SubResource("FastNoiseLite_r83i5")
+color_ramp = SubResource("Gradient_venf7")
+noise = SubResource("FastNoiseLite_d5in4")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wv7f5"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_u2c1l"]
 seamless = true
-color_ramp = SubResource("Gradient_v081h")
-noise = SubResource("FastNoiseLite_r83i5")
+color_ramp = SubResource("Gradient_venf7")
+noise = SubResource("FastNoiseLite_d5in4")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
 shader = ExtResource("1_qey08")
@@ -108,28 +105,14 @@ shader_parameter/desert_color = Color(0.6328, 0.6218, 0.2917, 1)
 shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
 shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
-shader_parameter/surface_texture = SubResource("NoiseTexture2D_wv7f5")
-shader_parameter/surface_normal = SubResource("NoiseTexture2D_kjtuo")
-shader_parameter/mountain_texture = SubResource("NoiseTexture2D_7ce7q")
-shader_parameter/mountain_normal = SubResource("NoiseTexture2D_2f3xd")
-shader_parameter/desert_texture = SubResource("NoiseTexture2D_02g8o")
-shader_parameter/cloud_texture = SubResource("NoiseTexture2D_x2bee")
-shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_b3wo1")
-shader_parameter/ice_texture = SubResource("NoiseTexture2D_i3b7a")
-
-[sub_resource type="Theme" id="Theme_23yx4"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50wve"]
-bg_color = Color(0.103743, 0.103744, 0.103744, 1)
-
-[sub_resource type="Theme" id="Theme_funtb"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w0b5"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.103744, 0.103744, 0.103743, 1)
+shader_parameter/surface_texture = SubResource("NoiseTexture2D_u2c1l")
+shader_parameter/surface_normal = SubResource("NoiseTexture2D_npfks")
+shader_parameter/mountain_texture = SubResource("NoiseTexture2D_xuucj")
+shader_parameter/mountain_normal = SubResource("NoiseTexture2D_7yry6")
+shader_parameter/desert_texture = SubResource("NoiseTexture2D_5plwf")
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_b8mlt")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_enrlt")
+shader_parameter/ice_texture = SubResource("NoiseTexture2D_vp6yw")
 
 [node name="RockyPlanet" type="Node2D"]
 script = ExtResource("1_08tb2")
@@ -156,377 +139,5 @@ grow_vertical = 2
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
 
-[node name="UILayer" type="CanvasLayer" parent="."]
-
-[node name="ParamPanel" type="PanelContainer" parent="UILayer"]
+[node name="RockyPlanetUI" parent="." instance=ExtResource("4_1n0ek")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 0)
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -103.5
-offset_right = 256.0
-offset_bottom = 103.5
-grow_vertical = 2
-theme = SubResource("Theme_23yx4")
-theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
-
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/ParamPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/ParamPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 10
-columns = 2
-
-[node name="ShineLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-visible = false
-layout_mode = 2
-text = "Light Offset"
-
-[node name="ShineSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 1.0
-step = 0.01
-value = 0.6
-
-[node name="OceanLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Sea Level"
-
-[node name="OceanDepthSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 2.0
-step = 0.01
-value = 0.7
-
-[node name="IceLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Pole Ice"
-
-[node name="IceSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 1.0
-step = 0.01
-value = 0.51
-
-[node name="Label2" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Atmosphere"
-
-[node name="AtmosSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 1.0
-step = 0.01
-value = 0.25
-
-[node name="Label3" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Clouds
-"
-
-[node name="CloudSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 1.0
-step = 0.05
-value = 0.7
-
-[node name="Label4" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Cloud Dense
-"
-
-[node name="CloudSlider2" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 0.7
-step = 0.02
-value = 0.5
-
-[node name="MtnSnowLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Mtn Snow
-"
-
-[node name="MtnSnowSlider" type="HSlider" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 2.0
-step = -0.02
-value = 1.54
-
-[node name="DesertLabel" type="Label" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Deserts"
-
-[node name="DesertButton" type="CheckButton" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-button_pressed = true
-
-[node name="RandParamsButton" type="Button" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Random Parameters"
-
-[node name="ResetButton" type="Button" parent="UILayer/ParamPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Regenerate Noise"
-
-[node name="ColorPanel" type="PanelContainer" parent="UILayer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 0)
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -76.0
-offset_bottom = 76.0
-grow_horizontal = 0
-grow_vertical = 2
-theme = SubResource("Theme_funtb")
-theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
-
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/ColorPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer/ColorPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 10
-columns = 2
-
-[node name="GroundCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Ground"
-
-[node name="GroundColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0.2131, 0.4805, 0.1276, 1)
-
-[node name="DesertCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Sand"
-
-[node name="DesertColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-color = Color(0.6328, 0.6218, 0.2917, 1)
-
-[node name="SkyCLabel" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Sky"
-
-[node name="SkyColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-color = Color(0, 0.2277, 0.5703, 1)
-
-[node name="CloudCLabel2" type="Label" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Cloud"
-
-[node name="CloudColor" type="ColorPickerButton" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-color = Color(1, 1, 1, 1)
-
-[node name="RandColorButton" type="Button" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Random Color"
-
-[node name="ShareButton" type="Button" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Share Planet"
-
-[node name="SeedEdit" type="LineEdit" parent="UILayer/ColorPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-placeholder_text = "seed"
-alignment = 1
-
-[node name="PresetPanel" type="PanelContainer" parent="UILayer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 0)
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -80.0
-offset_right = 140.0
-offset_bottom = -29.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_vertical = 8
-theme = SubResource("Theme_funtb")
-theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
-
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/PresetPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/PresetPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="EarthButton" type="Button" parent="UILayer/PresetPanel/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Earth"
-
-[node name="MarsButton" type="Button" parent="UILayer/PresetPanel/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Mars"
-
-[node name="RandomButton" type="Button" parent="UILayer/PresetPanel/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Random"
-
-[node name="DisplayPanel" type="PanelContainer" parent="UILayer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(25, 25)
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -50.0
-offset_bottom = 50.0
-grow_horizontal = 0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-tooltip_text = "Hide Controls"
-theme_override_styles/panel = SubResource("StyleBoxFlat_2w0b5")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/DisplayPanel"]
-clip_contents = true
-layout_mode = 2
-
-[node name="VisibilityButton" type="TextureButton" parent="UILayer/DisplayPanel/HBoxContainer"]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-toggle_mode = true
-texture_normal = ExtResource("3_4ft83")
-texture_pressed = ExtResource("4_mu5de")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="CameraButton" type="TextureButton" parent="UILayer/DisplayPanel/HBoxContainer"]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = ExtResource("5_o5fgk")
-texture_pressed = ExtResource("6_0g8as")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="NotifyPanel" type="PanelContainer" parent="UILayer"]
-unique_name_in_owner = true
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -160.5
-offset_top = -40.0
-offset_right = 160.5
-grow_horizontal = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/NotifyPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
-
-[node name="NotifyLabel" type="Label" parent="UILayer/NotifyPanel/MarginContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Welcome to Sublight Planets by @fritzy"
-horizontal_alignment = 1
-
-[node name="CreditsPanel" type="PanelContainer" parent="UILayer"]
-unique_name_in_owner = true
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -394.0
-offset_top = -40.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/CreditsPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 5
-
-[node name="Label" type="Label" parent="UILayer/CreditsPanel/MarginContainer"]
-layout_mode = 2
-text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"
-
-[node name="URLPanel" type="PanelContainer" parent="UILayer"]
-unique_name_in_owner = true
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 253.0
-offset_bottom = -7.0
-grow_vertical = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="UILayer/URLPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 5
-
-[node name="Label" type="Label" parent="UILayer/URLPanel/MarginContainer"]
-layout_mode = 2
-text = "fritzy.itch.io/sublight-planets"

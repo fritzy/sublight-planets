@@ -1,0 +1,395 @@
+[gd_scene load_steps=9 format=3 uid="uid://dbjpjwjv0o42"]
+
+[ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://icon_eye_opened.svg" id="1_1rylw"]
+[ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="2_td1m0"]
+[ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="3_57412"]
+[ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="4_fb5xd"]
+
+[sub_resource type="Theme" id="Theme_23yx4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50wve"]
+bg_color = Color(0.103743, 0.103744, 0.103744, 1)
+
+[sub_resource type="Theme" id="Theme_funtb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w0b5"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.103744, 0.103744, 0.103743, 1)
+
+[node name="RockyPlanetUI" type="CanvasLayer"]
+
+[node name="ParamPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -103.5
+offset_right = 256.0
+offset_bottom = 103.5
+grow_vertical = 2
+theme = SubResource("Theme_23yx4")
+theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
+
+[node name="MarginContainer" type="MarginContainer" parent="ParamPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ParamPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="ParamPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="ShineLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+visible = false
+layout_mode = 2
+text = "Light Offset"
+
+[node name="ShineSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.6
+
+[node name="OceanLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Sea Level"
+
+[node name="OceanDepthSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 2.0
+step = 0.01
+value = 0.7
+
+[node name="IceLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Pole Ice"
+
+[node name="IceSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.51
+
+[node name="Label2" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Atmosphere"
+
+[node name="AtmosSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.25
+
+[node name="Label3" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Clouds
+"
+
+[node name="CloudSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.7
+
+[node name="Label4" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Cloud Dense
+"
+
+[node name="CloudSlider2" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 0.7
+step = 0.02
+value = 0.5
+
+[node name="MtnSnowLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Mtn Snow
+"
+
+[node name="MtnSnowSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 2.0
+step = -0.02
+value = 1.54
+
+[node name="DesertLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Deserts"
+
+[node name="DesertButton" type="CheckButton" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="RandParamsButton" type="Button" parent="ParamPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Random Parameters"
+
+[node name="ResetButton" type="Button" parent="ParamPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Regenerate Noise"
+
+[node name="ColorPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -76.0
+offset_bottom = 76.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = SubResource("Theme_funtb")
+theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="ColorPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="GroundCLabel" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Ground"
+
+[node name="GroundColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.2131, 0.4805, 0.1276, 1)
+
+[node name="DesertCLabel" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Sand"
+
+[node name="DesertColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0.6328, 0.6218, 0.2917, 1)
+
+[node name="SkyCLabel" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Sky"
+
+[node name="SkyColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0, 0.2277, 0.5703, 1)
+
+[node name="CloudCLabel2" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Cloud"
+
+[node name="CloudColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="RandColorButton" type="Button" parent="ColorPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Random Color"
+
+[node name="ShareButton" type="Button" parent="ColorPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Share Planet"
+
+[node name="SeedEdit" type="LineEdit" parent="ColorPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+placeholder_text = "seed"
+alignment = 1
+
+[node name="PresetPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -80.0
+offset_right = 140.0
+offset_bottom = -29.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme = SubResource("Theme_funtb")
+theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
+
+[node name="MarginContainer" type="MarginContainer" parent="PresetPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PresetPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="EarthButton" type="Button" parent="PresetPanel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Earth"
+
+[node name="MarsButton" type="Button" parent="PresetPanel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mars"
+
+[node name="RandomButton" type="Button" parent="PresetPanel/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Random"
+
+[node name="DisplayPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 50.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+tooltip_text = "Hide Controls"
+theme_override_styles/panel = SubResource("StyleBoxFlat_2w0b5")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DisplayPanel"]
+clip_contents = true
+layout_mode = 2
+
+[node name="VisibilityButton" type="TextureButton" parent="DisplayPanel/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("1_1rylw")
+texture_pressed = ExtResource("2_td1m0")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="CameraButton" type="TextureButton" parent="DisplayPanel/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("3_57412")
+texture_pressed = ExtResource("4_fb5xd")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="NotifyPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.5
+offset_top = -40.0
+offset_right = 160.5
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="NotifyPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="NotifyLabel" type="Label" parent="NotifyPanel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Welcome to Sublight Planets by @fritzy"
+horizontal_alignment = 1
+
+[node name="CreditsPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -394.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CreditsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="CreditsPanel/MarginContainer"]
+layout_mode = 2
+text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"
+
+[node name="URLPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 253.0
+offset_bottom = -7.0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="URLPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="URLPanel/MarginContainer"]
+layout_mode = 2
+text = "fritzy.itch.io/sublight-planets"

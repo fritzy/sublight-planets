@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=3 uid="uid://ba30kxu3om3b1"]
+
+[ext_resource type="Script" path="res://scripts/map/gas_planet.gd" id="1_2t4fa"]
+[ext_resource type="Shader" path="res://scripts/map/gasplanet.gdshader" id="1_4tpf1"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_c8fcd"]
+seed = 473059235
+domain_warp_enabled = true
+domain_warp_amplitude = 50.0
+domain_warp_fractal_gain = 0.7
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_olwsr"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_c8fcd")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xhocl"]
+seamless = true
+noise = SubResource("FastNoiseLite_c8fcd")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mybbv"]
+seed = 473059235
+frequency = 0.0071
+fractal_gain = 0.35
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mgxcm"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_mybbv")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1xi8k"]
+seamless = true
+noise = SubResource("FastNoiseLite_mybbv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24cuc"]
+shader = ExtResource("1_4tpf1")
+shader_parameter/cloud_color = Color(0.80549, 0.779018, 0.625232, 1)
+shader_parameter/cloud_color2 = Color(0.493211, 0.220127, 0, 1)
+shader_parameter/storm_color = Color(0.588253, 0.152202, 0, 1)
+shader_parameter/amplitude = 0.382
+shader_parameter/planet_radius = 1.0
+shader_parameter/gas1_texture = SubResource("NoiseTexture2D_xhocl")
+shader_parameter/gas1_normal = SubResource("NoiseTexture2D_olwsr")
+shader_parameter/gas2_texture = SubResource("NoiseTexture2D_1xi8k")
+shader_parameter/gas2_normal = SubResource("NoiseTexture2D_mgxcm")
+
+[node name="GasPlanet" type="Node2D"]
+script = ExtResource("1_2t4fa")
+
+[node name="Planet" type="Button" parent="."]
+material = SubResource("ShaderMaterial_24cuc")
+custom_minimum_size = Vector2(512, 512)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]

@@ -1,26 +1,26 @@
 @tool
 extends Node2D
 
-@onready var shine_slider = %ShineSlider
-@onready var ice_slider = %IceSlider
-@onready var ocean_depth_slider = %OceanDepthSlider
-@onready var ground_color = %GroundColor
-@onready var sky_color = %SkyColor
-@onready var desert_color = %DesertColor
-@onready var desert_button = %DesertButton
-@onready var atmos_slider = %AtmosSlider
-@onready var cloud_slider = %CloudSlider
-@onready var mtn_snow_slider = %MtnSnowSlider
-@onready var cloud_dense_slider = %CloudSlider2
-@onready var cloud_color = %CloudColor
-@onready var rand_color_button = %RandColorButton
-@onready var rand_params_button = %RandParamsButton
+@onready var shine_slider = %RockyPlanetUI/%ShineSlider
+@onready var ice_slider = %RockyPlanetUI/%IceSlider
+@onready var ocean_depth_slider = %RockyPlanetUI/%OceanDepthSlider
+@onready var ground_color = %RockyPlanetUI/%GroundColor
+@onready var sky_color = %RockyPlanetUI/%SkyColor
+@onready var desert_color = %RockyPlanetUI/%DesertColor
+@onready var desert_button = %RockyPlanetUI/%DesertButton
+@onready var atmos_slider = %RockyPlanetUI/%AtmosSlider
+@onready var cloud_slider = %RockyPlanetUI/%CloudSlider
+@onready var mtn_snow_slider = %RockyPlanetUI/%MtnSnowSlider
+@onready var cloud_dense_slider = %RockyPlanetUI/%CloudSlider2
+@onready var cloud_color = %RockyPlanetUI/%CloudColor
+@onready var rand_color_button = %RockyPlanetUI/%RandColorButton
+@onready var rand_params_button = %RockyPlanetUI/%RandParamsButton
 
-@onready var reset_button = %ResetButton
+@onready var reset_button = %RockyPlanetUI/%ResetButton
 
-@onready var earth_button = %EarthButton
-@onready var mars_button = %MarsButton
-@onready var random_button = %RandomButton
+@onready var earth_button = %RockyPlanetUI/%EarthButton
+@onready var mars_button = %RockyPlanetUI/%MarsButton
+@onready var random_button = %RockyPlanetUI/%RandomButton
 
 var mouse_over: bool = false;
 
@@ -76,7 +76,7 @@ func _ready() -> void:
 	ice_gradient.offsets = PackedFloat32Array([0.503, 0.784, 1.0])
 	ice_gradient.colors = PackedColorArray([Color.BLACK, Color(0.34, 0.34, 0.34), Color.WHITE])
 
-	%NotifyPanel.position.y = -%NotifyPanel.size.y
+	%RockyPlanetUI/%NotifyPanel.position.y = -%RockyPlanetUI/%NotifyPanel.size.y
 	
 	if OS.has_feature('web'):
 		load_from_url()
@@ -102,11 +102,11 @@ func _ready() -> void:
 	earth_button.pressed.connect(generate_earth)
 	mars_button.pressed.connect(generate_mars)
 	random_button.pressed.connect(generate_random)
-	%VisibilityButton.toggled.connect(toggle_panel_visiblity)
-	%CameraButton.pressed.connect(take_screenshot)
+	%RockyPlanetUI/%VisibilityButton.toggled.connect(toggle_panel_visiblity)
+	%RockyPlanetUI/%CameraButton.pressed.connect(take_screenshot)
 	%Planet.mouse_entered.connect(func(): mouse_over = true)
 	%Planet.mouse_exited.connect(func(): mouse_over = false)
-	%ShareButton.pressed.connect(copy_planet_link)
+	%RockyPlanetUI/%ShareButton.pressed.connect(copy_planet_link)
 
 	show_notification("Welcome to Sublight Planets by @fritzy")
 
@@ -186,9 +186,9 @@ func load_packed_value(data) -> void:
 	regenerate()
 	
 func take_screenshot() -> void:
-	if %VisibilityButton.button_pressed:
-		%DisplayPanel.visible = false
-		%NotifyPanel.visible = false
+	if %RockyPlanetUI/%VisibilityButton.button_pressed:
+		%RockyPlanetUI/%DisplayPanel.visible = false
+		%RockyPlanetUI/%NotifyPanel.visible = false
 		await get_tree().create_timer(0.5).timeout
 	var image := get_viewport().get_texture().get_image()
 	if OS.has_feature('web'):
@@ -217,20 +217,20 @@ func take_screenshot() -> void:
 			id = parts[2].to_int() + 1
 		var img_file_name = "%s/%s" % [OS.get_system_dir(OS.SYSTEM_DIR_PICTURES), 'sublight-screenshot-%d.png' % id]
 		image.save_png(img_file_name)
-		%NotifyPanel.visible = true
+		%RockyPlanetUI/%NotifyPanel.visible = true
 		show_notification("Saved screenshot: %s" % img_file_name)
 	await get_tree().create_timer(1.0).timeout
-	%DisplayPanel.visible = true
-	%NotifyPanel.visible = true
+	%RockyPlanetUI/%DisplayPanel.visible = true
+	%RockyPlanetUI/%NotifyPanel.visible = true
 
 func toggle_panel_visiblity(toggle: bool) -> void:
-	%PresetPanel.visible = not toggle
-	%ParamPanel.visible = not toggle
-	%ColorPanel.visible = not toggle
+	%RockyPlanetUI/%PresetPanel.visible = not toggle
+	%RockyPlanetUI/%ParamPanel.visible = not toggle
+	%RockyPlanetUI/%ColorPanel.visible = not toggle
 	# panel not sizing correctly after visiblity toggle
-	%ColorPanel.set_size(%ColorPanel.get_minimum_size())
-	%ParamPanel.set_size(%ParamPanel.get_minimum_size())
-	%PresetPanel.set_size(%PresetPanel.get_minimum_size())
+	%RockyPlanetUI/%ColorPanel.set_size(%RockyPlanetUI/%ColorPanel.get_minimum_size())
+	%RockyPlanetUI/%ParamPanel.set_size(%RockyPlanetUI/%ParamPanel.get_minimum_size())
+	%RockyPlanetUI/%PresetPanel.set_size(%RockyPlanetUI/%PresetPanel.get_minimum_size())
 
 func _set_shine(value) -> void:
 	planet.set_shader_parameter('shine_offset', shine_slider.value)
@@ -265,17 +265,17 @@ func _desert_toggled(value) -> void:
 		planet.set_shader_parameter('desert_patches', 0.0)
 
 func randomize_colors() -> void:
-	var pickers = [%GroundColor, %DesertColor, %SkyColor, %CloudColor]
+	var pickers = [%RockyPlanetUI/%GroundColor, %RockyPlanetUI/%DesertColor, %RockyPlanetUI/%SkyColor, %RockyPlanetUI/%CloudColor]
 	for picker in pickers:
 		picker.color = Color(randf(), randf(), randf())
 		picker.color_changed.emit(picker.color)
 
 func randomize_params() -> void:
-	var sliders = [%OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
+	var sliders = [%RockyPlanetUI/%OceanDepthSlider, %RockyPlanetUI/%IceSlider, %RockyPlanetUI/%AtmosSlider, %RockyPlanetUI/%CloudSlider, %RockyPlanetUI/%CloudSlider2]
 	for slider in sliders:
 		slider.value = randf_range(slider.min_value, slider.max_value)
 	regenerate_clouds()
-	var toggles = [%DesertButton]
+	var toggles = [%RockyPlanetUI/%DesertButton]
 	for toggle in toggles:
 		toggle.button_pressed = bool(randi_range(0, 1))
 
@@ -454,8 +454,8 @@ func regenerate_ice() -> void:
 	planet.set_shader_parameter('ice_texture', texture)
 
 func show_notification(text: String) -> void:
-	%NotifyLabel.text = text
+	%RockyPlanetUI/%NotifyLabel.text = text
 	print(text)
 	var tween := create_tween()
-	tween.tween_property(%NotifyPanel, 'position:y', 0.0, 0.5)
-	tween.tween_property(%NotifyPanel, 'position:y', -%NotifyPanel.size.y, 0.5).set_delay(3.0)
+	tween.tween_property(%RockyPlanetUI/%NotifyPanel, 'position:y', 0.0, 0.5)
+	tween.tween_property(%RockyPlanetUI/%NotifyPanel, 'position:y', -%RockyPlanetUI/%NotifyPanel.size.y, 0.5).set_delay(3.0)
