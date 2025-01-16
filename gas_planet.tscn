@@ -1,46 +1,46 @@
 [gd_scene load_steps=19 format=3 uid="uid://ba30kxu3om3b1"]
 
-[ext_resource type="Script" path="res://scripts/map/gas_planet.gd" id="1_2t4fa"]
-[ext_resource type="Shader" path="res://scripts/map/gasplanet.gdshader" id="1_4tpf1"]
-[ext_resource type="Script" path="res://scripts/map/stars.gd" id="2_k0ust"]
+[ext_resource type="Script" uid="uid://bo46kfep6b7p1" path="res://scripts/map/gas_planet.gd" id="1_2t4fa"]
+[ext_resource type="Shader" uid="uid://b08exm683f6s0" path="res://scripts/map/gasplanet.gdshader" id="1_4tpf1"]
+[ext_resource type="Script" uid="uid://dre8a6ddv56rd" path="res://scripts/map/stars.gd" id="2_k0ust"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_c8fcd"]
-seed = 473059235
-frequency = 0.0048
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0c2lx"]
+seed = 1534246311
 domain_warp_enabled = true
 domain_warp_amplitude = 50.0
 domain_warp_fractal_gain = 0.7
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_olwsr"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5c4o0"]
 seamless = true
 as_normal_map = true
-noise = SubResource("FastNoiseLite_c8fcd")
+noise = SubResource("FastNoiseLite_0c2lx")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xhocl"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_17o2j"]
 seamless = true
-noise = SubResource("FastNoiseLite_c8fcd")
+noise = SubResource("FastNoiseLite_0c2lx")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_mybbv"]
-seed = 473059235
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dl3pl"]
+seed = 1534246311
 frequency = 0.0046
 fractal_gain = 0.35
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mgxcm"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_oyksm"]
 seamless = true
 as_normal_map = true
-noise = SubResource("FastNoiseLite_mybbv")
+noise = SubResource("FastNoiseLite_dl3pl")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1xi8k"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1vfr"]
 seamless = true
-noise = SubResource("FastNoiseLite_mybbv")
+noise = SubResource("FastNoiseLite_dl3pl")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_iymc5"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xf5is"]
+seed = 1534246312
 frequency = 0.003
 fractal_gain = 0.3
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_labyu"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8l4dg"]
 seamless = true
-noise = SubResource("FastNoiseLite_iymc5")
+noise = SubResource("FastNoiseLite_xf5is")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6gnb6"]
 frequency = 0.0311
@@ -69,21 +69,21 @@ noise = SubResource("FastNoiseLite_xdsks")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_24cuc"]
 shader = ExtResource("1_4tpf1")
-shader_parameter/cloud_color = Color(0.80549, 0.779018, 0.625232, 1)
-shader_parameter/cloud_color2 = Color(0.493211, 0.220127, 0, 1)
-shader_parameter/storm_color = Color(0.588253, 0.152202, 0, 1)
-shader_parameter/ring1_color = Color(0.812278, 0.76246, 0.512978, 1)
-shader_parameter/ring2_color = Color(0.595041, 0.312933, 0.113596, 1)
-shader_parameter/amplitude = 0.441
-shader_parameter/planet_radius = 0.396
-shader_parameter/gas1_texture = SubResource("NoiseTexture2D_xhocl")
-shader_parameter/gas1_normal = SubResource("NoiseTexture2D_olwsr")
-shader_parameter/gas2_texture = SubResource("NoiseTexture2D_1xi8k")
-shader_parameter/gas2_normal = SubResource("NoiseTexture2D_mgxcm")
-shader_parameter/gas3_texture = SubResource("NoiseTexture2D_labyu")
+shader_parameter/gas1_texture = SubResource("NoiseTexture2D_17o2j")
+shader_parameter/gas1_normal = SubResource("NoiseTexture2D_5c4o0")
+shader_parameter/gas2_texture = SubResource("NoiseTexture2D_h1vfr")
+shader_parameter/gas2_normal = SubResource("NoiseTexture2D_oyksm")
+shader_parameter/gas3_texture = SubResource("NoiseTexture2D_8l4dg")
 shader_parameter/ring1_texture = SubResource("NoiseTexture2D_smblf")
 shader_parameter/ring2_texture = SubResource("NoiseTexture2D_b63l4")
 shader_parameter/ring3_texture = SubResource("NoiseTexture2D_27neq")
+shader_parameter/cloud_color = Color(0.80549, 0.779018, 0.625232, 1)
+shader_parameter/cloud_color2 = Color(0.493211, 0.213251, 0, 1)
+shader_parameter/storm_color = Color(0.846222, 0.726473, 0.684675, 1)
+shader_parameter/ring1_color = Color(0.486423, 0.257841, 0.144043, 1)
+shader_parameter/ring2_color = Color(0.757969, 0.7174, 0.638194, 1)
+shader_parameter/amplitude = 0.25
+shader_parameter/planet_radius = 0.427
 
 [node name="GasPlanet" type="Node2D"]
 script = ExtResource("1_2t4fa")

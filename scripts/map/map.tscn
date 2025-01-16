@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://cwqg0sl15l843"]
 
-[ext_resource type="Script" path="res://scripts/map/map.gd" id="1_f5fyp"]
+[ext_resource type="Script" uid="uid://b70r1h1jjhwc" path="res://scripts/map/map.gd" id="1_f5fyp"]
 [ext_resource type="Material" uid="uid://b3380yfw66310" path="res://scripts/map/crt_material.tres" id="2_xgqds"]
-[ext_resource type="Script" path="res://scripts/map/stars.gd" id="2_xym0a"]
-[ext_resource type="Script" path="res://scripts/map/map_system.gd" id="3_s26l1"]
+[ext_resource type="Script" uid="uid://dre8a6ddv56rd" path="res://scripts/map/stars.gd" id="2_xym0a"]
+[ext_resource type="Script" uid="uid://cvifbcqx56w1m" path="res://scripts/map/map_system.gd" id="3_s26l1"]
 [ext_resource type="PackedScene" uid="uid://bsjnfr1fd24rx" path="res://scripts/map/sun.tscn" id="5_tdq6a"]
 
 [node name="Map" type="Node2D"]

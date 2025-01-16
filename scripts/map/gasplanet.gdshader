@@ -62,9 +62,9 @@ void fragment() {
 	vec3 cloud3_sample = texture(gas3_texture, storm_offset2).rgb;
 	vec3 mixed_storm_sample = (((cloud2_sample + cloud3_sample) / 2.0) - 0.5) * 2.0;
 
-	float up_height = texture(gas2_texture, vec2(storm_offset.x, storm_offset.y - .04)).r;
+	float up_height = texture(gas1_texture, vec2(storm_offset.x, storm_offset.y - .04)).r;
 	float down_height = texture(gas2_texture, vec2(storm_offset.x, storm_offset.y + .04)).r;
-	float y_offset = down_height - up_height;
+	float y_offset = (down_height - up_height) * 0.5;
 
 	float eased_storm = 1.0 - cos((mixed_storm_sample.r * PI) / 2.0);
 	//eased_storm = mixed_storm_sample.r - 0.5;
@@ -74,7 +74,7 @@ void fragment() {
 	float show_red  = mix(0.0, 0.75, step(0.1 * (amplitude + 0.0001), abs(eased_storm)* amplitude));
 	//eased_storm = mixed_storm_sample.r;
 
-	vec3 cloud1_sample = texture(gas1_texture, vec2(cloud_offset.x, cloud_offset.y + eased_storm * amplitude)).rgb;
+	vec3 cloud1_sample = texture(gas1_texture, vec2(cloud_offset.x, cloud_offset.y + (y_offset) * amplitude)).rgb;
 
 	base_color.rgb = mix(
 		//cloud1_sample * cloud_color,

@@ -113,7 +113,7 @@ void fragment() {
 	// time offsets for cloud textures
 	vec2 cloud_offset1 = vec2(speed * 1.4, 0.0) * TIME;
 	vec2 cloud_offset2 = vec2(speed * 1.1, 0.0) * TIME;
-	
+
 	// start with white
 	vec3 color = vec3(1.0, 1.0, 1.0);
 	// planet shadow amount
@@ -150,7 +150,7 @@ void fragment() {
 	// mix the ground color with the desert color
 	// normalize land based on remaining height from sea level
 	vec3 ground_mod = (ground_color.rgb * 1.0) + (smoothstep(0.2, 0.55, abs(disty - 0.5)) * desert_color.rgb * 0.5);
-	
+
 	float r = (height - ocean_depth) / (2.0 - ocean_depth - 0.0001);
 	float land_height = r;
 	float sand_height = land_height + 0.2;
@@ -202,7 +202,7 @@ void fragment() {
 	// cut off the color at the land radius
 	color = color * land_alpha;
 
-	
+
 	float cloud_thickness = calculate_cloud_density(sphere_uv, cloud_alpha, cloud_offset1, cloud_offset2);
 	vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);
 	vec3 cloud_diffuse2 = diffuse_light(cloud_texture2, off_pos, UV, 0.4, light_pos);

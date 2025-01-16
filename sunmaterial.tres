@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=11 format=3 uid="uid://irykuv476qc0"]
 
-[ext_resource type="Shader" path="res://scripts/map/sun.gdshader" id="1_e54ov"]
+[ext_resource type="Shader" uid="uid://df0pd4u4a3vr4" path="res://scripts/map/sun.gdshader" id="1_e54ov"]
 
 [sub_resource type="Gradient" id="Gradient_dctso"]
 offsets = PackedFloat32Array(0, 0.0478261, 0.56087)
@@ -44,8 +44,8 @@ noise = SubResource("FastNoiseLite_08bh2")
 resource_local_to_scene = true
 shader = ExtResource("1_e54ov")
 shader_parameter/star_radius = 0.8
-shader_parameter/baseColor = Color(1, 0.283333, 0, 1)
-shader_parameter/highColor = Color(0.966667, 1, 0, 1)
 shader_parameter/noise1 = SubResource("NoiseTexture2D_jnn63")
 shader_parameter/noise2 = SubResource("NoiseTexture2D_puigm")
 shader_parameter/noise3 = SubResource("NoiseTexture2D_26a84")
+shader_parameter/baseColor = Color(1, 0.283333, 0, 1)
+shader_parameter/highColor = Color(0.966667, 1, 0, 1)

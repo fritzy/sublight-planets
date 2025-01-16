@@ -1,97 +1,105 @@
 [gd_scene load_steps=24 format=3 uid="uid://bb834fy7j5c0q"]
 
-[ext_resource type="Script" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
-[ext_resource type="Shader" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
+[ext_resource type="Script" uid="uid://5dnqkb26sl2g" path="res://scripts/rocky_planet.gd" id="1_08tb2"]
+[ext_resource type="Shader" uid="uid://de5d45pumt7d3" path="res://scripts/map/rockyplanet.gdshader" id="1_qey08"]
 [ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scripts/rocky_planet_ui.tscn" id="4_1n0ek"]
-[ext_resource type="Script" path="res://scripts/map/stars.gd" id="7_wthn5"]
+[ext_resource type="Script" uid="uid://dre8a6ddv56rd" path="res://scripts/map/stars.gd" id="7_wthn5"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_p2oh6"]
-seed = -1467319715
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hgs20"]
+seed = 128110427
 frequency = 0.0175
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b8mlt"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vavct"]
 seamless = true
-noise = SubResource("FastNoiseLite_p2oh6")
+noise = SubResource("FastNoiseLite_hgs20")
 
-[sub_resource type="Gradient" id="Gradient_dcv04"]
+[sub_resource type="Gradient" id="Gradient_lyfsc"]
 offsets = PackedFloat32Array(0.45, 0.719)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_fn3vb"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4bxwm"]
 noise_type = 0
-seed = -1467319715
+seed = 128110427
 frequency = 0.0039
 domain_warp_enabled = true
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_enrlt"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t2wfl"]
 seamless = true
-color_ramp = SubResource("Gradient_dcv04")
-noise = SubResource("FastNoiseLite_fn3vb")
+color_ramp = SubResource("Gradient_lyfsc")
+noise = SubResource("FastNoiseLite_4bxwm")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_jxfrr"]
-seed = -1467319715
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hnqse"]
+seed = 128110427
 frequency = 0.0087
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5plwf"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_by1mv"]
 seamless = true
-noise = SubResource("FastNoiseLite_jxfrr")
+noise = SubResource("FastNoiseLite_hnqse")
 
-[sub_resource type="Gradient" id="Gradient_ocs1a"]
+[sub_resource type="Gradient" id="Gradient_bs04n"]
 offsets = PackedFloat32Array(0.503, 0.784, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_qu03j"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wjllm"]
 noise_type = 2
-seed = -1467319715
+seed = 128110427
 frequency = 0.0524
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vp6yw"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l4fsh"]
 seamless = true
-color_ramp = SubResource("Gradient_ocs1a")
-noise = SubResource("FastNoiseLite_qu03j")
+color_ramp = SubResource("Gradient_bs04n")
+noise = SubResource("FastNoiseLite_wjllm")
 
-[sub_resource type="Gradient" id="Gradient_fbhmp"]
+[sub_resource type="Gradient" id="Gradient_h7to5"]
 offsets = PackedFloat32Array(0.447, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_c1hri"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_rce3i"]
 noise_type = 2
-seed = -1467319715
+seed = 128110427
 frequency = 0.0238
 fractal_lacunarity = 2.5
 fractal_gain = 0.8
 fractal_weighted_strength = 0.5
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7yry6"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h8xxu"]
 seamless = true
 as_normal_map = true
-color_ramp = SubResource("Gradient_fbhmp")
-noise = SubResource("FastNoiseLite_c1hri")
+color_ramp = SubResource("Gradient_h7to5")
+noise = SubResource("FastNoiseLite_rce3i")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xuucj"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cq3yc"]
 seamless = true
-color_ramp = SubResource("Gradient_fbhmp")
-noise = SubResource("FastNoiseLite_c1hri")
+color_ramp = SubResource("Gradient_h7to5")
+noise = SubResource("FastNoiseLite_rce3i")
 
-[sub_resource type="Gradient" id="Gradient_venf7"]
+[sub_resource type="Gradient" id="Gradient_rkov4"]
 offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
 colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 0.69, 0.69, 0.69, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_d5in4"]
-seed = -1467319715
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r1xdo"]
+seed = 128110427
 frequency = 0.0054
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_npfks"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qm0x4"]
 seamless = true
 as_normal_map = true
-color_ramp = SubResource("Gradient_venf7")
-noise = SubResource("FastNoiseLite_d5in4")
+color_ramp = SubResource("Gradient_rkov4")
+noise = SubResource("FastNoiseLite_r1xdo")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_u2c1l"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5irti"]
 seamless = true
-color_ramp = SubResource("Gradient_venf7")
-noise = SubResource("FastNoiseLite_d5in4")
+color_ramp = SubResource("Gradient_rkov4")
+noise = SubResource("FastNoiseLite_r1xdo")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
 shader = ExtResource("1_qey08")
+shader_parameter/surface_texture = SubResource("NoiseTexture2D_5irti")
+shader_parameter/surface_normal = SubResource("NoiseTexture2D_qm0x4")
+shader_parameter/mountain_texture = SubResource("NoiseTexture2D_cq3yc")
+shader_parameter/mountain_normal = SubResource("NoiseTexture2D_h8xxu")
+shader_parameter/desert_texture = SubResource("NoiseTexture2D_by1mv")
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_vavct")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_t2wfl")
+shader_parameter/ice_texture = SubResource("NoiseTexture2D_l4fsh")
 shader_parameter/shine_offset = Vector2(0.6, 0.5)
 shader_parameter/ocean_depth = 0.7
 shader_parameter/speed = 0.05
@@ -105,14 +113,6 @@ shader_parameter/desert_color = Color(0.6328, 0.6218, 0.2917, 1)
 shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
 shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
-shader_parameter/surface_texture = SubResource("NoiseTexture2D_u2c1l")
-shader_parameter/surface_normal = SubResource("NoiseTexture2D_npfks")
-shader_parameter/mountain_texture = SubResource("NoiseTexture2D_xuucj")
-shader_parameter/mountain_normal = SubResource("NoiseTexture2D_7yry6")
-shader_parameter/desert_texture = SubResource("NoiseTexture2D_5plwf")
-shader_parameter/cloud_texture = SubResource("NoiseTexture2D_b8mlt")
-shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_enrlt")
-shader_parameter/ice_texture = SubResource("NoiseTexture2D_vp6yw")
 
 [node name="RockyPlanet" type="Node2D"]
 script = ExtResource("1_08tb2")
