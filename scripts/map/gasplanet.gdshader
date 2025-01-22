@@ -103,7 +103,7 @@ void fragment() {
 
 	vec2 uv = UV;
 
-	
+
     // Convert to polar coordinates
     vec2 centered_uv = uv - vec2(0.5);
 	centered_uv.y *= 3.0;

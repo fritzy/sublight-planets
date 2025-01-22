@@ -8,7 +8,7 @@ uniform sampler2D gas_gradient: repeat_enable;
 const float repro_rad = 1.57;
 uniform float intensity: hint_range(0.001, 0.5) = 0.012;
 uniform float planet_radius: hint_range(0.33, 1.0) = 0.77;
-uniform vec2 shine_offset = vec2(0.5, 0.5);
+uniform vec2 sun_pos = vec2(0.5, 0.5);
 
 vec3 normal_diffuse(vec3 normal, vec2 light_pos, vec2 uv) {
 	vec2 lightDir = normalize(light_pos - uv);
@@ -38,15 +38,17 @@ void fragment() {
 	float samp_y = (sphere_uv.y + 1.0) / 2.0;
 	vec3 band_color = texture(gas_gradient, vec2(samp_y + sample, 0.0)).rgb;
 	//band_color -= (gas_sample1 + gas_sample2) / 8.0;
-	vec2 light_pos = shine_offset;
+	vec2 light_pos = sun_pos;
 	float light_dist = distance(UV, light_pos);
 
 	float planet_shadow = smoothstep((planet_radius * .8), 0.05, light_dist);
 	float planet_shine = smoothstep((planet_radius * .20), 0.01, light_dist);
 	float alpha = step(dist, planet_radius - 0.26);
 	band_color *= planet_shadow;
-	band_color += planet_shine * 0.4;
-	
+	//band_color += planet_shine * 0.4;
+	// softer edge
+	band_color *= smoothstep(0.5, 0.42, dist);
+
 	COLOR.rgb = band_color;
 	//COLOR.rgb = vec3(sample_area);
 	//COLOR.rgb = vec3(0.5 + (gas_sample1 * 0.5) - (gas_sample2 * 0.5));

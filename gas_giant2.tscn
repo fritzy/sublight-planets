@@ -46,24 +46,17 @@ shader_parameter/gas3_texture = ExtResource("2_53dey")
 shader_parameter/gas4_texture = ExtResource("3_1s04m")
 shader_parameter/gas_gradient = SubResource("GradientTexture1D_simmt")
 shader_parameter/intensity = 0.097
-shader_parameter/planet_radius = 0.707
-shader_parameter/shine_offset = Vector2(0.65, 0.5)
+shader_parameter/planet_radius = 0.721
+shader_parameter/sun_pos = Vector2(0.65, 0.5)
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="GasGiant" type="Node2D"]
 
 [node name="Planet" type="Button" parent="."]
 material = SubResource("ShaderMaterial_snl6b")
 custom_minimum_size = Vector2(650, 650)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
 offset_left = -343.0
 offset_top = -325.0
 offset_right = 343.0
 offset_bottom = 325.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Node2D" type="Node2D" parent="."]

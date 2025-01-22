@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dre8a6ddv56rd" path="res://scripts/map/stars.gd" id="7_wthn5"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_hgs20"]
-seed = 128110427
+seed = 1920927525
 frequency = 0.0175
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vavct"]
@@ -18,7 +18,7 @@ offsets = PackedFloat32Array(0.45, 0.719)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_4bxwm"]
 noise_type = 0
-seed = 128110427
+seed = 1920927525
 frequency = 0.0039
 domain_warp_enabled = true
 
@@ -28,7 +28,7 @@ color_ramp = SubResource("Gradient_lyfsc")
 noise = SubResource("FastNoiseLite_4bxwm")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_hnqse"]
-seed = 128110427
+seed = 1920927525
 frequency = 0.0087
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_by1mv"]
@@ -41,7 +41,7 @@ colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wjllm"]
 noise_type = 2
-seed = 128110427
+seed = 1920927525
 frequency = 0.0524
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l4fsh"]
@@ -54,7 +54,7 @@ offsets = PackedFloat32Array(0.447, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_rce3i"]
 noise_type = 2
-seed = 128110427
+seed = 1920927525
 frequency = 0.0238
 fractal_lacunarity = 2.5
 fractal_gain = 0.8
@@ -76,7 +76,7 @@ offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
 colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 0.69, 0.69, 0.69, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_r1xdo"]
-seed = 128110427
+seed = 1920927525
 frequency = 0.0054
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qm0x4"]
