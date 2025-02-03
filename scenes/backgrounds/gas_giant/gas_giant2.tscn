@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://mqb10b0dswlq"]
+[gd_scene load_steps=12 format=3 uid="uid://mqb10b0dswlq"]
 
-[ext_resource type="Shader" uid="uid://b5s76jady4iip" path="res://scripts/map/gasplanet2.gdshader" id="1_o8occ"]
-[ext_resource type="Texture2D" uid="uid://bt8w5sh8qtk8l" path="res://gas_giant2_intensity.tres" id="2_53dey"]
-[ext_resource type="Texture2D" uid="uid://3awajnp1k7ur" path="res://gas_giant2_intensity2.tres" id="3_1s04m"]
+[ext_resource type="Shader" uid="uid://b5s76jady4iip" path="res://scripts/map/gasplanet2.gdshader" id="1_kp03s"]
+[ext_resource type="Script" uid="uid://b8vnqaweagw4" path="res://scenes/backgrounds/gas_giant/gas_giant.gd" id="1_l2fnt"]
+[ext_resource type="Texture2D" uid="uid://bt8w5sh8qtk8l" path="res://scenes/backgrounds/gas_giant/gas_giant2_intensity.tres" id="2_l2fnt"]
+[ext_resource type="Texture2D" uid="uid://3awajnp1k7ur" path="res://scenes/backgrounds/gas_giant/gas_giant2_intensity2.tres" id="3_6cvkf"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_l0w5u"]
 frequency = 0.0095
@@ -39,24 +40,34 @@ gradient = SubResource("Gradient_fre1u")
 width = 1024
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_snl6b"]
-shader = ExtResource("1_o8occ")
+shader = ExtResource("1_kp03s")
 shader_parameter/gas1_texture = SubResource("NoiseTexture2D_07i42")
 shader_parameter/gas2_texture = SubResource("NoiseTexture2D_30ji2")
-shader_parameter/gas3_texture = ExtResource("2_53dey")
-shader_parameter/gas4_texture = ExtResource("3_1s04m")
+shader_parameter/gas3_texture = ExtResource("2_l2fnt")
+shader_parameter/gas4_texture = ExtResource("3_6cvkf")
 shader_parameter/gas_gradient = SubResource("GradientTexture1D_simmt")
-shader_parameter/intensity = 0.097
-shader_parameter/planet_radius = 0.721
+shader_parameter/intensity = 0.091
+shader_parameter/planet_radius = 0.74
 shader_parameter/sun_pos = Vector2(0.65, 0.5)
+shader_parameter/convexity = 1.124
+shader_parameter/margin = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
+shader_parameter/light_color = Color(1, 1, 1, 1)
+shader_parameter/light_direction = Vector3(0.57735, 0.57735, 0.57735)
+shader_parameter/specular_power = 50.0
+shader_parameter/specular_intensity = 0.358
 
 [node name="GasGiant" type="Node2D"]
+script = ExtResource("1_l2fnt")
 
 [node name="Planet" type="Button" parent="."]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_snl6b")
 custom_minimum_size = Vector2(650, 650)
-offset_left = -343.0
-offset_top = -325.0
-offset_right = 343.0
-offset_bottom = 325.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Node2D" type="Node2D" parent="."]

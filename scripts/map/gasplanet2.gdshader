@@ -10,6 +10,28 @@ uniform float intensity: hint_range(0.001, 0.5) = 0.012;
 uniform float planet_radius: hint_range(0.33, 1.0) = 0.77;
 uniform vec2 sun_pos = vec2(0.5, 0.5);
 
+uniform float convexity:hint_range(1.0, 2.0) = 1.0;
+uniform float margin:hint_range(1.0, 1.5) = 1.125;
+
+uniform vec3 ambient_light:source_color;
+uniform vec3 light_color:source_color;
+uniform vec3 light_direction = vec3(0.57735, 0.57735, 0.57735);
+uniform float specular_power:hint_range(1.0, 50.0) = 5.0;
+uniform float specular_intensity:hint_range(0.0, 1.0) = 0.25;
+
+vec3 get_normal(vec2 uv) {
+	float z = sqrt(1.0 - ( pow(uv.x, 2.0) + pow(uv.y, 2.0) ));
+	return  vec3(uv.x, uv.y, z);
+}
+
+vec3 get_light(vec3 normal, vec3 color) {
+	vec3 camera_direction = vec3(0.0, 0.0, 1.0);
+	vec3 half_vector = normalize( camera_direction + light_direction );
+	float diffuse    = max( 0.0, dot( light_direction, normal ) );
+	float specular   = pow(max( 0.0, dot( half_vector, normal )), specular_power);
+	return ambient_light + color * light_color.rgb * (diffuse + specular * specular_intensity); 
+}
+
 vec3 normal_diffuse(vec3 normal, vec2 light_pos, vec2 uv) {
 	vec2 lightDir = normalize(light_pos - uv);
 	float diff = max(dot(normal.rg, lightDir), 0.0);
@@ -38,15 +60,26 @@ void fragment() {
 	float samp_y = (sphere_uv.y + 1.0) / 2.0;
 	vec3 band_color = texture(gas_gradient, vec2(samp_y + sample, 0.0)).rgb;
 	//band_color -= (gas_sample1 + gas_sample2) / 8.0;
+	
+	vec2 uv_centered = UV * margin * 2.0 - margin; // make uv (0,0) in sprite center
+	vec3 sphere_normal = get_normal(uv_centered); // uv to spherical coordinates
+	sphere_normal.xy /= (sphere_normal.z / margin + 1.0) * convexity; // convex effect
+	sphere_normal = normalize(sphere_normal); // normalize normals
+
+	
 	vec2 light_pos = sun_pos;
 	float light_dist = distance(UV, light_pos);
 
-	float planet_shadow = smoothstep((planet_radius * .8), 0.05, light_dist);
-	float planet_shine = smoothstep((planet_radius * .20), 0.01, light_dist);
+	//float planet_shadow = smoothstep((planet_radius * .8), 0.05, light_dist);
+	//float planet_shine = smoothstep((planet_radius * .20), 0.01, light_dist);
 	float alpha = step(dist, planet_radius - 0.26);
-	band_color *= planet_shadow;
+	//band_color *= planet_shadow;
 	//band_color += planet_shine * 0.4;
 	// softer edge
+	
+	
+	band_color = get_light(sphere_normal, band_color);
+	
 	band_color *= smoothstep(0.5, 0.42, dist);
 
 	COLOR.rgb = band_color;

@@ -1,26 +1,26 @@
 @tool
 extends Node2D
 
-@onready var shine_slider = %RockyPlanetUI/%ShineSlider
-@onready var ice_slider = %RockyPlanetUI/%IceSlider
-@onready var ocean_depth_slider = %RockyPlanetUI/%OceanDepthSlider
-@onready var ground_color = %RockyPlanetUI/%GroundColor
-@onready var sky_color = %RockyPlanetUI/%SkyColor
-@onready var desert_color = %RockyPlanetUI/%DesertColor
-@onready var desert_button = %RockyPlanetUI/%DesertButton
-@onready var atmos_slider = %RockyPlanetUI/%AtmosSlider
-@onready var cloud_slider = %RockyPlanetUI/%CloudSlider
-@onready var mtn_snow_slider = %RockyPlanetUI/%MtnSnowSlider
-@onready var cloud_dense_slider = %RockyPlanetUI/%CloudSlider2
-@onready var cloud_color = %RockyPlanetUI/%CloudColor
-@onready var rand_color_button = %RockyPlanetUI/%RandColorButton
-@onready var rand_params_button = %RockyPlanetUI/%RandParamsButton
+#@onready var shine_slider = %RockyPlanetUI/%ShineSlider
+#@onready var ice_slider = %RockyPlanetUI/%IceSlider
+#@onready var ocean_depth_slider = %RockyPlanetUI/%OceanDepthSlider
+#@onready var ground_color = %RockyPlanetUI/%GroundColor
+#@onready var sky_color = %RockyPlanetUI/%SkyColor
+#@onready var desert_color = %RockyPlanetUI/%DesertColor
+#@onready var desert_button = %RockyPlanetUI/%DesertButton
+#@onready var atmos_slider = %RockyPlanetUI/%AtmosSlider
+#@onready var cloud_slider = %RockyPlanetUI/%CloudSlider
+#@onready var mtn_snow_slider = %RockyPlanetUI/%MtnSnowSlider
+#@onready var cloud_dense_slider = %RockyPlanetUI/%CloudSlider2
+#@onready var cloud_color = %RockyPlanetUI/%CloudColor
+#@onready var rand_color_button = %RockyPlanetUI/%RandColorButton
+#@onready var rand_params_button = %RockyPlanetUI/%RandParamsButton
 
-@onready var reset_button = %RockyPlanetUI/%ResetButton
+#@onready var reset_button = %RockyPlanetUI/%ResetButton
 
-@onready var earth_button = %RockyPlanetUI/%EarthButton
-@onready var mars_button = %RockyPlanetUI/%MarsButton
-@onready var random_button = %RockyPlanetUI/%RandomButton
+#@onready var earth_button = %RockyPlanetUI/%EarthButton
+#@onready var mars_button = %RockyPlanetUI/%MarsButton
+#@onready var random_button = %RockyPlanetUI/%RandomButton
 
 var mouse_over: bool = false;
 
@@ -76,7 +76,7 @@ func _ready() -> void:
 	ice_gradient.offsets = PackedFloat32Array([0.503, 0.784, 1.0])
 	ice_gradient.colors = PackedColorArray([Color.BLACK, Color(0.34, 0.34, 0.34), Color.WHITE])
 
-	%RockyPlanetUI/%NotifyPanel.position.y = -%RockyPlanetUI/%NotifyPanel.size.y
+	#%RockyPlanetUI/%NotifyPanel.position.y = -%RockyPlanetUI/%NotifyPanel.size.y
 	
 	if OS.has_feature('web'):
 		load_from_url()
@@ -84,48 +84,49 @@ func _ready() -> void:
 		generate_earth()
 		update_inputs()
 
-	shine_slider.value_changed.connect(_set_shine)
-	ice_slider.value_changed.connect(_set_ice)
-	sky_color.color_changed.connect(_set_sky_color)
-	ground_color.color_changed.connect(_set_ground_color)
-	cloud_color.color_changed.connect(func(color): planet.set_shader_parameter('cloud_color', color))
-	desert_color.color_changed.connect(_set_desert_color)
-	ocean_depth_slider.value_changed.connect(_set_ocean_depth)
-	atmos_slider.value_changed.connect(func(value): planet.set_shader_parameter('atmosphere_opacity', value))
-	cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
-	cloud_dense_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_density', value))
-	mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
-	reset_button.pressed.connect(func(): regenerate(true))
-	desert_button.toggled.connect(_desert_toggled)
-	rand_color_button.pressed.connect(randomize_colors)
-	rand_params_button.pressed.connect(randomize_params)
-	earth_button.pressed.connect(generate_earth)
-	mars_button.pressed.connect(generate_mars)
-	random_button.pressed.connect(generate_random)
-	%RockyPlanetUI/%VisibilityButton.toggled.connect(toggle_panel_visiblity)
-	%RockyPlanetUI/%CameraButton.pressed.connect(take_screenshot)
-	%Planet.mouse_entered.connect(func(): mouse_over = true)
-	%Planet.mouse_exited.connect(func(): mouse_over = false)
-	%RockyPlanetUI/%ShareButton.pressed.connect(copy_planet_link)
+	#shine_slider.value_changed.connect(_set_shine)
+	#ice_slider.value_changed.connect(_set_ice)
+	#sky_color.color_changed.connect(_set_sky_color)
+	#ground_color.color_changed.connect(_set_ground_color)
+	#cloud_color.color_changed.connect(func(color): planet.set_shader_parameter('cloud_color', color))
+	#desert_color.color_changed.connect(_set_desert_color)
+	#ocean_depth_slider.value_changed.connect(_set_ocean_depth)
+	#atmos_slider.value_changed.connect(func(value): planet.set_shader_parameter('atmosphere_opacity', value))
+	#cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
+	#cloud_dense_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_density', value))
+	#mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
+	#reset_button.pressed.connect(func(): regenerate(true))
+	#desert_button.toggled.connect(_desert_toggled)
+	#rand_color_button.pressed.connect(randomize_colors)
+	#rand_params_button.pressed.connect(randomize_params)
+	#earth_button.pressed.connect(generate_earth)
+	#mars_button.pressed.connect(generate_mars)
+	#random_button.pressed.connect(generate_random)
+	#%RockyPlanetUI/%VisibilityButton.toggled.connect(toggle_panel_visiblity)
+	#%RockyPlanetUI/%CameraButton.pressed.connect(take_screenshot)
+	#%Planet.mouse_entered.connect(func(): mouse_over = true)
+	#%Planet.mouse_exited.connect(func(): mouse_over = false)
+	#%RockyPlanetUI/%ShareButton.pressed.connect(copy_planet_link)
 
-	show_notification("Welcome to Sublight Planets by @fritzy")
+	#show_notification("Welcome to Sublight Planets by @fritzy")
 
 func update_inputs() -> void:
+	return
 	#shine_slider.value = planet.get_shader_parameter('shine_offset')
-	ice_slider.value = planet.get_shader_parameter('ice_coverage')
-	sky_color.color = planet.get_shader_parameter('ocean_color')
-	ground_color.color = planet.get_shader_parameter('ground_color')
-	cloud_color.color = planet.get_shader_parameter('cloud_color')
-	desert_color.color = planet.get_shader_parameter('desert_color')
-	ocean_depth_slider.value = planet.get_shader_parameter('ocean_depth')
-	atmos_slider.value = planet.get_shader_parameter('atmosphere_opacity')
-	cloud_slider.value = planet.get_shader_parameter('cloud_opacity')
-	mtn_snow_slider.value = planet.get_shader_parameter('mtn_snow_height')
-	var dpatches: float = planet.get_shader_parameter('desert_patches')
-	if dpatches > 0.1:
-		desert_button.button_pressed = true
-	else:
-		desert_button.button_pressed = false
+	#ice_slider.value = planet.get_shader_parameter('ice_coverage')
+	#sky_color.color = planet.get_shader_parameter('ocean_color')
+	#ground_color.color = planet.get_shader_parameter('ground_color')
+	#cloud_color.color = planet.get_shader_parameter('cloud_color')
+	#desert_color.color = planet.get_shader_parameter('desert_color')
+	#ocean_depth_slider.value = planet.get_shader_parameter('ocean_depth')
+	#atmos_slider.value = planet.get_shader_parameter('atmosphere_opacity')
+	#cloud_slider.value = planet.get_shader_parameter('cloud_opacity')
+	#mtn_snow_slider.value = planet.get_shader_parameter('mtn_snow_height')
+	#var dpatches: float = planet.get_shader_parameter('desert_patches')
+	#if dpatches > 0.1:
+	#	desert_button.button_pressed = true
+	#else:
+	#	desert_button.button_pressed = false
 
 func load_from_url() -> void:
 	var window = JavaScriptBridge.get_interface('window')
@@ -232,11 +233,11 @@ func toggle_panel_visiblity(toggle: bool) -> void:
 	%RockyPlanetUI/%ParamPanel.set_size(%RockyPlanetUI/%ParamPanel.get_minimum_size())
 	%RockyPlanetUI/%PresetPanel.set_size(%RockyPlanetUI/%PresetPanel.get_minimum_size())
 
-func _set_shine(value) -> void:
-	planet.set_shader_parameter('shine_offset', shine_slider.value)
+#func _set_shine(value) -> void:
+#	planet.set_shader_parameter('shine_offset', shine_slider.value)
 
-func _set_ice(value) -> void:
-	planet.set_shader_parameter('ice_coverage', ice_slider.value)
+#func _set_ice(value) -> void:
+#	planet.set_shader_parameter('ice_coverage', ice_slider.value)
 
 func _input(event):
 	# Mouse in viewport coordinates.

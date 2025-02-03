@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://6iu16a8rf6ta"]
 
 [ext_resource type="Script" uid="uid://bucq3pimbbkgp" path="res://test_scene.gd" id="1_2nij2"]
-[ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://nebula.tscn" id="1_ia1lp"]
-[ext_resource type="PackedScene" uid="uid://mqb10b0dswlq" path="res://gas_giant2.tscn" id="2_sasra"]
+[ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://scenes/backgrounds/starfield/nebula.tscn" id="1_ia1lp"]
+[ext_resource type="PackedScene" uid="uid://mqb10b0dswlq" path="res://scenes/backgrounds/gas_giant/gas_giant2.tscn" id="2_sasra"]
 [ext_resource type="Texture2D" uid="uid://bheaaxv4kek3h" path="res://assets/faction_1_ships_32x32.png" id="4_7cbxl"]
 [ext_resource type="Texture2D" uid="uid://bs30q287a4eld" path="res://assets/tigersclaw.png" id="4_8pr8v"]
 [ext_resource type="Texture2D" uid="uid://bwmg3uvyuknw8" path="res://assets/faction_2_ships_32x32.png" id="5_8pr8v"]

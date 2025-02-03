@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://de6r61odwfsr6"]
 
-[ext_resource type="Shader" uid="uid://bu0kvsc7sktqy" path="res://nebula.gdshader" id="1_w63am"]
+[ext_resource type="Shader" uid="uid://bu0kvsc7sktqy" path="res://scenes/backgrounds/starfield/nebula.gdshader" id="1_w63am"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_w63am"]
 noise_type = 3

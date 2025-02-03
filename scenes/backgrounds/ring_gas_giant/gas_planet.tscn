@@ -1,46 +1,46 @@
 [gd_scene load_steps=19 format=3 uid="uid://ba30kxu3om3b1"]
 
-[ext_resource type="Script" uid="uid://bo46kfep6b7p1" path="res://scripts/map/gas_planet.gd" id="1_2t4fa"]
-[ext_resource type="Shader" uid="uid://b08exm683f6s0" path="res://scripts/map/gasplanet.gdshader" id="1_4tpf1"]
-[ext_resource type="Script" uid="uid://dre8a6ddv56rd" path="res://scripts/map/stars.gd" id="2_k0ust"]
+[ext_resource type="Script" uid="uid://bo46kfep6b7p1" path="res://scripts/map/gas_planet.gd" id="1_eqjua"]
+[ext_resource type="Script" uid="uid://dre8a6ddv56rd" path="res://scripts/map/stars.gd" id="2_c67fv"]
+[ext_resource type="Shader" uid="uid://b08exm683f6s0" path="res://scripts/map/gasplanet.gdshader" id="3_p0oir"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_0c2lx"]
-seed = 1423774051
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_eqjua"]
+seed = -374660158
 domain_warp_enabled = true
 domain_warp_amplitude = 50.0
 domain_warp_fractal_gain = 0.7
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5c4o0"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_c67fv"]
 seamless = true
 as_normal_map = true
-noise = SubResource("FastNoiseLite_0c2lx")
+noise = SubResource("FastNoiseLite_eqjua")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_17o2j"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_p0oir"]
 seamless = true
-noise = SubResource("FastNoiseLite_0c2lx")
+noise = SubResource("FastNoiseLite_eqjua")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_dl3pl"]
-seed = 1423774051
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_v8u5g"]
+seed = -374660158
 frequency = 0.0046
 fractal_gain = 0.35
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_oyksm"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_chjis"]
 seamless = true
 as_normal_map = true
-noise = SubResource("FastNoiseLite_dl3pl")
+noise = SubResource("FastNoiseLite_v8u5g")
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h1vfr"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_iev36"]
 seamless = true
-noise = SubResource("FastNoiseLite_dl3pl")
+noise = SubResource("FastNoiseLite_v8u5g")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_xf5is"]
-seed = 1423774052
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_buvn5"]
+seed = -374660157
 frequency = 0.003
 fractal_gain = 0.3
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8l4dg"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0n1m0"]
 seamless = true
-noise = SubResource("FastNoiseLite_xf5is")
+noise = SubResource("FastNoiseLite_buvn5")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6gnb6"]
 frequency = 0.0311
@@ -68,12 +68,12 @@ as_normal_map = true
 noise = SubResource("FastNoiseLite_xdsks")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_24cuc"]
-shader = ExtResource("1_4tpf1")
-shader_parameter/gas1_texture = SubResource("NoiseTexture2D_17o2j")
-shader_parameter/gas1_normal = SubResource("NoiseTexture2D_5c4o0")
-shader_parameter/gas2_texture = SubResource("NoiseTexture2D_h1vfr")
-shader_parameter/gas2_normal = SubResource("NoiseTexture2D_oyksm")
-shader_parameter/gas3_texture = SubResource("NoiseTexture2D_8l4dg")
+shader = ExtResource("3_p0oir")
+shader_parameter/gas1_texture = SubResource("NoiseTexture2D_p0oir")
+shader_parameter/gas1_normal = SubResource("NoiseTexture2D_c67fv")
+shader_parameter/gas2_texture = SubResource("NoiseTexture2D_iev36")
+shader_parameter/gas2_normal = SubResource("NoiseTexture2D_chjis")
+shader_parameter/gas3_texture = SubResource("NoiseTexture2D_0n1m0")
 shader_parameter/ring1_texture = SubResource("NoiseTexture2D_smblf")
 shader_parameter/ring2_texture = SubResource("NoiseTexture2D_b63l4")
 shader_parameter/ring3_texture = SubResource("NoiseTexture2D_27neq")
@@ -86,10 +86,10 @@ shader_parameter/amplitude = 0.25
 shader_parameter/planet_radius = 0.427
 
 [node name="GasPlanet" type="Node2D"]
-script = ExtResource("1_2t4fa")
+script = ExtResource("1_eqjua")
 
 [node name="StarField" type="Node2D" parent="."]
-script = ExtResource("2_k0ust")
+script = ExtResource("2_c67fv")
 
 [node name="Planet" type="Button" parent="."]
 material = SubResource("ShaderMaterial_24cuc")
