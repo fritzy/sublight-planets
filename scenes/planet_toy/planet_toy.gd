@@ -3,15 +3,16 @@ extends Node2D
 @export var planet_carousel: Array[PackedScene]
 @export var planet_uis: Array[PackedScene]
 var planet_idx := 0
+var planets: Array[Celestial]
+var uis: Array[Node2D]
 var current_planet: Celestial
-var current_ui: Control
+var current_ui: BaseCelestialUI
 
 func _ready() -> void:
 	%RightButton.pressed.connect(_handle_right_planet)
 	%LeftButton.pressed.connect(_handle_left_planet)
 
-	current_planet = planet_carousel[planet_idx].instantiate()
-	$Planets.add_child(current_planet)
+	_setup_planet()
 	
 func _handle_right_planet() -> void:
 	await _move_and_remove(current_planet, 1.0)
@@ -41,6 +42,14 @@ func _move_and_remove(planet: Node2D, dir: float) -> void:
 		current_ui = null
 
 func _load_and_move(dir: float) -> void:
+	_setup_planet()
+	current_planet.position = Vector2(-dir * 1200.0, 0.0)
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(current_planet, "position", Vector2(0.0, 0.0), 0.25)
+	await tween.finished
+
+func _setup_planet() -> void:
 	current_planet = planet_carousel[planet_idx].instantiate()
 	%PlanetNameLabel.text = current_planet.celestial_name
 	$Planets.add_child(current_planet)
@@ -49,15 +58,15 @@ func _load_and_move(dir: float) -> void:
 		%PlanetUI.add_child(current_ui)
 		current_ui.update_axis.connect(_handle_update_axis)
 		current_ui.update_shader_parameter.connect(_handle_update_shader_parameter)
-
-	current_planet.position = Vector2(-dir * 1200.0, 0.0)
-	var tween = create_tween()
-	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(current_planet, "position", Vector2(0.0, 0.0), 0.25)
-	await tween.finished
+		current_ui.button_pressed.connect(_handle_button_pressed)
+		current_planet.updated_shader_parameters.connect(current_ui.handle_updated_shader_parameters)
 
 func _handle_update_axis(axis: float) -> void:
 	%Camera.rotation = axis
 
 func _handle_update_shader_parameter(parameter: StringName, value: Variant) -> void:
 	current_planet.set_shader_parameter(parameter, value)
+
+func _handle_button_pressed(method: StringName) -> void:
+	print('Button %s' % method)
+	current_planet.call(method)

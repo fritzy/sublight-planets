@@ -8,10 +8,10 @@
 
 [sub_resource type="Theme" id="Theme_23yx4"]
 
+[sub_resource type="Theme" id="Theme_funtb"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50wve"]
 bg_color = Color(0.103743, 0.103744, 0.103744, 1)
-
-[sub_resource type="Theme" id="Theme_funtb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w0b5"]
 content_margin_left = 5.0
@@ -22,23 +22,25 @@ bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 
 [node name="RockyPlanetUI" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_m4vfi")
 
 [node name="ParamPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 0)
+custom_minimum_size = Vector2(256, 10)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 18.0
-offset_top = 134.0
-offset_right = 274.0
-offset_bottom = 472.0
+offset_top = -143.5
+offset_right = 256.0
+offset_bottom = 143.5
 grow_vertical = 2
 theme = SubResource("Theme_23yx4")
-theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
 [node name="MarginContainer" type="MarginContainer" parent="ParamPanel"]
 layout_mode = 2
@@ -107,8 +109,7 @@ value = 0.25
 
 [node name="Label3" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Clouds
-"
+text = "Clouds"
 
 [node name="CloudSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
@@ -119,21 +120,19 @@ value = 0.7
 
 [node name="Label4" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Cloud Dense
-"
+text = "Cloud Dense"
 
 [node name="CloudSlider2" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-max_value = 0.7
+max_value = 1.0
 step = 0.02
 value = 0.5
 
 [node name="MtnSnowLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Mtn Snow
-"
+text = "Mtn Snow"
 
 [node name="MtnSnowSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
@@ -161,6 +160,27 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Regenerate Noise"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="ParamPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="EarthButton" type="Button" parent="ParamPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Earth"
+
+[node name="MarsButton" type="Button" parent="ParamPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mars"
+
+[node name="RandomButton" type="Button" parent="ParamPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Random"
+
 [node name="ColorPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
@@ -170,10 +190,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 870.0
-offset_top = 179.0
-offset_right = 1126.0
-offset_bottom = 331.0
+offset_left = -256.0
+offset_top = -76.0
+offset_bottom = 76.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = SubResource("Theme_funtb")
@@ -250,53 +269,6 @@ layout_mode = 2
 placeholder_text = "seed"
 alignment = 1
 
-[node name="PresetPanel" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 0)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = 512.0
-offset_right = 295.0
-offset_bottom = 563.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_vertical = 8
-theme = SubResource("Theme_funtb")
-theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
-
-[node name="MarginContainer" type="MarginContainer" parent="PresetPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PresetPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="EarthButton" type="Button" parent="PresetPanel/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Earth"
-
-[node name="MarsButton" type="Button" parent="PresetPanel/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Mars"
-
-[node name="RandomButton" type="Button" parent="PresetPanel/MarginContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Random"
-
 [node name="DisplayPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
@@ -304,10 +276,8 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = 1014.0
-offset_top = 15.0
-offset_right = 1128.0
-offset_bottom = 75.0
+offset_left = -114.0
+offset_bottom = 60.0
 grow_horizontal = 0
 size_flags_horizontal = 8
 size_flags_vertical = 0
@@ -366,15 +336,11 @@ horizontal_alignment = 1
 [node name="CreditsPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 606.0
+offset_top = -40.0
 offset_right = 414.0
-offset_bottom = 646.0
-grow_horizontal = 0
 grow_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="CreditsPanel"]
@@ -391,13 +357,14 @@ text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"
 [node name="URLPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 897.0
-offset_top = 606.0
-offset_right = 1150.0
-offset_bottom = 639.0
+offset_left = -253.0
+offset_top = -33.0
+grow_horizontal = 0
 grow_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="URLPanel"]

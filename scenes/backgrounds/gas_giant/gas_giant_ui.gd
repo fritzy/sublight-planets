@@ -1,4 +1,4 @@
-extends Control
+extends BaseCelestialUI
 
 @onready var axis_slider:HSlider = %Axis
 @onready var orbit_slider:HSlider = %Orbit
@@ -16,9 +16,6 @@ extends Control
 	set(value):
 		lock_axis = value
 		_update_planet()
-
-signal update_axis(float)
-signal update_shader_parameter(StringName, Variant)
 
 func _ready() -> void:
 	axis_slider.value_changed.connect(func(value: float): axis = value)

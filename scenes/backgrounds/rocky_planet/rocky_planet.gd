@@ -111,22 +111,17 @@ func _ready() -> void:
 	#show_notification("Welcome to Sublight Planets by @fritzy")
 
 func update_inputs() -> void:
-	return
-	#shine_slider.value = planet.get_shader_parameter('shine_offset')
-	#ice_slider.value = planet.get_shader_parameter('ice_coverage')
-	#sky_color.color = planet.get_shader_parameter('ocean_color')
-	#ground_color.color = planet.get_shader_parameter('ground_color')
-	#cloud_color.color = planet.get_shader_parameter('cloud_color')
-	#desert_color.color = planet.get_shader_parameter('desert_color')
-	#ocean_depth_slider.value = planet.get_shader_parameter('ocean_depth')
-	#atmos_slider.value = planet.get_shader_parameter('atmosphere_opacity')
-	#cloud_slider.value = planet.get_shader_parameter('cloud_opacity')
-	#mtn_snow_slider.value = planet.get_shader_parameter('mtn_snow_height')
-	#var dpatches: float = planet.get_shader_parameter('desert_patches')
-	#if dpatches > 0.1:
-	#	desert_button.button_pressed = true
-	#else:
-	#	desert_button.button_pressed = false
+	var props := planet.get_property_list()
+	var parameters: Dictionary[StringName, Variant] = {}
+	for property in props:
+		if String(property.name).begins_with("shader_parameter"):
+			#prints(property.name, property.type)
+			if property.type != Variant.Type.TYPE_OBJECT:
+				var name = String(property.name).substr(17)
+				parameters[StringName(name)] = planet.get(property.name)
+	updated_shader_parameters.emit(
+		parameters
+	)
 
 func load_from_url() -> void:
 	var window = JavaScriptBridge.get_interface('window')
@@ -266,19 +261,22 @@ func _desert_toggled(value) -> void:
 		planet.set_shader_parameter('desert_patches', 0.0)
 
 func randomize_colors() -> void:
-	var pickers = [%RockyPlanetUI/%GroundColor, %RockyPlanetUI/%DesertColor, %RockyPlanetUI/%SkyColor, %RockyPlanetUI/%CloudColor]
-	for picker in pickers:
-		picker.color = Color(randf(), randf(), randf())
-		picker.color_changed.emit(picker.color)
+	var params := ['ocean_color', 'ground_color', 'desert_color', 'cloud_color']
+	for param in params:
+		planet.set_shader_parameter(param, Color(randf(), randf(), randf()))
+	update_inputs()
 
 func randomize_params() -> void:
-	var sliders = [%RockyPlanetUI/%OceanDepthSlider, %RockyPlanetUI/%IceSlider, %RockyPlanetUI/%AtmosSlider, %RockyPlanetUI/%CloudSlider, %RockyPlanetUI/%CloudSlider2]
-	for slider in sliders:
-		slider.value = randf_range(slider.min_value, slider.max_value)
+	#planet.set_shader_parameter('shine_offset', randf())
+	planet.set_shader_parameter('ice_coverage', randf())
+	#planet.set_shader_parameter('ocean_color', randf())
+	planet.set_shader_parameter('ocean_depth', randf() * 2.0)
+	planet.set_shader_parameter('atmosphere_opacity', randf())
+	planet.set_shader_parameter('cloud_opacity', randf())
+	#planet.set_shader_parameter('mtn_snow_height', randf())
+	planet.set_shader_parameter('desert_patches', float(bool(randi_range(0, 1))))
 	regenerate_clouds()
-	var toggles = [%RockyPlanetUI/%DesertButton]
-	for toggle in toggles:
-		toggle.button_pressed = bool(randi_range(0, 1))
+	update_inputs()
 
 func regenerate(new_seed: bool = false) -> void:
 	if new_seed:
