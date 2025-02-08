@@ -1,15 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkw7xp0d8w2us"]
+[gd_scene load_steps=10 format=3 uid="uid://dkw7xp0d8w2us"]
 
 [ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://scenes/backgrounds/starfield/nebula.tscn" id="1_520vc"]
 [ext_resource type="Script" uid="uid://bkwyg1gky3eb4" path="res://scenes/planet_toy/planet_toy.gd" id="1_am71v"]
+[ext_resource type="PackedScene" uid="uid://bb834fy7j5c0q" path="res://scenes/backgrounds/rocky_planet/rocky_planet.tscn" id="2_3qujd"]
 [ext_resource type="PackedScene" uid="uid://mqb10b0dswlq" path="res://scenes/backgrounds/gas_giant/gas_giant2.tscn" id="2_rxtas"]
 [ext_resource type="Texture2D" uid="uid://uuwe6r1cl6wt" path="res://assets/left-white-icon.svg" id="3_12blc"]
 [ext_resource type="Texture2D" uid="uid://ddfh3ay7ud3fc" path="res://assets/right-white-icon.svg" id="4_am71v"]
-[ext_resource type="Script" uid="uid://dpm1qhop545b2" path="res://scenes/planet_toy/sun_position_gizmo.gd" id="6_blupj"]
+[ext_resource type="PackedScene" uid="uid://c53i6ba71k0hk" path="res://scenes/backgrounds/sun/sun.tscn" id="4_o2hnj"]
+[ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scenes/backgrounds/rocky_planet/rocky_planet_ui.tscn" id="5_baf7r"]
+[ext_resource type="PackedScene" uid="uid://0gyn3hg8hjmn" path="res://scenes/backgrounds/gas_giant/gas_giant_ui.tscn" id="7_evwkc"]
 
 [node name="PlanetToy" type="Node2D"]
 script = ExtResource("1_am71v")
-planet_carousel = Array[PackedScene]([null])
+planet_carousel = Array[PackedScene]([ExtResource("2_3qujd"), ExtResource("2_rxtas"), ExtResource("4_o2hnj")])
+planet_uis = Array[PackedScene]([ExtResource("5_baf7r"), ExtResource("7_evwkc"), null])
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
@@ -26,124 +30,67 @@ offset_top = -322.5
 offset_right = 576.0
 offset_bottom = 322.5
 
-[node name="GasGiant" parent="." instance=ExtResource("2_rxtas")]
-unique_name_in_owner = true
+[node name="Planets" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Selector" type="PanelContainer" parent="CanvasLayer"]
+[node name="UIs" type="Control" parent="CanvasLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlanetUI" type="Control" parent="CanvasLayer/UIs"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BaseUI" type="Control" parent="CanvasLayer/UIs"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Selector" type="PanelContainer" parent="CanvasLayer/UIs/BaseUI"]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -39.5
-offset_top = -40.0
-offset_right = 39.5
+offset_left = 452.0
+offset_top = 544.0
+offset_right = 660.0
+offset_bottom = 608.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Selector"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UIs/BaseUI/Selector"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Selector/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer"]
 layout_mode = 2
 
-[node name="LeftButton" type="Button" parent="CanvasLayer/Selector/MarginContainer/HBoxContainer"]
+[node name="LeftButton" type="Button" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("3_12blc")
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Selector/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 5
 
-[node name="PlanetNameLabel" type="Label" parent="CanvasLayer/Selector/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="PlanetNameLabel" type="Label" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Gas Giant"
+text = "???"
 
-[node name="RightButton" type="Button" parent="CanvasLayer/Selector/MarginContainer/HBoxContainer"]
+[node name="RightButton" type="Button" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("4_am71v")
-
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-offset_left = 25.0
-offset_top = 119.0
-offset_right = 258.0
-offset_bottom = 459.0
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="GizmoLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Local Star Position"
-horizontal_alignment = 1
-
-[node name="SunPositionGizmo" type="Control" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(150, 150)
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("6_blupj")
-
-[node name="HSeparator" type="HSeparator" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/h_separation = 10
-columns = 2
-
-[node name="AxisLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Axis"
-horizontal_alignment = 1
-
-[node name="Axis" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-min_value = -1.571
-max_value = 1.571
-step = 0.01
-value = -0.000999999
-
-[node name="OrbitLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Orbit"
-horizontal_alignment = 1
-
-[node name="Orbit" type="HSlider" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 4
-min_value = -3.142
-max_value = 3.142
-step = 0.01
-value = -0.002
-
-[node name="LockLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Tilt"
-horizontal_alignment = 1
-
-[node name="LockCamera" type="CheckButton" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-
-[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2

@@ -1,5 +1,5 @@
 @tool
-extends Node2D
+extends Celestial
 
 #@onready var shine_slider = %RockyPlanetUI/%ShineSlider
 #@onready var ice_slider = %RockyPlanetUI/%IceSlider

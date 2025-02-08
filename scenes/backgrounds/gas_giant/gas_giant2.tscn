@@ -57,16 +57,22 @@ shader_parameter/light_direction = Vector3(0.57735, 0.57735, 0.57735)
 shader_parameter/specular_power = 50.0
 shader_parameter/specular_intensity = 0.358
 
-[node name="GasGiant" type="Node2D"]
+[node name="GasGiant" type="Node2D" node_paths=PackedStringArray("celestial_body")]
 script = ExtResource("1_l2fnt")
+celestial_name = "Gas Giant"
+celestial_body = NodePath("Planet")
 
-[node name="Planet" type="Button" parent="."]
+[node name="Planet" type="ColorRect" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_snl6b")
 custom_minimum_size = Vector2(650, 650)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -325.0
+offset_top = -325.0
+offset_right = 325.0
+offset_bottom = 325.0
 grow_horizontal = 2
 grow_vertical = 2
 

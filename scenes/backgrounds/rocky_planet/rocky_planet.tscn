@@ -112,13 +112,15 @@ shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
 shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
 
-[node name="RockyPlanet" type="Node2D"]
+[node name="RockyPlanet" type="Node2D" node_paths=PackedStringArray("celestial_body")]
 script = ExtResource("1_08tb2")
+celestial_name = "Rocky Planet"
+celestial_body = NodePath("Planet")
 
-[node name="Planet" type="Button" parent="."]
+[node name="Planet" type="ColorRect" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0fwbt")
-custom_minimum_size = Vector2(512, 512)
+custom_minimum_size = Vector2(650, 650)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

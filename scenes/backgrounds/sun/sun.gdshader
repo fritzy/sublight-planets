@@ -101,28 +101,6 @@ void fragment() {
 	sun *= smoothstep_min(0.4, 0.3, dist, 0.3);
 	COLOR.rgb = vec3((sun_color2 + sun_color) * flame_brightness * flames + sun);
 	COLOR.rgb *= 0.7 + brightness * 0.3;
-	//COLOR.rgb = vec3(zoom_tunnel(UV));
-	//COLOR.rgb = vec3(sample + sample2) / 1.5;
-	// Called for every pixel the material is visible on.
-}
+	COLOR.a = clamp(sun.r + sun.g + sun.b + flames + smooth_alpha, 0.0, 1.0);
 
-/*
-void fragment() { // Get the UV coordinates
-	vec2 uv = UV - 0.5;
-	vec3 ray_direction = vec3(uv, 1.0);
-	float tunnel_radius = 0.5;
-	float ray_length = tunnel_radius / length(ray_direction.xy);
-	vec3 intersection = ray_direction * ray_length;
-	float thea = 1.0 * atan(intersection.y / intersection.x) / PI;
-	vec2 p = vec2(thea, intersection.z);
-	p.y += TIME;
-	float dist = pow(length(uv), 1.5);
-	vec4 pixel = texture(gas2_texture, p) * dist;
-	COLOR.rgb = pixel.rgb * 2.0;
 }
-*/
-
-//void light() {
-//	// Called for every pixel for every light affecting the CanvasItem.
-//	// Uncomment to replace the default light processing function with this one.
-//}

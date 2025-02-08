@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://c53i6ba71k0hk"]
+[gd_scene load_steps=14 format=3 uid="uid://c53i6ba71k0hk"]
 
 [ext_resource type="Shader" uid="uid://c6vc7r0b5pn1r" path="res://scenes/backgrounds/sun/sun.gdshader" id="1_83v5f"]
+[ext_resource type="Script" uid="uid://qnm25k5ok3ae" path="res://scenes/backgrounds/sun/sun.gd" id="1_swa70"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ygyot"]
 fractal_weighted_strength = 0.7
@@ -67,9 +68,12 @@ shader_parameter/flame_warp_speed = 0.02
 shader_parameter/flame_merge_speed = 0.02
 shader_parameter/core_merge_speed = 0.02
 
-[node name="Sun" type="CanvasLayer"]
+[node name="Sun" type="Node2D" node_paths=PackedStringArray("celestial_body")]
+script = ExtResource("1_swa70")
+celestial_name = "Star"
+celestial_body = NodePath("SunShader")
 
-[node name="Button" type="Button" parent="."]
+[node name="SunShader" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_eecwf")
 anchors_preset = 8
 anchor_left = 0.5

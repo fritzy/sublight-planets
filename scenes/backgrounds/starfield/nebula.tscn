@@ -26,7 +26,7 @@ shader_parameter/nebula_area1 = SubResource("NoiseTexture2D_nvv4j")
 shader_parameter/nebula_area2 = SubResource("NoiseTexture2D_mg3es")
 shader_parameter/nebula_color = Color(0.199749, 0.486317, 0.798701, 1)
 
-[node name="ColorRect" type="ColorRect"]
+[node name="NebulaBackground" type="ColorRect"]
 material = SubResource("ShaderMaterial_nvv4j")
 anchors_preset = 15
 anchor_right = 1.0

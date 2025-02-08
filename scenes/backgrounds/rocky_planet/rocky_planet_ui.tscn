@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dbjpjwjv0o42"]
+[gd_scene load_steps=10 format=3 uid="uid://dbjpjwjv0o42"]
 
 [ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://icon_eye_opened.svg" id="1_1rylw"]
+[ext_resource type="Script" uid="uid://5oke0i7q00pu" path="res://scenes/backgrounds/rocky_planet/rocky_planet_ui.gd" id="1_m4vfi"]
 [ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="2_td1m0"]
 [ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="3_57412"]
 [ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="4_fb5xd"]
@@ -19,17 +20,22 @@ content_margin_right = 5.0
 content_margin_bottom = 5.0
 bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 
-[node name="RockyPlanetUI" type="CanvasLayer"]
+[node name="RockyPlanetUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_m4vfi")
 
 [node name="ParamPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -103.5
-offset_right = 256.0
-offset_bottom = 103.5
+offset_left = 18.0
+offset_top = 134.0
+offset_right = 274.0
+offset_bottom = 472.0
 grow_vertical = 2
 theme = SubResource("Theme_23yx4")
 theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
@@ -158,14 +164,16 @@ text = "Regenerate Noise"
 [node name="ColorPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -256.0
-offset_top = -76.0
-offset_bottom = 76.0
+offset_left = 870.0
+offset_top = 179.0
+offset_right = 1126.0
+offset_bottom = 331.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = SubResource("Theme_funtb")
@@ -245,15 +253,16 @@ alignment = 1
 [node name="PresetPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -80.0
-offset_right = 140.0
-offset_bottom = -29.0
+offset_left = 15.0
+offset_top = 512.0
+offset_right = 295.0
+offset_bottom = 563.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
@@ -291,11 +300,14 @@ text = "Random"
 [node name="DisplayPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -50.0
-offset_bottom = 50.0
+offset_left = 1014.0
+offset_top = 15.0
+offset_right = 1128.0
+offset_bottom = 75.0
 grow_horizontal = 0
 size_flags_horizontal = 8
 size_flags_vertical = 0
@@ -329,6 +341,7 @@ stretch_mode = 0
 
 [node name="NotifyPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -352,13 +365,15 @@ horizontal_alignment = 1
 
 [node name="CreditsPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -394.0
-offset_top = -40.0
+offset_top = 606.0
+offset_right = 414.0
+offset_bottom = 646.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -375,12 +390,14 @@ text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"
 
 [node name="URLPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 253.0
-offset_bottom = -7.0
+offset_left = 897.0
+offset_top = 606.0
+offset_right = 1150.0
+offset_bottom = 639.0
 grow_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="URLPanel"]
