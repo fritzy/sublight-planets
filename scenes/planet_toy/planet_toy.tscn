@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dkw7xp0d8w2us"]
+[gd_scene load_steps=15 format=3 uid="uid://dkw7xp0d8w2us"]
 
 [ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://scenes/backgrounds/starfield/nebula.tscn" id="1_520vc"]
 [ext_resource type="Script" uid="uid://bkwyg1gky3eb4" path="res://scenes/planet_toy/planet_toy.gd" id="1_am71v"]
@@ -9,6 +9,17 @@
 [ext_resource type="PackedScene" uid="uid://c53i6ba71k0hk" path="res://scenes/backgrounds/sun/sun.tscn" id="4_o2hnj"]
 [ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scenes/backgrounds/rocky_planet/rocky_planet_ui.tscn" id="5_baf7r"]
 [ext_resource type="PackedScene" uid="uid://0gyn3hg8hjmn" path="res://scenes/backgrounds/gas_giant/gas_giant_ui.tscn" id="7_evwkc"]
+[ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://icon_eye_opened.svg" id="8_haptq"]
+[ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="9_wbomp"]
+[ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="10_awv70"]
+[ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="11_bd7ws"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e34hi"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 
 [node name="PlanetToy" type="Node2D"]
 script = ExtResource("1_am71v")
@@ -25,10 +36,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -322.5
-offset_right = 576.0
-offset_bottom = 322.5
+offset_left = -575.0
+offset_top = -323.0
+offset_right = 577.0
+offset_bottom = 322.0
 
 [node name="Planets" type="Node2D" parent="."]
 
@@ -51,11 +62,56 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="BaseUI" type="Control" parent="CanvasLayer/UIs"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DisplayPanel" type="PanelContainer" parent="CanvasLayer/UIs/BaseUI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_bottom = 60.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+tooltip_text = "Hide Controls"
+theme_override_styles/panel = SubResource("StyleBoxFlat_e34hi")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UIs/BaseUI/DisplayPanel"]
+clip_contents = true
+layout_mode = 2
+
+[node name="VisibilityButton" type="TextureButton" parent="CanvasLayer/UIs/BaseUI/DisplayPanel/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("8_haptq")
+texture_pressed = ExtResource("9_wbomp")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="CameraButton" type="TextureButton" parent="CanvasLayer/UIs/BaseUI/DisplayPanel/HBoxContainer"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("10_awv70")
+texture_pressed = ExtResource("11_bd7ws")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="Selector" type="PanelContainer" parent="CanvasLayer/UIs/BaseUI"]
 layout_mode = 1
@@ -64,10 +120,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 452.0
-offset_top = 544.0
-offset_right = 660.0
-offset_bottom = 608.0
+offset_left = -218.0
+offset_top = -64.0
+offset_right = 218.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
@@ -92,10 +147,58 @@ theme_override_constants/margin_bottom = 5
 
 [node name="PlanetNameLabel" type="Label" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "???"
+horizontal_alignment = 1
 
 [node name="RightButton" type="Button" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("4_am71v")
+
+[node name="CreditsPanel" type="PanelContainer" parent="CanvasLayer/UIs/BaseUI"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 313.0
+offset_bottom = -7.0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UIs/BaseUI/CreditsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UIs/BaseUI/CreditsPanel/MarginContainer"]
+layout_mode = 2
+text = "Sublight Planets © 2024 Nathan Fritz"
+
+[node name="URLPanel" type="PanelContainer" parent="CanvasLayer/UIs/BaseUI"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -253.0
+offset_top = -33.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UIs/BaseUI/URLPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UIs/BaseUI/URLPanel/MarginContainer"]
+layout_mode = 2
+text = "fritzy.itch.io/sublight-planets"

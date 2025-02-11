@@ -53,7 +53,8 @@ shader_parameter/convexity = 1.124
 shader_parameter/margin = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
 shader_parameter/light_color = Color(1, 1, 1, 1)
-shader_parameter/light_direction = Vector3(0.57735, 0.57735, 0.57735)
+shader_parameter/axis = 0.0
+shader_parameter/orbit = 1.34
 shader_parameter/specular_power = 50.0
 shader_parameter/specular_intensity = 0.358
 

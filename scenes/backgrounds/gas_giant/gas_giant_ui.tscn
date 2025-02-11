@@ -1,21 +1,26 @@
 [gd_scene load_steps=3 format=3 uid="uid://0gyn3hg8hjmn"]
 
 [ext_resource type="Script" uid="uid://dpm1qhop545b2" path="res://scenes/backgrounds/gas_giant/gas_giant_ui.gd" id="1_ky6jq"]
-[ext_resource type="Script" path="res://scenes/backgrounds/gas_giant/sun_gizmo.gd" id="2_3qocx"]
+[ext_resource type="PackedScene" uid="uid://bxlq620fm2nvu" path="res://scenes/planet_toy/stargizmo.tscn" id="2_3qocx"]
 
 [node name="GasGiantUI" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ky6jq")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_left = 25.0
-offset_top = 119.0
-offset_right = 258.0
-offset_bottom = 459.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -170.0
+offset_right = 233.0
+offset_bottom = 170.0
+grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
@@ -32,12 +37,9 @@ layout_mode = 2
 text = "Local Star Position"
 horizontal_alignment = 1
 
-[node name="SunGizmo" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="SunGizmo" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_3qocx")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("2_3qocx")
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

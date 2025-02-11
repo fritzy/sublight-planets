@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxlq620fm2nvu"]
+
+[ext_resource type="Script" uid="uid://b3j5a7s50mxc7" path="res://scenes/backgrounds/gas_giant/sun_gizmo.gd" id="1_5uafw"]
+
+[node name="SunGizmo" type="Control"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 3
+anchors_preset = 0
+size_flags_vertical = 3
+script = ExtResource("1_5uafw")

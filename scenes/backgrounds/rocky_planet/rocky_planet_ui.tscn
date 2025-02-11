@@ -1,10 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dbjpjwjv0o42"]
+[gd_scene load_steps=6 format=3 uid="uid://dbjpjwjv0o42"]
 
-[ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://icon_eye_opened.svg" id="1_1rylw"]
 [ext_resource type="Script" uid="uid://5oke0i7q00pu" path="res://scenes/backgrounds/rocky_planet/rocky_planet_ui.gd" id="1_m4vfi"]
-[ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="2_td1m0"]
-[ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="3_57412"]
-[ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="4_fb5xd"]
+[ext_resource type="Script" uid="uid://b3j5a7s50mxc7" path="res://scenes/backgrounds/gas_giant/sun_gizmo.gd" id="2_sqq4p"]
 
 [sub_resource type="Theme" id="Theme_23yx4"]
 
@@ -12,13 +9,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_50wve"]
 bg_color = Color(0.103743, 0.103744, 0.103744, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2w0b5"]
-content_margin_left = 5.0
-content_margin_top = 5.0
-content_margin_right = 5.0
-content_margin_bottom = 5.0
-bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 
 [node name="RockyPlanetUI" type="Control"]
 layout_mode = 3
@@ -36,9 +26,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -143.5
-offset_right = 256.0
-offset_bottom = 143.5
+offset_left = 10.0
+offset_top = -314.0
+offset_right = 266.0
+offset_bottom = 267.0
 grow_vertical = 2
 theme = SubResource("Theme_23yx4")
 
@@ -52,10 +43,41 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="ParamPanel/MarginContainer"]
 layout_mode = 2
 
+[node name="SunGizmo" type="Control" parent="ParamPanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 236)
+layout_mode = 2
+script = ExtResource("2_sqq4p")
+metadata/_custom_type_script = ExtResource("2_sqq4p")
+
 [node name="GridContainer" type="GridContainer" parent="ParamPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
+
+[node name="AxisLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Axis"
+
+[node name="AxisSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -1.571
+max_value = 1.571
+step = 0.001
+value = 0.429
+
+[node name="OrbitLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Orbit"
+
+[node name="OrbitSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = -3.142
+max_value = 3.142
+step = 0.001
+value = 0.429
 
 [node name="ShineLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 visible = false
@@ -269,46 +291,6 @@ layout_mode = 2
 placeholder_text = "seed"
 alignment = 1
 
-[node name="DisplayPanel" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -114.0
-offset_bottom = 60.0
-grow_horizontal = 0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-tooltip_text = "Hide Controls"
-theme_override_styles/panel = SubResource("StyleBoxFlat_2w0b5")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="DisplayPanel"]
-clip_contents = true
-layout_mode = 2
-
-[node name="VisibilityButton" type="TextureButton" parent="DisplayPanel/HBoxContainer"]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-toggle_mode = true
-texture_normal = ExtResource("1_1rylw")
-texture_pressed = ExtResource("2_td1m0")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="CameraButton" type="TextureButton" parent="DisplayPanel/HBoxContainer"]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = ExtResource("3_57412")
-texture_pressed = ExtResource("4_fb5xd")
-ignore_texture_size = true
-stretch_mode = 0
-
 [node name="NotifyPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -332,48 +314,3 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Welcome to Sublight Planets by @fritzy"
 horizontal_alignment = 1
-
-[node name="CreditsPanel" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 414.0
-grow_vertical = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="CreditsPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 5
-
-[node name="Label" type="Label" parent="CreditsPanel/MarginContainer"]
-layout_mode = 2
-text = "Sublight Planets by @fritzy — © 2024 Nathan Fritz"
-
-[node name="URLPanel" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -253.0
-offset_top = -33.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="URLPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 5
-
-[node name="Label" type="Label" parent="URLPanel/MarginContainer"]
-layout_mode = 2
-text = "fritzy.itch.io/sublight-planets"

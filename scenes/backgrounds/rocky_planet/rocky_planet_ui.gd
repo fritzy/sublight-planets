@@ -3,8 +3,13 @@ extends BaseCelestialUI
 @onready var sliders = [%OceanDepthSlider, %IceSlider, %AtmosSlider, %CloudSlider, %CloudSlider2]
 @onready var pickers = [%GroundColor, %DesertColor, %SkyColor, %CloudColor]
 
+var axis := 0.0
+var orbit := 0.0
+
 func _ready() -> void:
 	parameter_map = {
+		&"orbit": %OrbitSlider,
+		&"axis": %AxisSlider,
 		&"ice_coverage": %IceSlider,
 		&"ocean_depth": %OceanDepthSlider,
 		&"atmosphere_opacity": %AtmosSlider,
@@ -24,4 +29,16 @@ func _ready() -> void:
 		%RandParamsButton: &"randomize_params",
 		%RandColorButton: &"randomize_colors",
 	}
+	%OrbitSlider.value_changed.connect(func(value):
+		orbit = value
+		_update_gizmo()
+	)
+	%AxisSlider.value_changed.connect(func(value):
+		axis = value
+		_update_gizmo()
+	)
 	super()
+
+func _update_gizmo() -> void:
+	prints(axis, orbit)
+	%SunGizmo.update(axis, orbit, false)

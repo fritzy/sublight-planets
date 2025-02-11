@@ -24,8 +24,9 @@ func _ready() -> void:
 	%LockCamera.toggled.connect(func(value: bool): lock_axis = value)
 
 func _update_planet() -> void:
-	var sun_pos := Vector3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit))
-	update_shader_parameter.emit(&"light_direction", sun_pos)
+	#var sun_pos := Vector3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit))
+	update_shader_parameter.emit(&"axis", axis)
+	update_shader_parameter.emit(&"orbit", orbit)
 	if lock_axis:
 		update_axis.emit(axis)
 	else:

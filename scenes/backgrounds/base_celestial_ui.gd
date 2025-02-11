@@ -13,16 +13,16 @@ func _ready() -> void:
 	connect_buttons()
 
 func handle_updated_shader_parameters(parameters: Dictionary[StringName, Variant]) -> void:
-	for name in parameters:
-		if not parameter_map.has(name):
+	for pname in parameters:
+		if not parameter_map.has(pname):
 			continue
-		var control = parameter_map[name]
+		var control = parameter_map[pname]
 		if control is Slider:
-			control.set_value_no_signal(parameters[name])
+			control.set_value_no_signal(parameters[pname])
 		elif control is ColorPickerButton:
-			control.color = parameters[name]
+			control.color = parameters[pname]
 		elif control is CheckButton:
-			control.button_pressed = bool(parameters[name])
+			control.button_pressed = bool(parameters[pname])
 
 func connect_parameter_inputs() -> void:
 	for parameter in parameter_map:

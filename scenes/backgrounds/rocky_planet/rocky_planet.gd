@@ -117,8 +117,8 @@ func update_inputs() -> void:
 		if String(property.name).begins_with("shader_parameter"):
 			#prints(property.name, property.type)
 			if property.type != Variant.Type.TYPE_OBJECT:
-				var name = String(property.name).substr(17)
-				parameters[StringName(name)] = planet.get(property.name)
+				var pname = String(property.name).substr(17)
+				parameters[StringName(pname)] = planet.get(property.name)
 	updated_shader_parameters.emit(
 		parameters
 	)

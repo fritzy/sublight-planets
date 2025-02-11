@@ -34,7 +34,10 @@ func _move_and_remove(planet: Node2D, dir: float) -> void:
 	%Camera.rotation = 0.0
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_parallel(true)
 	tween.tween_property(planet, "position", Vector2(1200.0 * dir, 0.0), 0.25)
+	if current_ui != null:
+		tween.tween_property(current_ui, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.25)
 	await tween.finished
 	planet.queue_free()
 	if current_ui != null:
@@ -46,7 +49,11 @@ func _load_and_move(dir: float) -> void:
 	current_planet.position = Vector2(-dir * 1200.0, 0.0)
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_parallel(true)
 	tween.tween_property(current_planet, "position", Vector2(0.0, 0.0), 0.25)
+	if current_ui != null:
+		current_ui.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		tween.tween_property(current_ui, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.25)
 	await tween.finished
 
 func _setup_planet() -> void:
