@@ -1,7 +1,7 @@
 shader_type canvas_item;
-uniform sampler2D surface_texture: repeat_enable;
-uniform sampler2D surface_normal: repeat_enable;
-uniform sampler2D mountain_texture: repeat_enable;
+uniform sampler2D surface_texture: repeat_enable, filter_linear_mipmap;
+uniform sampler2D surface_normal: repeat_enable, filter_linear_mipmap;
+uniform sampler2D mountain_texture: repeat_enable, filter_linear_mipmap;
 uniform sampler2D mountain_normal: repeat_enable;
 
 uniform sampler2D desert_texture: repeat_enable;
@@ -25,7 +25,7 @@ uniform float axis: hint_range(-1.571, 1.571) = 0.0;
 uniform float orbit: hint_range(-3.14159, 3.14159) = 0.0;
 
 const vec3 light_color = vec3(1.0, 1.0, 1.0);
-const float repro_rad = 2.2;
+const float repro_rad = 2.25;
 
 vec3 get_star_pos() {
 	return vec3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit));
@@ -44,25 +44,24 @@ vec3 get_globe_normal(vec2 uv) {
 	return  vec3(uv.x, uv.y, z);
 }
 
-mat4 create_transformation_matrix(vec3 facing) {
+mat3 create_transformation_matrix(vec3 facing) {
     // Assuming y-axis as up
     vec3 up = normalize(vec3(2, 5, -2.0));
     vec3 right = normalize(cross(up, facing));
     vec3 new_up = cross(facing, right);
 
-    return mat4(
-        vec4(right, 0.0),
-        vec4(new_up, 0.0),
-        vec4(facing, 0.0),
-        vec4(0.0, 0.0, 0.0, 1.0)
+    return mat3(
+        vec3(right),
+        vec3(new_up),
+        vec3(facing)
     );
 }
 
-vec3 parent_normals2(vec3 parent_facing, vec3 child_facing) {
+vec3 parent_normals(vec3 parent_facing, vec3 child_facing) {
 	child_facing = child_facing * 2.0 - vec3(0.85);
-    mat4 transformation_matrix = create_transformation_matrix(parent_facing);
-    vec4 global_facing_vec4 = transformation_matrix * vec4(child_facing, 1.0);
-    return normalize(global_facing_vec4.xyz);
+    mat3 transformation_matrix = create_transformation_matrix(parent_facing);
+    vec3 global_facing = transformation_matrix * child_facing;
+    return normalize(global_facing);
 }
 
 
@@ -82,9 +81,32 @@ vec3 normal_diffuse(vec3 normal, vec2 light_pos, vec2 uv) {
 	return diff * vec3(1.0, 1.0, 1.0);
 }
 
-vec3 poor_mans_normal(sampler2D texture, vec2 uv, float scale) {
+vec3 rotate_y(vec3 v, float angle) {
+    float cosAngle = cos(angle);
+    float sinAngle = sin(angle);
+    return vec3(
+        v.z * sinAngle + v.x * cosAngle,
+        v.y,
+        v.z * cosAngle - v.x * sinAngle
+    );
+}
+
+vec3 poor_mans_normal(sampler2D img, vec2 uv, float scale) {
+    vec2 offset_x = vec2(scale, 0.0);
+    vec2 offset_y = vec2(0.0, scale);
+
+    float heightL = texture(img, uv - offset_x).r;
+    float heightR = texture(img, uv + offset_x).r;
+    float heightD = texture(img, uv - offset_y).r;
+    float heightU = texture(img, uv + offset_y).r;
+
+    vec3 normal = vec3(heightL - heightR, heightD - heightU, 2.0 * scale);
+    normal = normalize(normal);
+    return normal;
+}
+vec3 poor_mans_normal2(sampler2D texture, vec2 uv, float scale) {
 	float ups = 0.003;
-	float vps = 0.003;
+	float vps = .003;
 
 	// poor man's normal
 	float mount_pu = texture(texture, uv + vec2(ups, 0.0)).r;
@@ -94,7 +116,17 @@ vec3 poor_mans_normal(sampler2D texture, vec2 uv, float scale) {
 
 	float du = (mount_mu - mount_pu) * scale;
 	float dv = (mount_mv - mount_pv) * scale;
-	vec3 mN = normalize(vec3(du, dv, 0.4));
+	vec3 mN = normalize(vec3(dv, du, 0.4));
+	
+    // Rotate the normal by -90 degrees around the x-axis
+	 //vec3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit));
+    float angle = 0.0;
+	float rot = 1.0 * TIME;
+	mat3 rotationMatrix = create_transformation_matrix(
+		 vec3(cos(rot) * cos(angle), cos(rot) * sin(angle), sin(rot))
+	);
+    mN = rotationMatrix * mN;
+	
 	return mN;
 }
 
@@ -113,40 +145,57 @@ vec3 diffuse_light(sampler2D texture, vec2 texture_uv, vec2 uv, float scale, vec
 }
 
 
-vec2 calculate_sphere_uv(vec2 uv) {
-	vec2 sphere_uv = vec2(repro_rad * (uv.x - 0.5), repro_rad * (uv.y - 0.5));
-	sphere_uv.x = asin(sphere_uv.x / sqrt(1.0 - sphere_uv.y * sphere_uv.y)) * repro_rad / PI;
-	sphere_uv.y = asin(sphere_uv.y) * repro_rad / PI;
-	return sphere_uv;
+vec2 calculate_sphere_uv(vec2 uv, vec2 ratio) {
+    vec2 sphere_uv = vec2(repro_rad * (uv.x - 0.5), repro_rad * (uv.y - 0.5));
+
+    sphere_uv.x = asin(sphere_uv.x / sqrt(1.0 - sphere_uv.y * sphere_uv.y)) * repro_rad / PI;
+    sphere_uv.y = asin(sphere_uv.y) * repro_rad / PI;
+	
+	sphere_uv.x *= cos(sphere_uv.y * PI * 0.25);
+
+    // Define a scaling factor to repeat the texture less frequently
+    float scale_factor = 0.5;
+
+    // Scale the UV coordinates
+    sphere_uv *= scale_factor;
+	sphere_uv *= ratio;
+	//sphere_uv.y *= 0.5;
+	sphere_uv += 0.5;
+    // Wrap the UV coordinates to stay within the [0, 1] range
+    sphere_uv = fract(sphere_uv);
+
+    return sphere_uv;
 }
+
 
 
 vec3 reproject_normal(vec3 n1, vec3 n2) {
     return normalize(n1 + n2);
 }
 
-float calculate_cloud_density(vec2 uv, float cloud_alpha, vec2 offset1, vec2 offset2) {
-	//vec2 sphere_uv = calculate_sphere_uv(uv);
-	vec2 sphere_uv = uv;
-	vec2 cloud_swirl_offset1 = offset2 * 1.4;
-	vec2 cloud_swirl = texture(surface_texture, sphere_uv + cloud_swirl_offset1).rg * 0.1;
-	float clouds = texture(cloud_texture, sphere_uv + offset1 + cloud_swirl).r;
-	float clouds2 = texture(cloud_texture2, sphere_uv + offset2 + cloud_swirl).r;
+float calculate_cloud_density(vec2 uv, float cloud_alpha, vec2 offset1, vec2 offset2, vec2 offset3) {
+	vec2 sphere_uv = calculate_sphere_uv(uv, vec2(0.5, 1.0));
+	//vec2 sphere_uv = uv;
+	//vec2 cloud_swirl_offset1 = offset2 * 1.4;
+	vec2 cloud_swirl = texture(surface_texture, sphere_uv + offset3).rg * 0.1;
+	float clouds = texture(cloud_texture, sphere_uv + offset1).r;
+	float clouds2 = texture(cloud_texture2, sphere_uv + offset2).r;
 	float cloud_overlap = (clouds2 - clouds + cloud_density);
 	cloud_alpha = mix(cloud_alpha, 0.0, step(cloud_overlap, 1.0 - cloud_density));
 	return cloud_overlap * cloud_alpha * cloud_opacity;
+	//return sphere_uv.y;
 }
 
 // for each pixel, this is run with the pixel's UV coord
 void fragment() {
 	// -- sample the texture for a sphere
-	vec2 sphere_uv = calculate_sphere_uv(vec2(UV.x, UV.y));
+	vec2 sphere_uv = calculate_sphere_uv(vec2(UV.x, UV.y), vec2(0.5, 1.0));
 	//sphere_uv.x *= 0.5;
 	// distance from center
 	float dist = distance(UV, vec2(0.5, 0.5));
 	float disty = abs(sphere_uv.y);
 	float disty2 = abs(sphere_uv.y - 0.5);
-	float orbit2 = orbit + 0.1 * TIME;
+	float orbit2 = orbit + 0.05 * TIME;
 	//vec2 off_pos = sphere_uv + vec2(speed, 0.0) * TIME;
 	//vec2 off_pos = sphere_uv;
 	vec2 off_pos = sphere_uv -
@@ -167,8 +216,9 @@ void fragment() {
 	float deserts = texture(desert_texture, off_pos).r;
 
 	// time offsets for cloud textures
-	vec2 cloud_offset1 = vec2(speed * 1.4, 0.0) * TIME;
-	vec2 cloud_offset2 = vec2(speed * 1.1, 0.0) * TIME;
+	vec2 cloud_offset1 =  sphere_uv - vec2(orbit2 / PI * 2.1, 0.0) + 0.5;
+	vec2 cloud_offset2 =  sphere_uv - vec2(orbit2 / PI * 2.6, 0.0) + 0.5;
+	vec2 cloud_offset3 =  sphere_uv - vec2(orbit2 / PI * 2.0, 0.0) + 0.5;
 
 	// start with white
 	vec3 color = vec3(1.0, 1.0, 1.0);
@@ -193,7 +243,7 @@ void fragment() {
 	//float planet_shadow = smoothstep(0.6, 0.05, light_dist);
 
 	// add some mountain ranges
-	height += (mountain);
+	height += mountain;
 	float ocean = mix(1.0, 0.0, step(ocean_depth, height));
 
 	float desert = mix(1.0, 0.0, step(deserts + (0.4 - disty), 1.00));
@@ -209,18 +259,23 @@ void fragment() {
 
 	float r = (height - ocean_depth) / (2.0 - ocean_depth - 0.0001);
 	float land_height = r;
-	float sand_height = land_height + 0.2;
+	float sand_height = land_height + 0.1;
 	float snow_elev = mtn_snow_height * smoothstep(2.0, 0.5, disty);
 	sand_height = land_height + 0.15;
+	
 	vec3 ground_sand_mix = mix(
-			mix(
 				(ground_color.rgb * (land_height + 1.0)),
 				(desert_color.rgb * 1.5 + (desert_color.rgb * land_height * .7)),
-				step(height, ocean_depth + 0.06)
-			),
+				step(height, ocean_depth + 0.02)
+			);
+	ground_sand_mix = mix(ground_sand_mix, desert_color.rgb, mix(0.0, deserts,1.0 - disty) * 1.5 );
+	
+	vec3 ground_snow_mix = mix(
+			ground_sand_mix,
 			vec3(1.0) + 0.4 * height,
 			step(snow_elev, height)
 		);
+		
 
 
 	// if this is ocean, draw it with extra shine
@@ -233,15 +288,15 @@ void fragment() {
 
 	// combine ground and mountain normals to generate highlights
 	//float ground_diffuse = normal_diffuse2(surface_norm, mountain_norm, light_pos, UV);
-	vec3 globe_surface_mountain_norm = parent_normals2(
+	vec3 globe_surface_mountain_norm = parent_normals(
 		globe_normal,
 		//parent_normals(surface_norm, mountain_norm)
 		normalize((surface_norm + mountain_norm))
 	);
 	vec3 lit_ground_color = get_light(
 		globe_surface_mountain_norm,
-		ground_sand_mix,
-		200.0,
+		ground_snow_mix,
+		20.0,
 		  0.25);
 	// if this is ground draw our mixed ground color (not ocean)
 	//color = mix(color, ground_sand_mix + shine * 0.2, 1.0 - ocean);
@@ -270,26 +325,39 @@ void fragment() {
 
 	// cut off the color at the land radius
 	color = color * land_alpha;
+	*/
+	float cloud_thickness = calculate_cloud_density(UV, cloud_alpha, cloud_offset1, cloud_offset2, cloud_offset3);
+	vec2 cloud_off = vec2(-speed * 1.0, 0) * TIME;
+	vec3 cloud_norm1 = poor_mans_normal(cloud_texture, sphere_uv + cloud_offset1, 1.0);
+	vec3 cloud_norm2 = poor_mans_normal(cloud_texture2, sphere_uv + cloud_offset2, 1.0);
+	vec3 total_cloud_norm = parent_normals(
+		get_globe_normal(UV),
+		cloud_norm1
+	);
+	 
+	vec3 cloud_diffuse = get_light(globe_normal, cloud_color.rgb, 30.0, 0.55);
+	//vec3 cloud_diffuse2 = get_light(cloud_norm2, ground_snow_mix, 200.0, 0.25);
+	//vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);
+	//vec3 cloud_diffuse2 = diffuse_light(cloud_texture2, off_pos, UV, 0.4, light_pos);
+	//vec3 total_cloud_diffuse = (cloud_diffuse1 + cloud_diffuse2);
 
-	float cloud_thickness = calculate_cloud_density(sphere_uv, cloud_alpha, cloud_offset1, cloud_offset2);
-	vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);
-	vec3 cloud_diffuse2 = diffuse_light(cloud_texture2, off_pos, UV, 0.4, light_pos);
-	vec3 total_cloud_diffuse = (cloud_diffuse1 + cloud_diffuse2);
-
+	color = mix(color, cloud_diffuse, min(cloud_thickness * 1.2, 1.0));
+	/*
 	color = mix(color,
 		min(cloud_color.rgb + (shine * 0.2) + ((shine + planet_shadow) * total_cloud_diffuse * -0.5), vec3(1.0)) * 1.0,
 		min(cloud_thickness * 1.2, 1.0)
 		);
+	*/
 	// reverse shadow for atmosphere, more intense at the edges
 	float atmos_intensity = smoothstep(0.3, 0.5, dist) + 0.1;
 
 	// apply the atmosophere to the color
-	color = color + (ocean_color.rgb * atmos_intensity * 2.0 * atmosphere_opacity);
+	//color = color + (ocean_color.rgb * atmos_intensity * 2.0 * atmosphere_opacity);
 
-	color *= planet_shadow;
-*/
+	//color *= planet_shadow;
+
 	// final color of the pixel
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
 	//COLOR.rgb = ocean_diffuse;
-	//COLOR.rgb = vec3(land_height);
+	//COLOR.rgb = vec3(sphere_uv.y);
 }

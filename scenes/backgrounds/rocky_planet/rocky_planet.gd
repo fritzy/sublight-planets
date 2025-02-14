@@ -359,6 +359,8 @@ func set_shader_values(values: Dictionary) -> void:
 
 func regenerate_ground() -> void:
 	var texture := NoiseTexture2D.new()
+	texture.width = 1024;
+	texture.height = 512;
 	texture.seamless = true
 	texture.color_ramp = surface_gradient
 	var noise = FastNoiseLite.new()
@@ -375,6 +377,8 @@ func regenerate_ground() -> void:
 	planet.set_shader_parameter('surface_normal', normal)
 
 	var mtn_texture := NoiseTexture2D.new()
+	mtn_texture.width = 1024;
+	mtn_texture.height = 512;
 	mtn_texture.seamless = true
 	mtn_texture.color_ramp = mtn_gradient
 	var noise2 = FastNoiseLite.new()
@@ -396,6 +400,8 @@ func regenerate_ground() -> void:
 
 func regenerate_desert() -> void:
 	var texture := NoiseTexture2D.new()
+	texture.width = 1024;
+	texture.height = 512;
 	texture.seamless = true
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
@@ -410,6 +416,8 @@ func regenerate_clouds() -> void:
 	var density = 0.5;
 	prints("regenerating clouds", density)
 	var texture := NoiseTexture2D.new()
+	texture.width = 1024;
+	texture.height = 512;
 	texture.seamless = true
 	#texture.color_ramp =l cloud_gradient
 	var noise = FastNoiseLite.new()
@@ -424,6 +432,8 @@ func regenerate_clouds() -> void:
 	planet.set_shader_parameter('cloud_texture', texture)
 
 	var texture2 := NoiseTexture2D.new()
+	texture2.width = 1024;
+	texture2.height = 512;
 	texture2.seamless = true
 	cloud2_gradient = Gradient.new()
 	cloud2_gradient.offsets = PackedFloat32Array([min(0.9 * (1.0 - density), 0.7), 0.719])
@@ -442,6 +452,8 @@ func regenerate_clouds() -> void:
 
 func regenerate_ice() -> void:
 	var texture := NoiseTexture2D.new()
+	texture.width = 1024;
+	texture.height = 512;
 	texture.seamless = true
 	texture.color_ramp = ice_gradient
 	var noise = FastNoiseLite.new()

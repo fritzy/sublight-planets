@@ -26,10 +26,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 10.0
-offset_top = -314.0
-offset_right = 266.0
-offset_bottom = 267.0
+offset_top = -143.5
+offset_right = 256.0
+offset_bottom = 143.5
 grow_vertical = 2
 theme = SubResource("Theme_23yx4")
 
@@ -43,41 +42,10 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="ParamPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="SunGizmo" type="Control" parent="ParamPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 236)
-layout_mode = 2
-script = ExtResource("2_sqq4p")
-metadata/_custom_type_script = ExtResource("2_sqq4p")
-
 [node name="GridContainer" type="GridContainer" parent="ParamPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
-
-[node name="AxisLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Axis"
-
-[node name="AxisSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-min_value = -1.571
-max_value = 1.571
-step = 0.001
-value = 0.429
-
-[node name="OrbitLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Orbit"
-
-[node name="OrbitSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-min_value = -3.142
-max_value = 3.142
-step = 0.001
-value = 0.429
 
 [node name="ShineLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 visible = false
@@ -203,9 +171,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Random"
 
-[node name="ColorPanel" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(256, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -213,78 +179,134 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -256.0
-offset_top = -76.0
-offset_bottom = 76.0
+offset_top = -242.5
+offset_bottom = 242.5
 grow_horizontal = 0
 grow_vertical = 2
-theme = SubResource("Theme_funtb")
-theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
 
-[node name="MarginContainer" type="MarginContainer" parent="ColorPanel"]
+[node name="GizmoContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/GizmoContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/GizmoContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="ColorPanel/MarginContainer/VBoxContainer"]
+[node name="SunGizmo" type="Control" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 236)
+layout_mode = 2
+script = ExtResource("2_sqq4p")
+metadata/_custom_type_script = ExtResource("2_sqq4p")
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 columns = 2
 
-[node name="GroundCLabel" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="AxisLabel" type="Label" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Axis"
+
+[node name="AxisSlider" type="HSlider" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1.571
+max_value = 1.571
+step = 0.001
+value = 0.429
+
+[node name="OrbitLabel" type="Label" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Orbit"
+
+[node name="OrbitSlider" type="HSlider" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -3.142
+max_value = 3.142
+step = 0.001
+value = 0.429
+
+[node name="ColorPanel" type="PanelContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+theme = SubResource("Theme_funtb")
+theme_override_styles/panel = SubResource("StyleBoxFlat_50wve")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ColorPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ColorPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="GroundCLabel" type="Label" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Ground"
 
-[node name="GroundColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="GroundColor" type="ColorPickerButton" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.2131, 0.4805, 0.1276, 1)
 
-[node name="DesertCLabel" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="DesertCLabel" type="Label" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Sand"
 
-[node name="DesertColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="DesertColor" type="ColorPickerButton" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 color = Color(0.6328, 0.6218, 0.2917, 1)
 
-[node name="SkyCLabel" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="SkyCLabel" type="Label" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Sky"
 
-[node name="SkyColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="SkyColor" type="ColorPickerButton" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 color = Color(0, 0.2277, 0.5703, 1)
 
-[node name="CloudCLabel2" type="Label" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="CloudCLabel2" type="Label" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Cloud"
 
-[node name="CloudColor" type="ColorPickerButton" parent="ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
+[node name="CloudColor" type="ColorPickerButton" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 color = Color(1, 1, 1, 1)
 
-[node name="RandColorButton" type="Button" parent="ColorPanel/MarginContainer/VBoxContainer"]
+[node name="RandColorButton" type="Button" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Random Color"
 
-[node name="ShareButton" type="Button" parent="ColorPanel/MarginContainer/VBoxContainer"]
+[node name="ShareButton" type="Button" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Share Planet"
 
-[node name="SeedEdit" type="LineEdit" parent="ColorPanel/MarginContainer/VBoxContainer"]
+[node name="SeedEdit" type="LineEdit" parent="VBoxContainer/ColorPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
