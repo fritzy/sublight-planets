@@ -455,14 +455,28 @@ func regenerate_ice() -> void:
 	texture.width = 1024;
 	texture.height = 512;
 	texture.seamless = true
-	texture.color_ramp = ice_gradient
+	#texture.color_ramp = ice_gradient
+	texture.as_normal_map = false
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_CELLULAR
-	noise.frequency = 0.0524
+	noise.frequency = 0.04
+	noise.fractal_lacunarity = 1.0
+	noise.fractal_gain = 0.8
+	noise.fractal_weighted_strength = 0.0
 	noise.seed = texture_seed
+	noise.cellular_distance_function = FastNoiseLite.DISTANCE_EUCLIDEAN_SQUARED
+	noise.cellular_jitter = 1.0
+	noise.cellular_return_type = FastNoiseLite.RETURN_DISTANCE2_DIV
 	texture.noise = noise
 	await texture.changed
 	planet.set_shader_parameter('ice_texture', texture)
+
+	var ice_normal: NoiseTexture2D = texture.duplicate()
+	ice_normal.as_normal_map = true
+	ice_normal.invert = true
+	ice_normal.bump_strength = 0.5
+	await ice_normal.changed
+	planet.set_shader_parameter('ice_normal', ice_normal)
 
 func show_notification(text: String) -> void:
 	%RockyPlanetUI/%NotifyLabel.text = text

@@ -2,12 +2,14 @@ shader_type canvas_item;
 uniform sampler2D surface_texture: repeat_enable, filter_linear_mipmap;
 uniform sampler2D surface_normal: repeat_enable, filter_linear_mipmap;
 uniform sampler2D mountain_texture: repeat_enable, filter_linear_mipmap;
-uniform sampler2D mountain_normal: repeat_enable;
+uniform sampler2D mountain_normal: repeat_enable, filter_linear_mipmap;
 
 uniform sampler2D desert_texture: repeat_enable;
 uniform sampler2D cloud_texture: repeat_enable;
 uniform sampler2D cloud_texture2: repeat_enable;
 uniform sampler2D ice_texture: repeat_enable;
+uniform sampler2D ice_normal: repeat_enable;
+
 uniform vec2 shine_offset = vec2(0.5, 0.5);
 uniform float ocean_depth: hint_range(0.0, 2.0) = 1.0;
 uniform float speed: hint_range(0.0, 0.3) = 0.1;
@@ -48,7 +50,7 @@ mat3 create_transformation_matrix(vec3 facing) {
     // Assuming y-axis as up
     vec3 up = normalize(vec3(2, 5, -2.0));
     vec3 right = normalize(cross(up, facing));
-    vec3 new_up = cross(facing, right);
+    vec3 new_up = cross(-facing, right);
 
     return mat3(
         vec3(right),
@@ -68,10 +70,10 @@ vec3 parent_normals(vec3 parent_facing, vec3 child_facing) {
 vec3 get_light(vec3 normal, vec3 color, float specular_power, float specular_intensity) {
 	vec3 camera_direction = vec3(0.0, 0.0, 1.0);
 	//uv = uv * 1.125 * 2.0 - 1.125;
-	vec3 light_direction = get_star_pos();
+	vec3 light_direction = normalize(get_star_pos());
 	vec3 half_vector = normalize( camera_direction + light_direction );
-	float diffuse    = max( 0.0, dot( light_direction, normal ) );
-	float specular   = pow(max( 0.0, dot( light_direction, normal )), specular_power);
+	float diffuse    = max( 0.0, dot( normal, light_direction ) );
+	float specular   = pow(max( 0.0, dot( half_vector, normal )), specular_power);
 	return color * (diffuse + specular * specular_intensity);
 }
 
@@ -144,6 +146,31 @@ vec3 diffuse_light(sampler2D texture, vec2 texture_uv, vec2 uv, float scale, vec
 	return normal_diffuse(normal, light_pos, uv);
 }
 
+vec2 calculate_ray_offset(vec3 normal, vec3 ray_vector, float distance) {
+    // Normalize the input vectors
+    normal = normalize(normal);
+    ray_vector = normalize(ray_vector);
+	vec3 camera_vector = vec3(0.0, 0.0, 1.0);
+
+    // Compute the intersection point
+    float cos_theta = dot(normal, ray_vector);
+    float sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+    
+    // Compute the travel distance along the ray
+    float travel_distance = distance / cos_theta;
+
+    // Compute the offset in the direction of the ray
+    vec3 offset_vector = ray_vector * travel_distance;
+
+    // Project the offset vector onto the surface plane
+    vec3 surface_offset_vector = offset_vector - normal * dot(normal, offset_vector);
+
+    // Convert the 3D surface offset vector to a 2D offset
+    vec2 offset = vec2(surface_offset_vector.x, surface_offset_vector.z);
+
+    return offset;
+}
+
 
 vec2 calculate_sphere_uv(vec2 uv, vec2 ratio) {
     vec2 sphere_uv = vec2(repro_rad * (uv.x - 0.5), repro_rad * (uv.y - 0.5));
@@ -211,7 +238,8 @@ void fragment() {
 	float mountain = texture(mountain_texture, off_pos).r;
 	vec3 mountain_norm = texture(mountain_normal, off_pos).rgb;
 	// ice
-	float ice_cracks = texture(ice_texture, off_pos).r;
+	vec3 ice_cracks = texture(ice_texture, off_pos).rgb;
+	vec3 ice_norm = texture(ice_normal, off_pos).rgb;
 	// sample desert texture for desert splotches
 	float deserts = texture(desert_texture, off_pos).r;
 
@@ -249,7 +277,7 @@ void fragment() {
 	float desert = mix(1.0, 0.0, step(deserts + (0.4 - disty), 1.00));
 	// determine if this is snow based on height sample plus distance to poles
 	float snowt = mix(1.0, 0.0,
-		step(disty
+		step(disty2
 		* max(height, ocean * ((ocean_depth + height / 4.0) - ocean_depth))
 		+ ice_coverage, 0.9));
 
@@ -268,7 +296,7 @@ void fragment() {
 				(desert_color.rgb * 1.5 + (desert_color.rgb * land_height * .7)),
 				step(height, ocean_depth + 0.02)
 			);
-	ground_sand_mix = mix(ground_sand_mix, desert_color.rgb, mix(0.0, deserts,1.0 - disty) * 1.5 );
+	ground_sand_mix = mix(ground_sand_mix, desert_color.rgb,  deserts * (1.0 - abs(sphere_uv.y - 0.5)) );
 	
 	vec3 ground_snow_mix = mix(
 			ground_sand_mix,
@@ -305,6 +333,19 @@ void fragment() {
 	//color = mix(color, color * ground_diffuse * ground * (shine * 0.8 + planet_shadow * 4.4), 0.34);
 	// if this is snow/ice apply it to the color
 
+	vec3 globe_ice_norm = parent_normals(globe_normal, ice_norm);
+	globe_surface_mountain_norm = mix(globe_surface_mountain_norm, globe_ice_norm, ocean);
+	
+	//ice_cracks.y *= -1.0;
+	vec3 ice_color = mix(vec3(1.0, 1.0, 1.0), ocean_color.rgb, mix(0.0, ice_cracks.r * 0.25, ocean));
+	vec3 ice_diffuse = get_light(
+			globe_surface_mountain_norm, ice_color, 200, 0.25
+	);
+	
+	//vec3 ice_diffuse = diffuse_light(ice_texture, off_pos, UV, -0.4, light_pos);
+	color = mix(color, ice_diffuse, snowt);
+	//	ice_cracks, color, 20, 0.25
+	//);
 	//vec3 ice_diffuse = diffuse_light(ice_texture, off_pos, UV, -0.4, light_pos);
 	//color = mix(color, vec3(1.0 - ice_cracks * 0.5), snowt);
 	//color = color + (shine * 2.0) * ice_diffuse * snowt;
@@ -326,6 +367,15 @@ void fragment() {
 	// cut off the color at the land radius
 	color = color * land_alpha;
 	*/
+	
+	vec2 cloud_shadow_offset = 
+		clamp(
+			calculate_ray_offset(globe_normal, get_star_pos(), 0.01),
+			vec2(-0.025, -0.025), vec2(0.025, 0.025)
+		);
+	float cloud_shadow = calculate_cloud_density(UV + cloud_shadow_offset, cloud_alpha, cloud_offset1, cloud_offset2, cloud_offset3);
+	color.rgb = mix(color.rgb, vec3(0.0, 0.0, 0.0), cloud_shadow);
+	
 	float cloud_thickness = calculate_cloud_density(UV, cloud_alpha, cloud_offset1, cloud_offset2, cloud_offset3);
 	vec2 cloud_off = vec2(-speed * 1.0, 0) * TIME;
 	vec3 cloud_norm1 = poor_mans_normal(cloud_texture, sphere_uv + cloud_offset1, 1.0);
@@ -358,6 +408,7 @@ void fragment() {
 
 	// final color of the pixel
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
+	//COLOR.rgb = mix(vec3(1.0, 1.0, 1.0), desert_color.rgb, deserts * (1.0 - abs(sphere_uv.y - 0.5)));
 	//COLOR.rgb = ocean_diffuse;
 	//COLOR.rgb = vec3(sphere_uv.y);
 }
