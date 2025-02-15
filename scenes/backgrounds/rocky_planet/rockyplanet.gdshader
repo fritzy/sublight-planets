@@ -47,9 +47,11 @@ vec3 get_globe_normal(vec2 uv) {
 }
 
 mat3 create_transformation_matrix(vec3 facing) {
+    // Choose an initial up vector
     // Assuming y-axis as up
-    vec3 up = normalize(vec3(2, 5, -2.0));
+    vec3 up = normalize(vec3(0., 1., 0.));
     vec3 right = normalize(cross(up, facing));
+	// shadows are inverted vertically unless I negate the facing for up
     vec3 new_up = cross(-facing, right);
 
     return mat3(
@@ -60,7 +62,8 @@ mat3 create_transformation_matrix(vec3 facing) {
 }
 
 vec3 parent_normals(vec3 parent_facing, vec3 child_facing) {
-	child_facing = child_facing * 2.0 - vec3(0.85);
+	// not sure why the bias is like this
+	child_facing = normalize(child_facing - vec3(0.41));
     mat3 transformation_matrix = create_transformation_matrix(parent_facing);
     vec3 global_facing = transformation_matrix * child_facing;
     return normalize(global_facing);
@@ -73,7 +76,7 @@ vec3 get_light(vec3 normal, vec3 color, float specular_power, float specular_int
 	vec3 light_direction = normalize(get_star_pos());
 	vec3 half_vector = normalize( camera_direction + light_direction );
 	float diffuse    = max( 0.0, dot( normal, light_direction ) );
-	float specular   = pow(max( 0.0, dot( half_vector, normal )), specular_power);
+	float specular   = pow(max( 0.0, dot( light_direction, normal )), specular_power);
 	return color * (diffuse + specular * specular_intensity);
 }
 
@@ -325,7 +328,7 @@ void fragment() {
 		globe_surface_mountain_norm,
 		ground_snow_mix,
 		20.0,
-		  0.25);
+		  0.3);
 	// if this is ground draw our mixed ground color (not ocean)
 	//color = mix(color, ground_sand_mix + shine * 0.2, 1.0 - ocean);
 	color = mix(color, lit_ground_color, 1.0 - ocean);
