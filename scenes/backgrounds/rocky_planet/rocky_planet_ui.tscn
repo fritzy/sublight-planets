@@ -236,6 +236,29 @@ max_value = 3.142
 step = 0.001
 value = 0.429
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tilt"
+
+[node name="TiltToggle" type="CheckButton" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rotate"
+
+[node name="RotateToggle" type="CheckButton" parent="VBoxContainer/GizmoContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+
 [node name="ColorPanel" type="PanelContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)

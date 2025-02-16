@@ -5,6 +5,8 @@ extends BaseCelestialUI
 
 var axis := 0.0
 var orbit := 0.0
+var lock_axis := false
+var rotate := false
 
 func _ready() -> void:
 	parameter_map = {
@@ -37,8 +39,26 @@ func _ready() -> void:
 		axis = value
 		_update_gizmo()
 	)
+	%TiltToggle.toggled.connect(func(value):
+		lock_axis = value
+		_update_gizmo()
+	)
+	%RotateToggle.toggled.connect(func(value):
+		rotate = value
+	)
 	super()
 
+func _process(delta) -> void:
+	if rotate:
+		orbit += delta * 0.5
+		if orbit >= PI:
+			orbit = -PI + orbit - PI
+		_update_gizmo()
+		update_shader_parameter.emit(&"orbit", orbit)
+
 func _update_gizmo() -> void:
-	prints(axis, orbit)
-	%SunGizmo.update(axis, orbit, false)
+	if lock_axis:
+		update_axis.emit(axis)
+	else:
+		update_axis.emit(0.0)
+	%SunGizmo.update(axis, orbit, lock_axis)

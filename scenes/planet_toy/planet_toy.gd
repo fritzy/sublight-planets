@@ -11,8 +11,14 @@ var current_ui: BaseCelestialUI
 func _ready() -> void:
 	%RightButton.pressed.connect(_handle_right_planet)
 	%LeftButton.pressed.connect(_handle_left_planet)
+	%VisibilityButton.pressed.connect(_handle_visibility_button)
 
 	_setup_planet()
+
+func _handle_visibility_button():
+	print(%BaseUI)
+	%BaseUI.visible = not %BaseUI.visible
+	%PlanetUI.visible = not %PlanetUI.visible
 	
 func _handle_right_planet() -> void:
 	await _move_and_remove(current_planet, 1.0)

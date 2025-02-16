@@ -318,6 +318,9 @@ func regenerate_ground() -> void:
 	var noise = FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	noise.frequency = 0.0054
+	#noise.fractal_type = FastNoiseLite.FRACTAL_PING_PONG
+	#noise.fractal_lacunarity = 2.1
+	#noise.fractal_gain = 0.42
 	#noise.frequency = 0.0054
 	noise.seed = texture_seed
 	texture.noise = noise
@@ -339,7 +342,7 @@ func regenerate_ground() -> void:
 
 	noise2.frequency = 0.0238
 	noise2.fractal_lacunarity = 2.5
-	noise2.fractal_gain = 0.8
+	noise2.fractal_gain = 0.6
 	noise2.fractal_weighted_strength = 0.5
 
 	noise2.seed = texture_seed
