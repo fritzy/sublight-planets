@@ -127,9 +127,10 @@ text = "Mtn Snow"
 [node name="MtnSnowSlider" type="HSlider" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-max_value = 2.0
-step = -0.02
-value = 1.54
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.49
 
 [node name="DesertLabel" type="Label" parent="ParamPanel/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2

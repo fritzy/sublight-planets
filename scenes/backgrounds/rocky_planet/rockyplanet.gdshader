@@ -18,7 +18,7 @@ uniform float cloud_opacity: hint_range(0.0, 1.0) = 1.0;
 uniform float cloud_density: hint_range(0.0, 1.0) = 0.5;
 uniform float desert_patches: hint_range(0.0, 1.0, 1.0) = 1.0;
 uniform float atmosphere_opacity: hint_range(0.0, 1.0) = 0.7;
-uniform float mtn_snow_height: hint_range(0.0, 2.0) = 1.0;
+uniform float mtn_snow_height: hint_range(0.1, 1.0, 0.01) = 0.5;
 uniform vec4 desert_color: source_color;
 uniform vec4 ground_color: source_color = vec4(0.0, 1.0, 0.0, 1.0);
 uniform vec4 ocean_color: source_color = vec4(0.0, 0.0, 1.0, 1.0);
@@ -122,7 +122,7 @@ vec3 poor_mans_normal2(sampler2D texture, vec2 uv, float scale) {
 	float du = (mount_mu - mount_pu) * scale;
 	float dv = (mount_mv - mount_pv) * scale;
 	vec3 mN = normalize(vec3(dv, du, 0.4));
-	
+
     // Rotate the normal by -90 degrees around the x-axis
 	 //vec3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit));
     float angle = 0.0;
@@ -131,7 +131,7 @@ vec3 poor_mans_normal2(sampler2D texture, vec2 uv, float scale) {
 		 vec3(cos(rot) * cos(angle), cos(rot) * sin(angle), sin(rot))
 	);
     mN = rotationMatrix * mN;
-	
+
 	return mN;
 }
 
@@ -158,7 +158,7 @@ vec2 calculate_ray_offset(vec3 normal, vec3 ray_vector, float distance) {
     // Compute the intersection point
     float cos_theta = dot(normal, ray_vector);
     float sin_theta = sqrt(1.0 - cos_theta * cos_theta);
-    
+
     // Compute the travel distance along the ray
     float travel_distance = distance / cos_theta;
 
@@ -180,7 +180,7 @@ vec2 calculate_sphere_uv(vec2 uv, vec2 ratio) {
 
     sphere_uv.x = asin(sphere_uv.x / sqrt(1.0 - sphere_uv.y * sphere_uv.y)) * repro_rad / PI;
     sphere_uv.y = asin(sphere_uv.y) * repro_rad / PI;
-	
+
 	sphere_uv.x *= cos(sphere_uv.y * PI * 0.25);
 
     // Define a scaling factor to repeat the texture less frequently
@@ -225,7 +225,7 @@ void fragment() {
 	float dist = distance(UV, vec2(0.5, 0.5));
 	float disty = abs(sphere_uv.y);
 	float disty2 = abs(sphere_uv.y - 0.5);
-	float orbit2 = orbit + 0.05 * TIME;
+	float orbit2 = 0.05 * TIME;
 	//vec2 off_pos = sphere_uv + vec2(speed, 0.0) * TIME;
 	//vec2 off_pos = sphere_uv;
 	vec2 off_pos = sphere_uv -
@@ -277,7 +277,7 @@ void fragment() {
 	height += mountain;
 	float ocean = mix(1.0, 0.0, step(ocean_depth, height));
 
-	float desert = mix(1.0, 0.0, step(deserts + (0.4 - disty), 1.00));
+	//float desert = mix(1.0, 0.0, step(deserts + (0.4 - disty), 1.00));
 	// determine if this is snow based on height sample plus distance to poles
 	float snowt = mix(1.0, 0.0,
 		step(disty2
@@ -290,23 +290,24 @@ void fragment() {
 
 	float r = (height - ocean_depth) / (2.0 - ocean_depth - 0.0001);
 	float land_height = r;
-	float sand_height = land_height + 0.1;
-	float snow_elev = mtn_snow_height * smoothstep(2.0, 0.5, disty);
-	sand_height = land_height + 0.15;
-	
+	//float sand_height = land_height + 0.1;
+	float snow_elev = mtn_snow_height;
+	//sand_height = land_height + 0.15;
+
 	vec3 ground_sand_mix = mix(
-				(ground_color.rgb * (land_height + 1.0)),
-				(desert_color.rgb * 1.5 + (desert_color.rgb * land_height * .7)),
+				ground_color.rgb,
+				(desert_color.rgb),
 				step(height, ocean_depth + 0.02)
 			);
-	ground_sand_mix = mix(ground_sand_mix, desert_color.rgb,  deserts * (1.0 - abs(sphere_uv.y - 0.5)) );
-	
+	float desert_step = smoothstep(0.5, 0.6, deserts * (1.0 - abs(sphere_uv.y - 0.5) -mountain));
+	ground_sand_mix = mix(ground_sand_mix, desert_color.rgb,  desert_step );
+
 	vec3 ground_snow_mix = mix(
 			ground_sand_mix,
-			vec3(1.0) + 0.4 * height,
-			step(snow_elev, height)
+			mix(vec3(1.0), ocean_color.rgb, 0.2),
+			step(snow_elev, mountain)
 		);
-		
+
 
 
 	// if this is ocean, draw it with extra shine
@@ -328,7 +329,7 @@ void fragment() {
 		globe_surface_mountain_norm,
 		ground_snow_mix,
 		20.0,
-		  0.3);
+		  0.1);
 	// if this is ground draw our mixed ground color (not ocean)
 	//color = mix(color, ground_sand_mix + shine * 0.2, 1.0 - ocean);
 	color = mix(color, lit_ground_color, 1.0 - ocean);
@@ -338,13 +339,13 @@ void fragment() {
 
 	vec3 globe_ice_norm = parent_normals(globe_normal, ice_norm);
 	globe_surface_mountain_norm = mix(globe_surface_mountain_norm, globe_ice_norm, ocean);
-	
+
 	//ice_cracks.y *= -1.0;
 	vec3 ice_color = mix(vec3(1.0, 1.0, 1.0), ocean_color.rgb, mix(0.0, ice_cracks.r * 0.25, ocean));
 	vec3 ice_diffuse = get_light(
 			globe_surface_mountain_norm, ice_color, 200, 0.25
 	);
-	
+
 	//vec3 ice_diffuse = diffuse_light(ice_texture, off_pos, UV, -0.4, light_pos);
 	color = mix(color, ice_diffuse, snowt);
 	//	ice_cracks, color, 20, 0.25
@@ -370,15 +371,15 @@ void fragment() {
 	// cut off the color at the land radius
 	color = color * land_alpha;
 	*/
-	
-	vec2 cloud_shadow_offset = 
+
+	vec2 cloud_shadow_offset =
 		clamp(
 			calculate_ray_offset(globe_normal, get_star_pos(), 0.01),
 			vec2(-0.025, -0.025), vec2(0.025, 0.025)
 		);
 	float cloud_shadow = calculate_cloud_density(UV + cloud_shadow_offset, cloud_alpha, cloud_offset1, cloud_offset2, cloud_offset3);
 	color.rgb = mix(color.rgb, vec3(0.0, 0.0, 0.0), cloud_shadow);
-	
+
 	float cloud_thickness = calculate_cloud_density(UV, cloud_alpha, cloud_offset1, cloud_offset2, cloud_offset3);
 	vec2 cloud_off = vec2(-speed * 1.0, 0) * TIME;
 	vec3 cloud_norm1 = poor_mans_normal(cloud_texture, sphere_uv + cloud_offset1, 1.0);
@@ -387,7 +388,7 @@ void fragment() {
 		get_globe_normal(UV),
 		cloud_norm1
 	);
-	 
+
 	vec3 cloud_diffuse = get_light(globe_normal, cloud_color.rgb, 30.0, 0.55);
 	//vec3 cloud_diffuse2 = get_light(cloud_norm2, ground_snow_mix, 200.0, 0.25);
 	//vec3 cloud_diffuse1 = diffuse_light(cloud_texture, sphere_uv + vec2(speed * 1.5, 0.0) * TIME, UV, 0.4, light_pos);

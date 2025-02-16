@@ -1,27 +1,5 @@
 @tool
 extends Celestial
-
-#@onready var shine_slider = %RockyPlanetUI/%ShineSlider
-#@onready var ice_slider = %RockyPlanetUI/%IceSlider
-#@onready var ocean_depth_slider = %RockyPlanetUI/%OceanDepthSlider
-#@onready var ground_color = %RockyPlanetUI/%GroundColor
-#@onready var sky_color = %RockyPlanetUI/%SkyColor
-#@onready var desert_color = %RockyPlanetUI/%DesertColor
-#@onready var desert_button = %RockyPlanetUI/%DesertButton
-#@onready var atmos_slider = %RockyPlanetUI/%AtmosSlider
-#@onready var cloud_slider = %RockyPlanetUI/%CloudSlider
-#@onready var mtn_snow_slider = %RockyPlanetUI/%MtnSnowSlider
-#@onready var cloud_dense_slider = %RockyPlanetUI/%CloudSlider2
-#@onready var cloud_color = %RockyPlanetUI/%CloudColor
-#@onready var rand_color_button = %RockyPlanetUI/%RandColorButton
-#@onready var rand_params_button = %RockyPlanetUI/%RandParamsButton
-
-#@onready var reset_button = %RockyPlanetUI/%ResetButton
-
-#@onready var earth_button = %RockyPlanetUI/%EarthButton
-#@onready var mars_button = %RockyPlanetUI/%MarsButton
-#@onready var random_button = %RockyPlanetUI/%RandomButton
-
 var mouse_over: bool = false;
 
 var surface_gradient: Gradient;
@@ -83,32 +61,6 @@ func _ready() -> void:
 	else:
 		generate_earth()
 		update_inputs()
-
-	#shine_slider.value_changed.connect(_set_shine)
-	#ice_slider.value_changed.connect(_set_ice)
-	#sky_color.color_changed.connect(_set_sky_color)
-	#ground_color.color_changed.connect(_set_ground_color)
-	#cloud_color.color_changed.connect(func(color): planet.set_shader_parameter('cloud_color', color))
-	#desert_color.color_changed.connect(_set_desert_color)
-	#ocean_depth_slider.value_changed.connect(_set_ocean_depth)
-	#atmos_slider.value_changed.connect(func(value): planet.set_shader_parameter('atmosphere_opacity', value))
-	#cloud_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_opacity', value))
-	#cloud_dense_slider.value_changed.connect(func(value): planet.set_shader_parameter('cloud_density', value))
-	#mtn_snow_slider.value_changed.connect(func(value): planet.set_shader_parameter('mtn_snow_height', value))
-	#reset_button.pressed.connect(func(): regenerate(true))
-	#desert_button.toggled.connect(_desert_toggled)
-	#rand_color_button.pressed.connect(randomize_colors)
-	#rand_params_button.pressed.connect(randomize_params)
-	#earth_button.pressed.connect(generate_earth)
-	#mars_button.pressed.connect(generate_mars)
-	#random_button.pressed.connect(generate_random)
-	#%RockyPlanetUI/%VisibilityButton.toggled.connect(toggle_panel_visiblity)
-	#%RockyPlanetUI/%CameraButton.pressed.connect(take_screenshot)
-	#%Planet.mouse_entered.connect(func(): mouse_over = true)
-	#%Planet.mouse_exited.connect(func(): mouse_over = false)
-	#%RockyPlanetUI/%ShareButton.pressed.connect(copy_planet_link)
-
-	#show_notification("Welcome to Sublight Planets by @fritzy")
 
 func update_inputs() -> void:
 	var props := planet.get_property_list()
@@ -373,6 +325,7 @@ func regenerate_ground() -> void:
 	planet.set_shader_parameter('surface_texture', texture)
 	var normal: NoiseTexture2D = texture.duplicate()
 	normal.as_normal_map = true
+	normal.bump_strength = 40.0
 	await normal.changed
 	planet.set_shader_parameter('surface_normal', normal)
 
@@ -395,6 +348,7 @@ func regenerate_ground() -> void:
 	planet.set_shader_parameter('mountain_texture', mtn_texture)
 	var mtn_normal: NoiseTexture2D = mtn_texture.duplicate()
 	mtn_normal.as_normal_map = true
+	mtn_normal.bump_strength = 20.0
 	await mtn_normal.changed
 	planet.set_shader_parameter('mountain_normal', mtn_normal)
 
