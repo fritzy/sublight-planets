@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://de5d45pumt7d3" path="res://scenes/backgrounds/rocky_planet/rockyplanet.gdshader" id="1_qey08"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_pt2n0"]
-seed = 1643310529
+seed = -327237294
 frequency = 0.0175
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cpo5p"]
@@ -17,7 +17,7 @@ offsets = PackedFloat32Array(0.45, 0.719)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_y7qev"]
 noise_type = 0
-seed = 1643310529
+seed = -327237294
 frequency = 0.0039
 domain_warp_enabled = true
 
@@ -28,7 +28,7 @@ color_ramp = SubResource("Gradient_f3vsn")
 noise = SubResource("FastNoiseLite_y7qev")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xdmfv"]
-seed = 1643310529
+seed = -327237294
 frequency = 0.0087
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7arid"]
@@ -38,7 +38,7 @@ noise = SubResource("FastNoiseLite_xdmfv")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_qs0cu"]
 noise_type = 2
-seed = 1643310529
+seed = -327237294
 frequency = 0.04
 fractal_lacunarity = 1.0
 fractal_gain = 0.8
@@ -50,7 +50,7 @@ width = 1024
 invert = true
 seamless = true
 as_normal_map = true
-bump_strength = 0.4
+bump_strength = 0.5
 noise = SubResource("FastNoiseLite_qs0cu")
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xqne2"]
@@ -63,7 +63,7 @@ offsets = PackedFloat32Array(0.447, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ecbt1"]
 noise_type = 2
-seed = 1643310529
+seed = -327237294
 frequency = 0.0238
 fractal_lacunarity = 2.5
 fractal_gain = 0.6
@@ -88,7 +88,7 @@ offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
 colors = PackedColorArray(0, 0, 0, 1, 0.34, 0.34, 0.34, 1, 0.69, 0.69, 0.69, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_v34om"]
-seed = 1643310529
+seed = -327237294
 frequency = 0.0054
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6dtud"]
@@ -119,18 +119,18 @@ shader_parameter/ice_normal = SubResource("NoiseTexture2D_tf0q4")
 shader_parameter/shine_offset = Vector2(0.6, 0.5)
 shader_parameter/ocean_depth = 0.7
 shader_parameter/speed = 0.05
-shader_parameter/ice_coverage = 0.788
+shader_parameter/ice_coverage = 0.51
 shader_parameter/cloud_opacity = 0.7
 shader_parameter/cloud_density = 0.36
 shader_parameter/desert_patches = 1.0
-shader_parameter/atmosphere_opacity = 0.25
+shader_parameter/atmosphere_opacity = 0.533
 shader_parameter/mtn_snow_height = 1.54
 shader_parameter/desert_color = Color(0.6328, 0.6218, 0.2917, 1)
 shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
 shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
 shader_parameter/axis = 9.46497e-08
-shader_parameter/orbit = 1.01041
+shader_parameter/orbit = 1.46841
 
 [node name="RockyPlanet" type="Node2D" node_paths=PackedStringArray("celestial_body")]
 script = ExtResource("1_08tb2")

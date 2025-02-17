@@ -33,6 +33,10 @@ vec3 get_star_pos() {
 	return vec3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit));
 }
 
+float rand_light(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
+
 vec3 get_globe_normal(vec2 uv, float radius) {
 	uv = uv * radius * 2.0 - radius;
 	float z = sqrt(1.0 - ( pow(uv.x, 2.0) + pow(uv.y, 2.0) ));
@@ -138,7 +142,7 @@ void fragment() {
 	// cut off the land at different radiuses
 	float land_alpha = mix(1.0, 0.0, step(0.49, dist));
 	float cloud_alpha = mix(1.0, 0.0, step(0.48, dist));
-	float atmos_alpha = mix(1.0, 0.0, step(0.5, dist));
+
 
 	// determine if this is a ground pixel , 0.0 or 1.0
 	float ground = mix(1.0, 0.0, step(height, ocean_depth));
@@ -151,7 +155,7 @@ void fragment() {
 	float snowt = mix(1.0, 0.0,
 		step(disty2 * max(
 			height,
-			ocean * (ocean_depth + height / 4.0) - ocean_depth * 0.3) + ice_coverage,
+			ocean * (ocean_depth + height / 4.0) - ocean_depth * 0.25) + ice_coverage,
 			0.9
 		)
 	);
@@ -166,6 +170,8 @@ void fragment() {
 	);
 	float desert_step = smoothstep(0.5, 0.6, deserts * (1.0 - abs(sphere_uv.y - 0.5) -mountain));
 	ground_sand_mix = mix(ground_sand_mix, desert_color.rgb,  desert_step );
+
+
 
 	vec3 ground_snow_mix = mix(
 			ground_sand_mix,
@@ -185,6 +191,28 @@ void fragment() {
 	vec3 lit_ground_color = get_light(globe_surface_mountain_norm, ground_snow_mix, 20.0, 0.1);
 	color = mix(color, lit_ground_color, 1.0 - ocean);
 
+	float city_lights = texture(ice_texture, off_pos * 8.0).r;
+	city_lights -= texture(surface_texture, off_pos * 4.0).r * 0.7;
+	city_lights = step(0.6, city_lights) * step(height - 0.1, ocean_depth + 0.01);
+	city_lights = mix(
+		city_lights,
+		0.0,
+		smoothstep(
+			0.05,
+			0.1,
+			distance(
+				vec3(0.0),
+				lit_ground_color.rgb
+			)
+		)
+	);
+	color = mix(
+		vec3(0.6, 0.6, 0.2),
+		color,
+		step(city_lights, ocean)
+	);
+	
+
 	vec3 globe_ice_norm = parent_normals(globe_normal, ice_norm);
 	globe_surface_mountain_norm = mix(globe_surface_mountain_norm, globe_ice_norm, ocean);
 
@@ -194,6 +222,10 @@ void fragment() {
 	);
 	color = mix(color, ice_diffuse, snowt);
 
+
+	
+	// get the angle of the star and the surface to determine
+	// where to check for a cloud to decide where to place a shadow
 	vec2 cloud_shadow_off = clamp_distance(
 		(star_pos - globe_normal).xy * 0.03,
 		0.025
@@ -205,10 +237,19 @@ void fragment() {
 	vec3 cloud_diffuse = get_light(globe_normal, cloud_color.rgb, 30.0, 0.55);
 	color = mix(color, cloud_diffuse, min(cloud_thickness * 1.2, 1.0));
 
-	vec3 atmos_diff = get_light(get_globe_normal(UV, 0.9), ocean_color.rgb, 200.0, 0.2);
-	atmos_diff *= pow(dist * 2.0, 5.0) * atmosphere_opacity;
+	vec3 atmos_diff = get_light(get_globe_normal(UV, 0.9), ocean_color.rgb, 1.0, 0.8);
+	// more intense on the edges
+	atmos_diff *= pow(dist * 2.0, 6.0) * atmosphere_opacity;
+	// screen blend https://godotshaders.com/snippet/blending-modes/
 	color = 1.0 - (1.0 - color) * (1.0 - atmos_diff);
 	
+
 	// final color of the pixel
+	float atmos_alpha = mix(
+		1.0,
+		mix(atmosphere_opacity, 0.0, step(0.5, dist)),
+		step(0.48, dist)
+	);
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
+	//COLOR.rgba = (vec4(atmos_alpha, atmos_alpha, atmos_alpha, 1.0));
 }
