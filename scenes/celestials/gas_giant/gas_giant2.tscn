@@ -1,0 +1,78 @@
+[gd_scene load_steps=12 format=3 uid="uid://mqb10b0dswlq"]
+
+[ext_resource type="Shader" uid="uid://b5s76jady4iip" path="res://scenes/celestials/old_gas/gasplanet2.gdshader" id="1_kp03s"]
+[ext_resource type="Script" uid="uid://b8vnqaweagw4" path="res://scenes/celestials/gas_giant/gas_giant.gd" id="1_l2fnt"]
+[ext_resource type="Texture2D" uid="uid://bt8w5sh8qtk8l" path="res://scenes/celestials/gas_giant/gas_giant2_intensity.tres" id="2_l2fnt"]
+[ext_resource type="Texture2D" uid="uid://3awajnp1k7ur" path="res://scenes/celestials/gas_giant/gas_giant2_intensity2.tres" id="3_6cvkf"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_l0w5u"]
+frequency = 0.0095
+fractal_weighted_strength = 0.7
+domain_warp_enabled = true
+domain_warp_type = 1
+domain_warp_amplitude = 40.0
+domain_warp_frequency = 0.02
+domain_warp_fractal_octaves = 6
+domain_warp_fractal_lacunarity = 4.0
+domain_warp_fractal_gain = 0.3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_07i42"]
+seamless = true
+noise = SubResource("FastNoiseLite_l0w5u")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_l40mb"]
+seed = 1
+frequency = 0.011
+fractal_weighted_strength = 0.54
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_30ji2"]
+seamless = true
+noise = SubResource("FastNoiseLite_l40mb")
+
+[sub_resource type="Gradient" id="Gradient_fre1u"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.0330469, 0.0555188, 0.0812954, 0.105089, 0.142102, 0.16193, 0.18308, 0.231328, 0.249835, 0.287508, 0.312624, 0.356907, 0.377396, 0.397224, 0.428288, 0.440185, 0.487759, 0.509584, 0.526768, 0.584931, 0.627892, 0.673496, 0.707865, 0.730998, 0.766028, 0.83807, 0.890284, 0.914078, 0.949108)
+colors = PackedColorArray(0.737255, 0.6, 0.388235, 1, 0.715454, 0.588109, 0.38774, 1, 0.564706, 0.505882, 0.384314, 1, 1, 0.964706, 0.74902, 1, 0.842947, 0.694984, 0.451984, 1, 0.647059, 0.25098, 0.156863, 1, 0.819608, 0.654902, 0.407843, 1, 0.632193, 0.367354, 0.163441, 1, 0.819608, 0.654902, 0.407843, 1, 1, 0.964706, 0.74902, 1, 0.819608, 0.654902, 0.407843, 1, 0.647059, 0.25098, 0.156863, 1, 0.764706, 0.431373, 0.227451, 1, 0.647059, 0.25098, 0.156863, 1, 0.564706, 0.505882, 0.384314, 1, 0.819608, 0.654902, 0.407843, 1, 0.782474, 0.48545, 0.295434, 1, 0.458824, 0.427451, 0.313726, 1, 0.819608, 0.654902, 0.407843, 1, 1, 0.964706, 0.74902, 1, 0.670588, 0.372549, 0.176471, 1, 0.819608, 0.654902, 0.407843, 1, 0.764706, 0.431373, 0.227451, 1, 1, 0.964706, 0.74902, 1, 0.764706, 0.431373, 0.227451, 1, 0.470588, 0.243137, 0.180392, 1, 0.470588, 0.243137, 0.180392, 1, 1, 0.964706, 0.74902, 1, 0.632193, 0.367354, 0.163441, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_simmt"]
+gradient = SubResource("Gradient_fre1u")
+width = 1024
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_snl6b"]
+shader = ExtResource("1_kp03s")
+shader_parameter/gas1_texture = SubResource("NoiseTexture2D_07i42")
+shader_parameter/gas2_texture = SubResource("NoiseTexture2D_30ji2")
+shader_parameter/gas3_texture = ExtResource("2_l2fnt")
+shader_parameter/gas4_texture = ExtResource("3_6cvkf")
+shader_parameter/gas_gradient = SubResource("GradientTexture1D_simmt")
+shader_parameter/intensity = 0.091
+shader_parameter/planet_radius = 0.74
+shader_parameter/sun_pos = Vector2(0.65, 0.5)
+shader_parameter/convexity = 1.0
+shader_parameter/margin = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
+shader_parameter/light_color = Color(1, 1, 1, 1)
+shader_parameter/axis = 0.0
+shader_parameter/orbit = 1.0
+shader_parameter/specular_power = 50.0
+shader_parameter/specular_intensity = 0.358
+
+[node name="GasGiant" type="Node2D" node_paths=PackedStringArray("celestial_body")]
+script = ExtResource("1_l2fnt")
+celestial_name = "Gas Giant"
+celestial_body = NodePath("Planet")
+
+[node name="Planet" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_snl6b")
+custom_minimum_size = Vector2(650, 650)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -325.0
+offset_top = -325.0
+offset_right = 325.0
+offset_bottom = 325.0
+grow_horizontal = 2
+grow_vertical = 2

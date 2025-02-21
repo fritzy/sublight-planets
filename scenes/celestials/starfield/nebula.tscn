@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://de6r61odwfsr6"]
+
+[ext_resource type="Shader" uid="uid://bu0kvsc7sktqy" path="res://scenes/celestials/starfield/nebula.gdshader" id="1_w63am"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_w63am"]
+noise_type = 3
+fractal_gain = 0.8
+fractal_weighted_strength = 0.66
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nvv4j"]
+seamless = true
+noise = SubResource("FastNoiseLite_w63am")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nvv4j"]
+seed = 2
+frequency = 0.0073
+fractal_weighted_strength = 0.39
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mg3es"]
+seamless = true
+noise = SubResource("FastNoiseLite_nvv4j")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvv4j"]
+shader = ExtResource("1_w63am")
+shader_parameter/nebula_area1 = SubResource("NoiseTexture2D_nvv4j")
+shader_parameter/nebula_area2 = SubResource("NoiseTexture2D_mg3es")
+shader_parameter/nebula_color = Color(0.199749, 0.486317, 0.798701, 1)
+
+[node name="NebulaBackground" type="ColorRect"]
+material = SubResource("ShaderMaterial_nvv4j")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

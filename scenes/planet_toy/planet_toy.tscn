@@ -1,18 +1,18 @@
 [gd_scene load_steps=15 format=3 uid="uid://dkw7xp0d8w2us"]
 
-[ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://scenes/backgrounds/starfield/nebula.tscn" id="1_520vc"]
+[ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://scenes/celestials/starfield/nebula.tscn" id="1_520vc"]
 [ext_resource type="Script" uid="uid://bkwyg1gky3eb4" path="res://scenes/planet_toy/planet_toy.gd" id="1_am71v"]
-[ext_resource type="PackedScene" uid="uid://bb834fy7j5c0q" path="res://scenes/backgrounds/rocky_planet/rocky_planet.tscn" id="2_3qujd"]
-[ext_resource type="PackedScene" uid="uid://mqb10b0dswlq" path="res://scenes/backgrounds/gas_giant/gas_giant2.tscn" id="2_rxtas"]
+[ext_resource type="PackedScene" uid="uid://bb834fy7j5c0q" path="res://scenes/celestials/rocky_planet/rocky_planet.tscn" id="2_3qujd"]
+[ext_resource type="PackedScene" uid="uid://mqb10b0dswlq" path="res://scenes/celestials/gas_giant/gas_giant2.tscn" id="2_rxtas"]
 [ext_resource type="Texture2D" uid="uid://uuwe6r1cl6wt" path="res://assets/left-white-icon.svg" id="3_12blc"]
 [ext_resource type="Texture2D" uid="uid://ddfh3ay7ud3fc" path="res://assets/right-white-icon.svg" id="4_am71v"]
-[ext_resource type="PackedScene" uid="uid://c53i6ba71k0hk" path="res://scenes/backgrounds/sun/sun.tscn" id="4_o2hnj"]
-[ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scenes/backgrounds/rocky_planet/rocky_planet_ui.tscn" id="5_baf7r"]
-[ext_resource type="PackedScene" uid="uid://0gyn3hg8hjmn" path="res://scenes/backgrounds/gas_giant/gas_giant_ui.tscn" id="7_evwkc"]
-[ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://icon_eye_opened.svg" id="8_haptq"]
-[ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://icon_eye_closed.svg" id="9_wbomp"]
-[ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://icon_camera.svg" id="10_awv70"]
-[ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://icon_flash.svg" id="11_bd7ws"]
+[ext_resource type="PackedScene" uid="uid://c53i6ba71k0hk" path="res://scenes/celestials/sun/sun.tscn" id="4_o2hnj"]
+[ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scenes/celestials/rocky_planet/rocky_planet_ui.tscn" id="5_baf7r"]
+[ext_resource type="PackedScene" uid="uid://0gyn3hg8hjmn" path="res://scenes/celestials/gas_giant/gas_giant_ui.tscn" id="7_evwkc"]
+[ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://assets/icon_eye_opened.svg" id="8_haptq"]
+[ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://assets/icon_eye_closed.svg" id="9_wbomp"]
+[ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://assets/icon_camera.svg" id="10_awv70"]
+[ext_resource type="Texture2D" uid="uid://dvfo16l0gpowv" path="res://assets/icon_flash.svg" id="11_bd7ws"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e34hi"]
 content_margin_left = 5.0
@@ -158,7 +158,7 @@ theme_override_constants/margin_bottom = 5
 
 [node name="Label" type="Label" parent="CanvasLayer/UIs/BaseUI/CreditsPanel/MarginContainer"]
 layout_mode = 2
-text = "Sublight Planets © 2024 Nathan Fritz"
+text = "Sublight Planets © 2025 Nathanael Fritz"
 
 [node name="Selector" type="PanelContainer" parent="CanvasLayer/UIs/BaseUI"]
 layout_mode = 1
@@ -167,9 +167,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -218.0
+offset_left = -168.0
 offset_top = -64.0
-offset_right = 218.0
+offset_right = 168.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
@@ -179,6 +179,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer"]
 layout_mode = 2
+alignment = 1
 
 [node name="LeftButton" type="Button" parent="CanvasLayer/UIs/BaseUI/Selector/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true

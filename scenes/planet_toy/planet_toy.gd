@@ -36,14 +36,22 @@ func _handle_left_planet() -> void:
 	_load_and_move(-1.0)
 	print("handle left")
 
+func _input(event):
+	if event.is_action_pressed("toggle_border"):
+		var is_borderless := DisplayServer.window_get_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, 0)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, not is_borderless)
+	if event.is_action("exit_game"):
+		get_tree().quit()
+
 func _move_and_remove(planet: Node2D, dir: float) -> void:
 	%Camera.rotation = 0.0
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.set_parallel(true)
-	tween.tween_property(planet, "position", Vector2(1200.0 * dir, 0.0), 0.25)
+	tween.tween_property(planet, "position", Vector2(1200.0 * dir, 0.0), 0.75)
 	if current_ui != null:
-		tween.tween_property(current_ui, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.25)
+		tween.tween_property(current_ui, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.75)
 	await tween.finished
 	planet.queue_free()
 	if current_ui != null:
@@ -55,11 +63,12 @@ func _load_and_move(dir: float) -> void:
 	current_planet.position = Vector2(-dir * 1200.0, 0.0)
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.set_parallel(true)
-	tween.tween_property(current_planet, "position", Vector2(0.0, 0.0), 0.25)
+	tween.tween_property(current_planet, "position", Vector2(0.0, 0.0), 0.75)
 	if current_ui != null:
 		current_ui.modulate = Color(1.0, 1.0, 1.0, 0.0)
-		tween.tween_property(current_ui, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.25)
+		tween.tween_property(current_ui, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.75)
 	await tween.finished
 
 func _setup_planet() -> void:

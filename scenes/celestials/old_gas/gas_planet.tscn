@@ -1,0 +1,108 @@
+[gd_scene load_steps=18 format=3 uid="uid://ba30kxu3om3b1"]
+
+[ext_resource type="Script" uid="uid://bo46kfep6b7p1" path="res://scenes/celestials/old_gas/gas_planet.gd" id="1_eqjua"]
+[ext_resource type="Shader" uid="uid://b08exm683f6s0" path="res://scenes/celestials/old_gas/gasplanet.gdshader" id="3_p0oir"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dvber"]
+seed = -573883968
+domain_warp_enabled = true
+domain_warp_amplitude = 50.0
+domain_warp_fractal_gain = 0.7
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pfbk7"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_dvber")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_o0sie"]
+seamless = true
+noise = SubResource("FastNoiseLite_dvber")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_q6x78"]
+seed = -573883968
+frequency = 0.0046
+fractal_gain = 0.35
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7vn83"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_q6x78")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qg1re"]
+seamless = true
+noise = SubResource("FastNoiseLite_q6x78")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bktbl"]
+seed = -573883967
+frequency = 0.003
+fractal_gain = 0.3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jfln7"]
+seamless = true
+noise = SubResource("FastNoiseLite_bktbl")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6gnb6"]
+frequency = 0.0311
+domain_warp_enabled = true
+domain_warp_frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_smblf"]
+seamless = true
+noise = SubResource("FastNoiseLite_6gnb6")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_w80hm"]
+frequency = 0.037
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_b63l4"]
+seamless = true
+noise = SubResource("FastNoiseLite_w80hm")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xdsks"]
+noise_type = 2
+frequency = 0.0171
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_27neq"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_xdsks")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24cuc"]
+shader = ExtResource("3_p0oir")
+shader_parameter/gas1_texture = SubResource("NoiseTexture2D_o0sie")
+shader_parameter/gas1_normal = SubResource("NoiseTexture2D_pfbk7")
+shader_parameter/gas2_texture = SubResource("NoiseTexture2D_qg1re")
+shader_parameter/gas2_normal = SubResource("NoiseTexture2D_7vn83")
+shader_parameter/gas3_texture = SubResource("NoiseTexture2D_jfln7")
+shader_parameter/ring1_texture = SubResource("NoiseTexture2D_smblf")
+shader_parameter/ring2_texture = SubResource("NoiseTexture2D_b63l4")
+shader_parameter/ring3_texture = SubResource("NoiseTexture2D_27neq")
+shader_parameter/cloud_color = Color(0.80549, 0.779018, 0.625232, 1)
+shader_parameter/cloud_color2 = Color(0.493211, 0.213251, 0, 1)
+shader_parameter/storm_color = Color(0.846222, 0.726473, 0.684675, 1)
+shader_parameter/ring1_color = Color(0.486423, 0.257841, 0.144043, 1)
+shader_parameter/ring2_color = Color(0.757969, 0.7174, 0.638194, 1)
+shader_parameter/amplitude = 0.25
+shader_parameter/planet_radius = 0.427
+
+[node name="GasPlanet" type="Node2D"]
+script = ExtResource("1_eqjua")
+
+[node name="StarField" type="Node2D" parent="."]
+
+[node name="Planet" type="Button" parent="."]
+material = SubResource("ShaderMaterial_24cuc")
+custom_minimum_size = Vector2(1024, 1024)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
