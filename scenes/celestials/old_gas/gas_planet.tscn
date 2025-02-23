@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://b08exm683f6s0" path="res://scenes/celestials/old_gas/gasplanet.gdshader" id="3_p0oir"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dvber"]
-seed = -573883968
+seed = 1596923337
 domain_warp_enabled = true
 domain_warp_amplitude = 50.0
 domain_warp_fractal_gain = 0.7
@@ -19,7 +19,7 @@ seamless = true
 noise = SubResource("FastNoiseLite_dvber")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_q6x78"]
-seed = -573883968
+seed = 1596923337
 frequency = 0.0046
 fractal_gain = 0.35
 
@@ -33,7 +33,7 @@ seamless = true
 noise = SubResource("FastNoiseLite_q6x78")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_bktbl"]
-seed = -573883967
+seed = 1596923338
 frequency = 0.003
 fractal_gain = 0.3
 

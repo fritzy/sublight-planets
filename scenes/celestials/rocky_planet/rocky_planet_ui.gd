@@ -18,7 +18,7 @@ func _ready() -> void:
 		&"cloud_opacity": %CloudSlider,
 		&"cloud_density": %CloudSlider2,
 		&"mtn_snow_height": %MtnSnowSlider,
-		&"desert_patches": %DesertButton,
+		&"enable_city_lights": %CityLightsButton,
 		&"ocean_color": %SkyColor,
 		&"ground_color": %GroundColor,
 		&"cloud_color": %CloudColor,

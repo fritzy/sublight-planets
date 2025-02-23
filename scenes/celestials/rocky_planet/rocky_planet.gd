@@ -32,8 +32,6 @@ var current_values: PackedFloat32Array = [];
 @onready var planet: ShaderMaterial = $Planet.material
 
 func _ready() -> void:
-
-
 	surface_gradient = Gradient.new()
 	surface_gradient.offsets = PackedFloat32Array([0.157, 0.357, 0.622, 0.891])
 	surface_gradient.colors = PackedColorArray([Color.BLACK, Color(0.34, 0.34, 0.34), Color(0.69, 0.69, 0.69), Color.WHITE])
@@ -56,12 +54,9 @@ func _ready() -> void:
 
 	#%RockyPlanetUI/%NotifyPanel.position.y = -%RockyPlanetUI/%NotifyPanel.size.y
 	
-	if OS.has_feature('web'):
-		load_from_url()
-	else:
-		#generate_earth()
-		await get_tree().process_frame
-		update_inputs()
+	#generate_earth()
+	await get_tree().process_frame
+	update_inputs()
 
 func update_inputs() -> void:
 	var props := planet.get_property_list()
@@ -76,64 +71,6 @@ func update_inputs() -> void:
 		parameters
 	)
 
-func load_from_url() -> void:
-	var window = JavaScriptBridge.get_interface('window')
-	var data = window.getPlanetData()
-	print(data)
-	if data:
-		load_packed_value(data)
-	else:
-		print("no data")
-		generate_earth()
-		update_inputs()
-
-
-func copy_planet_link() -> void:
-	var data = save_packed_value().uri_encode()
-	var link = "https://fritzy.itch.io/sublight-planets?planet_data=%s" % data
-	DisplayServer.clipboard_set(link)
-	var window = JavaScriptBridge.get_interface('window')
-	window.navigator.clipboard.readText()
-	show_notification("Copied this planet link to clipboard for sharing!")
-
-func refresh_data() -> void:
-	var data = save_packed_value()
-	%DataInput.text = data
-
-func save_packed_value() -> String:
-	var saved_value: PackedFloat32Array = []
-	var values := get_shader_params()
-	saved_value.push_back(packed_version) # version
-	saved_value.push_back(packed_planet_type) # planet
-	saved_value.push_back(texture_seed) # planet
-	for field in packed_fields:
-		if field.ends_with('_color'):
-			saved_value.push_back(values[field].r)
-			saved_value.push_back(values[field].g)
-			saved_value.push_back(values[field].b)
-		else:
-			saved_value.push_back(values[field])
-	return Marshalls.raw_to_base64(saved_value.to_byte_array())
-
-func load_packed_value(data) -> void:
-	var bytearray := Marshalls.base64_to_raw(data)
-	var floats := Array(bytearray.to_float32_array())
-	var values = {}
-	var version = floats.pop_front()
-	var planet_type = floats.pop_front()
-	texture_seed = int(floats.pop_front())
-	var value
-	for field in packed_fields:
-		if field.ends_with('_color'):
-			value = Color(floats.pop_front(), floats.pop_front(), floats.pop_front())
-		else:
-			value = floats.pop_front()
-		values[field] = value
-		#planet.set_shader_parameter(field, value)
-	set_shader_values(values)
-	update_inputs()
-	regenerate()
-	
 func take_screenshot() -> void:
 	if %RockyPlanetUI/%VisibilityButton.button_pressed:
 		%RockyPlanetUI/%DisplayPanel.visible = false
@@ -143,7 +80,7 @@ func take_screenshot() -> void:
 	if OS.has_feature('web'):
 		var buf := image.save_png_to_buffer()
 		JavaScriptBridge.download_buffer(buf, 'sublight-screenshot.png', 'image/png')
-		show_notification('Downloading screenshot "sublight-screenshot.png"')
+		#show_notification('Downloading screenshot "sublight-screenshot.png"')
 	else:
 		var save_path = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
 		var dir = DirAccess.open(save_path)
@@ -167,33 +104,10 @@ func take_screenshot() -> void:
 		var img_file_name = "%s/%s" % [OS.get_system_dir(OS.SYSTEM_DIR_PICTURES), 'sublight-screenshot-%d.png' % id]
 		image.save_png(img_file_name)
 		%RockyPlanetUI/%NotifyPanel.visible = true
-		show_notification("Saved screenshot: %s" % img_file_name)
+		#show_notification("Saved screenshot: %s" % img_file_name)
 	await get_tree().create_timer(1.0).timeout
 	%RockyPlanetUI/%DisplayPanel.visible = true
 	%RockyPlanetUI/%NotifyPanel.visible = true
-
-func toggle_panel_visiblity(toggle: bool) -> void:
-	%RockyPlanetUI/%PresetPanel.visible = not toggle
-	%RockyPlanetUI/%ParamPanel.visible = not toggle
-	%RockyPlanetUI/%ColorPanel.visible = not toggle
-	# panel not sizing correctly after visiblity toggle
-	%RockyPlanetUI/%ColorPanel.set_size(%RockyPlanetUI/%ColorPanel.get_minimum_size())
-	%RockyPlanetUI/%ParamPanel.set_size(%RockyPlanetUI/%ParamPanel.get_minimum_size())
-	%RockyPlanetUI/%PresetPanel.set_size(%RockyPlanetUI/%PresetPanel.get_minimum_size())
-
-#func _set_shine(value) -> void:
-#	planet.set_shader_parameter('shine_offset', shine_slider.value)
-
-#func _set_ice(value) -> void:
-#	planet.set_shader_parameter('ice_coverage', ice_slider.value)
-
-func _input(event):
-	# Mouse in viewport coordinates.
-	if mouse_over and %Planet.button_pressed and (event is InputEventMouseMotion or event is InputEventMouseButton):
-		var pos = %Planet.get_local_mouse_position()
-		var width = %Planet.size.x
-		var height = %Planet.size.y
-		planet.set_shader_parameter('shine_offset', Vector2(pos.x / width, pos.y / height))
 
 func _set_sky_color(value) -> void:
 	planet.set_shader_parameter('ocean_color', value)
@@ -435,10 +349,3 @@ func regenerate_ice() -> void:
 	ice_normal.bump_strength = 0.5
 	await ice_normal.changed
 	planet.set_shader_parameter('ice_normal', ice_normal)
-
-func show_notification(text: String) -> void:
-	%RockyPlanetUI/%NotifyLabel.text = text
-	print(text)
-	var tween := create_tween()
-	tween.tween_property(%RockyPlanetUI/%NotifyPanel, 'position:y', 0.0, 0.5)
-	tween.tween_property(%RockyPlanetUI/%NotifyPanel, 'position:y', -%RockyPlanetUI/%NotifyPanel.size.y, 0.5).set_delay(3.0)

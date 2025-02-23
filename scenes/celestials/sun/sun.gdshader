@@ -31,13 +31,6 @@ vec2 rotate_uv(vec2 uv, float angle) {
 	uv += vec2(0.5);
 	return uv;
 }
-float exponential_smoothstep(float edge0, float edge1, float x, float exponent) {
-    // Clamp the input value
-    x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
-
-    // Apply the exponential dropoff
-    return pow(x, exponent) * (3.0 - 2.0 * pow(x, exponent));
-}
 
 float zoom_tunnel(vec2 uv) {
 	uv -= 0.5;
@@ -63,9 +56,9 @@ float smoothstep_min(float edge0, float edge1, float x, float min_val) {
 
 void fragment() {
 	float dist = distance(UV, vec2(0.5, 0.5));
+
 	//vec2 uv = calculate_sphere_uv(UV);
-	vec2 uv = vec2(UV);
-	uv -= vec2(0.5);
+	vec2 uv = vec2(UV) - 0.5;
 	uv *= 1.0 + zoom_tunnel(UV) * flame_warp;
 	uv += vec2(0.5);
 
@@ -82,18 +75,14 @@ void fragment() {
 	vec3 sun_sample = max(sun_color * 0.1, ((sun1 + sun2) + (sun3 + sun4)) * 0.8);
 
 	float alpha = step(dist, 0.5);
-	//alpha = step(0.4, alpha);
-	float dropoff = (dist - 0.4) / (0.5 - 0.4);
-	dropoff = dropoff * dropoff * 1.3;
-	//dropoff = smoothstep(0.0, 1.0, dropoff);
-	//float dropoff = smoothstep_min(0.4, 0.5, dist, 0.2);
-	float smooth_alpha = 1.0 - dropoff;
-	smooth_alpha -= sun1.r + sun2.r * 0.3;
-	smooth_alpha = clamp(0.0, 1.0, smooth_alpha);
-	//smooth_alpha *= (zoom1 + zoom2);
-	smooth_alpha *= step(0.3, dist);
+
+	float smooth_alpha = 1.0 - pow((dist - 0.4) / 0.1, 2.0) * 1.3;
+	smooth_alpha -=( sun1.r + sun2.r) * 0.6;
+	smooth_alpha = clamp(smooth_alpha, 0.0, 1.0);
+
+	// exponential dropoff
 	smooth_alpha *= smooth_alpha * step(dist, 0.5);
-	float area = smooth_alpha * step(smooth_alpha, 0.99) * alpha * (sample * sample2);
+
 	float flames = smooth_alpha * (sample) * 6.2;
 	flames *= (sample2);
 
@@ -102,5 +91,6 @@ void fragment() {
 	COLOR.rgb = vec3((sun_color2 + sun_color) * flame_brightness * flames + sun);
 	COLOR.rgb *= 0.7 + brightness * 0.3;
 	COLOR.a = clamp(sun.r + sun.g + sun.b + flames + smooth_alpha, 0.0, 1.0);
-
+	//COLOR.rgb = vec3(smooth_alpha);
+	//COLOR.rgb = vec3(sample2);
 }
