@@ -1,6 +1,6 @@
 // rockyplanet.gshader Copyright 2025 Nathanael C. Fritz
 // MIT License (see LICENSE file)
-// https://github.com/fritzy/
+// https://github.com/fritzy/sublight-planets
 
 // Shader to produce a rocky + ocean planet
 // rather than using a 3d model, uses calculated normals
@@ -67,9 +67,7 @@ mat3 create_transformation_matrix(vec3 facing) {
 // used for taking things like mountain normals and placing them
 // on "top" of the sphere normal of the globe, rotating it
 vec3 parent_normals(vec3 parent_facing, vec3 child_facing) {
-	// not sure why the bias is like this
-	// maybe someone can tell me
-	child_facing = normalize(child_facing - vec3(0.41));
+	child_facing = normalize(child_facing - vec3(0.5));
 	mat3 transformation_matrix = create_transformation_matrix(parent_facing);
 	vec3 global_facing = transformation_matrix * child_facing;
 	return normalize(global_facing);
@@ -100,7 +98,7 @@ vec3 get_phong_light(vec3 normal, vec3 light_direction, vec3 color, float specul
 vec2 calculate_sphere_uv(vec2 uv, vec2 ratio) {
 	// center the uv from -0.5 to 0.5
 	// for polar coordinates
-	vec2 sphere_uv = vec2(uv) - 0.5;
+	vec2 sphere_uv = uv - 0.5;
 	// scale by our radius
 	sphere_uv *= repro_rad;
 	// our radius ratio
@@ -169,20 +167,12 @@ void fragment() {
 	// cut off the land at different radiuses
 	float land_alpha = mix(1.0, 0.0, step(0.476, dist));
 	float cloud_alpha = mix(1.0, 0.0, step(0.49, dist));
+
+	// --- Land and Sea
 	// now our height is 0.0 to 2.0 representing the ground height
 	height += mountain;
 	// a float of 1.0 for ocean (anything below ocean depth) and 0.0 for land
 	float is_ocean = mix(1.0, 0.0, step(ocean_depth, height));
-	// determine if this is snow/ice based on
-	// land height, ocean_depth, distance from poles
-	// and the ice_coverage uniform
-	float is_frozen = mix(1.0, 0.0,
-		step(dist_y * max(
-			height,
-			is_ocean * (ocean_depth + height / 4.0) - ocean_depth * 0.25
-		) + ice_coverage,
-		0.9)
-	);
 	// calculate some beaches from sea level to slightly above
 	// with ground color and desert color
 	vec3 ground_sand_mix = mix(
@@ -211,14 +201,16 @@ void fragment() {
 	// parent our surface + mountain normals to the globe normal
 	vec3 globe_surface_mountain_norm = parent_normals(
 		globe_norm,
-		normalize(surface_norm + mountain_norm)
+		normalize(surface_norm + mountain_norm + 1.0)
 	);
 	// calculate our ground lighting with our global normal, surface normal, mountain normal
 	// and our combined ground, snow, sand coloring
 	// less shiny than the ocean
-	vec3 lit_ground_color = get_phong_light(globe_surface_mountain_norm, star_pos, ground_snow_mix, 20.0, 0.1);
+	vec3 lit_ground_color = get_phong_light(globe_surface_mountain_norm, star_pos, ground_snow_mix, 10.0, 0.3);
 	// apply our lit ground color if we're not an ocean pixel
 	color = mix(color, lit_ground_color, 1.0 - is_ocean);
+
+	// --- City Lights
 	// repurpose our ice cracks noise texture but offset and scale
 	// as the basis for our city lights
 	float city_lights = texture(ice_texture, off_pos * 8.234).r;
@@ -237,6 +229,8 @@ void fragment() {
 		vec3(0.6, 0.6, 0.2), // yellow lights
 		city_lights * float(enable_city_lights) * land_alpha // leave the color alone if no light here
 	);
+
+	// --- Polar Ice
 	// slap our ice normal onto the globe
 	vec3 globe_ice_norm = parent_normals(globe_norm, ice_norm);
 	// use our globe_ice_normal where there's ocean,
@@ -255,10 +249,22 @@ void fragment() {
 	// ice is kind of shiny
 	// combine the full global normal with our ice color to get the lit color
 	vec3 ice_diffuse = get_phong_light(
-		globe_surface_mountain_norm, star_pos, ice_color, 200, 0.25
+		globe_surface_mountain_norm, star_pos, ice_color, 20, 0.4
+	);
+	// determine if this is snow/ice based on
+	// land height, ocean_depth, distance from poles
+	// and the ice_coverage uniform
+	float is_frozen = mix(1.0, 0.0,
+		step(dist_y * max(
+			height,
+			is_ocean * (ocean_depth + height / 4.0) - ocean_depth * 0.25
+		) + ice_coverage,
+		0.9)
 	);
 	// apply our ice where things are frozen
 	color = mix(color, ice_diffuse, is_frozen);
+
+	// --- Clouds
 	// get the angle of the light (star/sun) and the surface to determine
 	// where to check for a cloud to decide where to place a shadow
 	// clamp our shadow length so that it doesn't get too crazy at the globe edges
@@ -279,6 +285,8 @@ void fragment() {
 	vec3 cloud_diffuse = get_phong_light(globe_norm, star_pos, cloud_color.rgb, 30.0, 0.55);
 	// apply the cloud color based on how thick they are here
 	color = mix(color, cloud_diffuse, min(cloud_thickness * 1.2, 1.0));
+
+	// --- Atmosphere
 	// get the atmosphere lighting at a different radius
 	// based on the ocean/sky color
 	vec3 atmos_diff = get_phong_light(get_globe_normal(UV, 0.9), star_pos, ocean_color.rgb, 1.0, 0.8);
@@ -298,6 +306,7 @@ void fragment() {
 		mix(atmosphere_opacity, 0.0, step(0.5, dist)),
 		step(0.48, dist)
 	);
+
 	// final color + alpha of the current UV pixel
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
 }

@@ -116,9 +116,9 @@ shader_parameter/cloud_texture = SubResource("NoiseTexture2D_cpo5p")
 shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_234o1")
 shader_parameter/ice_texture = SubResource("NoiseTexture2D_xqne2")
 shader_parameter/ice_normal = SubResource("NoiseTexture2D_tf0q4")
-shader_parameter/ocean_depth = 0.7
+shader_parameter/ocean_depth = 0.653
 shader_parameter/speed = 0.05
-shader_parameter/ice_coverage = 0.714
+shader_parameter/ice_coverage = 0.0
 shader_parameter/cloud_opacity = 0.559
 shader_parameter/cloud_density = 0.425
 shader_parameter/atmosphere_opacity = 0.936
@@ -127,8 +127,8 @@ shader_parameter/desert_color = Color(0.6328, 0.6218, 0.2917, 1)
 shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
 shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
-shader_parameter/axis = -0.183
-shader_parameter/orbit = 1.03141
+shader_parameter/axis = 0.0
+shader_parameter/orbit = 0.82541
 shader_parameter/enable_city_lights = true
 
 [node name="RockyPlanet" type="Node2D" node_paths=PackedStringArray("celestial_body")]
