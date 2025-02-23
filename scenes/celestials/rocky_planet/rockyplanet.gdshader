@@ -1,9 +1,11 @@
 // rockyplanet.gshader Copyright 2025 Nathanael C. Fritz
 // MIT License (see LICENSE file)
 // https://github.com/fritzy/
+
 // Shader to produce a rocky + ocean planet
 // rather than using a 3d model, uses calculated normals
 // phong lighting based on star position in axis/orbit
+
 shader_type canvas_item; // 2D
 // noise textures generated in rocky_planet.gd
 uniform sampler2D surface_texture: repeat_enable, filter_linear_mipmap;
@@ -21,7 +23,6 @@ uniform float speed: hint_range(0.0, 0.3) = 0.05;
 uniform float ice_coverage: hint_range(0.0, 1.0) = 0.36;
 uniform float cloud_opacity: hint_range(0.0, 1.0) = 1.0;
 uniform float cloud_density: hint_range(0.0, 1.0) = 0.5;
-
 uniform float atmosphere_opacity: hint_range(0.0, 1.0) = 0.7;
 uniform float mtn_snow_height: hint_range(0.1, 1.0, 0.01) = 0.5;
 uniform vec4 desert_color: source_color;
@@ -40,9 +41,10 @@ const float polar_pinch = 0.95;
 // the main flow of code starts in the fragment() {} function below
 
 // get the normal as if the pixel (uv) were on a sphere
-// we could just use a sphere normal texture
+// we could just use a sphere normal texture, but this is precise
 vec3 get_globe_normal(vec2 uv, float radius) {
 	uv = uv * radius * 2.0 - radius;
+	// see SBOM file
 	float z = sqrt(1.0 - (pow(uv.x, 2.0) + pow(uv.y, 2.0) ));
 	return  vec3(uv.x, uv.y, z);
 }
@@ -51,15 +53,15 @@ vec3 get_globe_normal(vec2 uv, float radius) {
 // in this case, we're using it to place other nomrals on top of the globe normal
 // https://en.wikipedia.org/wiki/Rotation_matrix
 mat3 create_transformation_matrix(vec3 facing) {
-    vec3 up = normalize(vec3(0.0, 1.0, 0.0));
-    vec3 right = normalize(cross(up, facing));
+	vec3 up = normalize(vec3(0.0, 1.0, 0.0));
+	vec3 right = normalize(cross(up, facing));
 	// -facing for opengl style vs directx
-    vec3 new_up = cross(-facing, right);
-    return mat3(
-        vec3(right),
-        vec3(new_up),
-        vec3(facing)
-    );
+	vec3 new_up = cross(-facing, right);
+	return mat3(
+		vec3(right),
+		vec3(new_up),
+		vec3(facing)
+	);
 }
 
 // used for taking things like mountain normals and placing them
@@ -68,15 +70,15 @@ vec3 parent_normals(vec3 parent_facing, vec3 child_facing) {
 	// not sure why the bias is like this
 	// maybe someone can tell me
 	child_facing = normalize(child_facing - vec3(0.41));
-    mat3 transformation_matrix = create_transformation_matrix(parent_facing);
-    vec3 global_facing = transformation_matrix * child_facing;
-    return normalize(global_facing);
+	mat3 transformation_matrix = create_transformation_matrix(parent_facing);
+	vec3 global_facing = transformation_matrix * child_facing;
+	return normalize(global_facing);
 }
 
 // clamp the length of a vector by scaling it down
 vec2 clamp_vector_length(vec2 v, float maxDistance) {
-    float len = length(v);
-    return v / len * min(len, maxDistance);
+	float len = length(v);
+	return v / len * min(len, maxDistance);
 }
 
 // calculate how a light affects the color of a pixel
@@ -87,8 +89,8 @@ vec3 get_phong_light(vec3 normal, vec3 light_direction, vec3 color, float specul
 	// basically brighter the closer they are to facing each other
 	// https://en.wikipedia.org/wiki/Dot_product
 	float diffuse = max(0.0, dot(normal, light_direction));
-	// specular shine is just like diffuse except scaled by an exponent
-	float specular = pow(max(0.0, dot(normal, light_direction)), specular_power);
+	// specular shine is just the diffuse scaled by an exponent
+	float specular = pow(diffuse, specular_power);
 	// when we combine dot product diffuse with a specular shine it's called phong lighting
 	// https://en.wikipedia.org/wiki/Phong_reflection_model
 	return color * (diffuse + specular * specular_intensity);
@@ -98,22 +100,21 @@ vec3 get_phong_light(vec3 normal, vec3 light_direction, vec3 color, float specul
 vec2 calculate_sphere_uv(vec2 uv, vec2 ratio) {
 	// center the uv from -0.5 to 0.5
 	// for polar coordinates
-    vec2 sphere_uv = vec2(uv) - 0.5;
+	vec2 sphere_uv = vec2(uv) - 0.5;
 	// scale by our radius
 	sphere_uv *= repro_rad;
-
 	// our radius ratio
 	float radius_ratio = repro_rad / PI;
 	// warp our xy
 	// zoom our x based on our y, pinched at the extremes
-    sphere_uv.x = asin(sphere_uv.x / sqrt(1.0 - sphere_uv.y * sphere_uv.y * polar_pinch)) * radius_ratio;
-    // pretty simple stretch of the y coordinate based on asin
+	sphere_uv.x = asin(sphere_uv.x / sqrt(1.0 - sphere_uv.y * sphere_uv.y * polar_pinch)) * radius_ratio;
+	// pretty simple stretch of the y coordinate based on asin
 	sphere_uv.y = asin(sphere_uv.y) * radius_ratio;
-    // Scale the UV coordinates by the texture ratio
-    sphere_uv *= 0.5 / ratio;
+	// Scale the UV coordinates by the texture ratio
+	sphere_uv *= 0.5 / ratio;
 	// non-polar coordinates
 	sphere_uv += 0.5;
-    return sphere_uv;
+	return sphere_uv;
 }
 
 // calculate how thick the clouds are at a given uv
