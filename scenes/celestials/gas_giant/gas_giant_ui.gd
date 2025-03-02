@@ -22,6 +22,15 @@ func _ready() -> void:
 	orbit_slider.value_changed.connect(func(value: float): orbit = value)
 	resized.connect(_update_planet)
 	%LockCamera.toggled.connect(func(value: bool): lock_axis = value)
+	button_map = {
+		%JupiterButton: &"set_jupiter_gradient",
+		%NeptuneButton: &"set_neptune_gradient",
+		%SaturnButton: &"set_saturn_gradient",
+	}
+	parameter_map = {
+		&"intensity": %TurbulenceSlider,
+	}
+	super()
 
 func _update_planet() -> void:
 	#var sun_pos := Vector3(cos(axis) * sin(orbit), sin(axis) * sin(orbit), cos(orbit))

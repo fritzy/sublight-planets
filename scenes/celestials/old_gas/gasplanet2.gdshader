@@ -6,7 +6,7 @@ uniform sampler2D gas3_texture: repeat_enable;
 uniform sampler2D gas4_texture: repeat_enable;
 uniform sampler2D gas_gradient: repeat_enable;
 const float repro_rad = 1.57;
-uniform float intensity: hint_range(0.001, 0.5) = 0.012;
+uniform float intensity: hint_range(0.001, 1.0) = 0.5;
 uniform float planet_radius: hint_range(0.33, 1.0) = 0.77;
 uniform vec2 sun_pos = vec2(0.5, 0.5);
 
@@ -61,7 +61,7 @@ void fragment() {
 	float gas_sample3 = texture(gas3_texture, vec2(sphere_uv.x + TIME * 0.005, sphere_uv.y + TIME * 0.05)).r;
 	float gas_sample4 = texture(gas4_texture, vec2(sphere_uv.x + TIME * -0.005, sphere_uv.y) - TIME * 0.05).r;
 	float sample_area = (gas_sample3 + gas_sample4);
-	float sample = (gas_sample1 * 1.0 + gas_sample2 * 1.0 - 1.0)  / 2.0 * intensity * (sample_area + 0.2);
+	float sample = (gas_sample1 * 1.0 + gas_sample2 * 1.0 - 1.0)  / 2.0 * intensity * 0.2 * (sample_area + 0.2);
 	float dist = distance(UV, vec2(0.5, 0.5));
 	float samp_y = (sphere_uv.y + 1.0) / 2.0;
 	vec3 band_color = texture(gas_gradient, vec2(samp_y + sample, 0.0)).rgb;

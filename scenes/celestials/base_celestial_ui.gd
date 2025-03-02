@@ -6,7 +6,7 @@ signal update_axis(float)
 signal button_pressed(StringName)
 
 var parameter_map: Dictionary[StringName, Variant] = {}
-var button_map: Dictionary[Button, Variant] = {}
+var button_map: Dictionary[BaseButton, Variant] = {}
 
 func _ready() -> void:
 	_connect_parameter_inputs()
@@ -50,7 +50,7 @@ func _connect_parameter_inputs() -> void:
 			update_shader_parameter.emit(parameter, control.toggled)
 
 func _connect_buttons() -> void:
-	for button: Button in button_map:
+	for button: BaseButton in button_map:
 		var parameter = button_map[button]
 		if parameter is StringName:
 			button.pressed.connect(
