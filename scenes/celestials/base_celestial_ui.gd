@@ -9,11 +9,11 @@ var parameter_map: Dictionary[StringName, Variant] = {}
 var button_map: Dictionary[BaseButton, Variant] = {}
 
 func _ready() -> void:
+	await get_tree().process_frame
 	_connect_parameter_inputs()
 	_connect_buttons()
 
 func handle_updated_shader_parameters(parameters: Dictionary[StringName, Variant]) -> void:
-	print("shader parameters mass update")
 	for pname in parameters:
 		if not parameter_map.has(pname):
 			continue

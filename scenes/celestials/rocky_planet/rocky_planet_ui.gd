@@ -28,6 +28,7 @@ func _ready() -> void:
 		%EarthButton: &"generate_earth",
 		%MarsButton: &"generate_mars",
 		%RandomButton: &"generate_random",
+		%ResetButton: &"regenerate",
 		%RandParamsButton: &"randomize_params",
 		%RandColorButton: &"randomize_colors",
 	}

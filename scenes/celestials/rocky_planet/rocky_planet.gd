@@ -145,9 +145,8 @@ func randomize_params() -> void:
 	regenerate_clouds()
 	update_inputs()
 
-func regenerate(new_seed: bool = false) -> void:
-	if new_seed:
-		texture_seed = randi()
+func regenerate() -> void:
+	texture_seed = randi()
 	regenerate_ground()
 	regenerate_desert()
 	regenerate_clouds()
@@ -192,7 +191,7 @@ func generate_earth() -> void:
 	}
 	set_shader_values(values)
 	update_inputs()
-	regenerate(true)
+	regenerate()
 
 func generate_mars() -> void:
 	var values := {
@@ -213,12 +212,12 @@ func generate_mars() -> void:
 	}
 	set_shader_values(values)
 	update_inputs()
-	regenerate(true)
+	regenerate()
 
 func generate_random() -> void:
 	randomize_params()
 	randomize_colors()
-	regenerate(true)
+	regenerate()
 
 func set_shader_values(values: Dictionary) -> void:
 	for param in values:
