@@ -71,44 +71,6 @@ func update_inputs() -> void:
 		parameters
 	)
 
-func take_screenshot() -> void:
-	if %RockyPlanetUI/%VisibilityButton.button_pressed:
-		%RockyPlanetUI/%DisplayPanel.visible = false
-		%RockyPlanetUI/%NotifyPanel.visible = false
-		await get_tree().create_timer(0.5).timeout
-	var image := get_viewport().get_texture().get_image()
-	if OS.has_feature('web'):
-		var buf := image.save_png_to_buffer()
-		JavaScriptBridge.download_buffer(buf, 'sublight-screenshot.png', 'image/png')
-		#show_notification('Downloading screenshot "sublight-screenshot.png"')
-	else:
-		var save_path = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
-		var dir = DirAccess.open(save_path)
-		var files = []
-		if dir:
-			dir.list_dir_begin()
-			var file_name = dir.get_next()
-			while file_name != "":
-				if not dir.current_is_dir():
-					#print("Found file: " + file_name)
-					if file_name.begins_with('sublight-screenshot-'):
-						files.push_back(file_name)
-				file_name = dir.get_next()
-		var id = 1;
-		if files.size() > 0:
-			files.sort()
-			var file_name = files.pop_back()
-			var parts = file_name.split('-');
-			# it's okay to have trailing characters
-			id = parts[2].to_int() + 1
-		var img_file_name = "%s/%s" % [OS.get_system_dir(OS.SYSTEM_DIR_PICTURES), 'sublight-screenshot-%d.png' % id]
-		image.save_png(img_file_name)
-		%RockyPlanetUI/%NotifyPanel.visible = true
-		#show_notification("Saved screenshot: %s" % img_file_name)
-	await get_tree().create_timer(1.0).timeout
-	%RockyPlanetUI/%DisplayPanel.visible = true
-	%RockyPlanetUI/%NotifyPanel.visible = true
-
 func _set_sky_color(value) -> void:
 	planet.set_shader_parameter('ocean_color', value)
 

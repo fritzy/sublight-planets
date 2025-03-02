@@ -12,9 +12,12 @@ func _ready() -> void:
 	%RightButton.pressed.connect(_handle_right_planet)
 	%LeftButton.pressed.connect(_handle_left_planet)
 	%VisibilityButton.pressed.connect(_handle_visibility_button)
+	%CameraButton.pressed.connect(_take_screenshot)
 
 	_load_planets()
 	_show_planet()
+	%NotificationPanel.position.y = -%NotificationPanel.size.y
+	_show_notification("Welcome to Sublight Planets")
 
 func _handle_visibility_button():
 	print(%BaseUI)
@@ -119,3 +122,46 @@ func _handle_update_shader_parameter(parameter: StringName, value: Variant) -> v
 func _handle_button_pressed(method: StringName) -> void:
 	print('Button %s' % method)
 	current_planet.call(method)
+
+func _take_screenshot() -> void:
+	if %VisibilityButton.button_pressed:
+		%DisplayPanel.visible = false
+		%NotificationPanel.visible = false
+	await get_tree().create_timer(0.5).timeout
+	var image := get_viewport().get_texture().get_image()
+	if OS.has_feature('web'):
+		var buf := image.save_png_to_buffer()
+		JavaScriptBridge.download_buffer(buf, 'sublight-screenshot.png', 'image/png')
+	else:
+		var save_path = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)
+		var dir = DirAccess.open(save_path)
+		var files = []
+		if dir:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if not dir.current_is_dir():
+					#print("Found file: " + file_name)
+					if file_name.begins_with('sublight-screenshot-'):
+						files.push_back(file_name)
+				file_name = dir.get_next()
+		var id = 1;
+		if files.size() > 0:
+			files.sort()
+			var file_name = files.pop_back()
+			var parts = file_name.split('-');
+			# it's okay to have trailing characters
+			id = parts[2].to_int() + 1
+		var img_file_name = "%s/%s" % [OS.get_system_dir(OS.SYSTEM_DIR_PICTURES), 'sublight-screenshot-%04d.png' % id]
+		image.save_png(img_file_name)
+		%NotificationPanel.visible = true
+		_show_notification("Saved screenshot: %s" % img_file_name)
+	await get_tree().create_timer(1.0).timeout
+	%DisplayPanel.visible = true
+	%NotificationPanel.visible = true
+
+func _show_notification(text: String) -> void:
+	%NotificationLabel.text = text
+	var tween := create_tween()
+	tween.tween_property(%NotificationPanel, "position:y", 0.0, 0.2)
+	tween.tween_property(%NotificationPanel, "position:y", -%NotificationPanel.size.y, 0.2).set_delay(5.0)
