@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://bktlyi66oe7r6"]
+
+[ext_resource type="Shader" uid="uid://dg4pl7wrk8nto" path="res://scenes/celestials/moon/moon.gdshader" id="1_h4071"]
+[ext_resource type="Script" uid="uid://clg7te2js0qja" path="res://scenes/celestials/moon/moon.gd" id="1_ttwx5"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ttwx5"]
+noise_type = 2
+seed = 16626980
+frequency = 0.03
+fractal_lacunarity = 2.2
+fractal_gain = 0.7
+cellular_return_type = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7s5jg"]
+width = 1024
+invert = true
+seamless = true
+as_normal_map = true
+bump_strength = 6.3
+normalize = false
+noise = SubResource("FastNoiseLite_ttwx5")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ybfa5"]
+width = 1024
+invert = true
+seamless = true
+normalize = false
+noise = SubResource("FastNoiseLite_ttwx5")
+
+[sub_resource type="Gradient" id="Gradient_ttwx5"]
+offsets = PackedFloat32Array(0.281106, 0.442396, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.532051, 0.532051, 0.532051, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7s5jg"]
+gradient = SubResource("Gradient_ttwx5")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7s5jg"]
+noise_type = 4
+frequency = 0.0465
+fractal_weighted_strength = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nhfo4"]
+width = 1024
+seamless = true
+noise = SubResource("FastNoiseLite_7s5jg")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ttwx5"]
+shader = ExtResource("1_h4071")
+shader_parameter/crater1_texture = SubResource("NoiseTexture2D_ybfa5")
+shader_parameter/crater1_normal = SubResource("NoiseTexture2D_7s5jg")
+shader_parameter/surface_intensity = SubResource("NoiseTexture2D_nhfo4")
+shader_parameter/light_gradient = SubResource("GradientTexture1D_7s5jg")
+shader_parameter/axis = 0.0
+shader_parameter/orbit = 1.185
+
+[node name="Moon" type="Node2D" node_paths=PackedStringArray("celestial_body")]
+script = ExtResource("1_ttwx5")
+celestial_name = "Moon"
+celestial_body = NodePath("Planet")
+
+[node name="Planet" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_ttwx5")
+custom_minimum_size = Vector2(650, 650)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -325.0
+offset_top = -325.0
+offset_right = 325.0
+offset_bottom = 325.0
+grow_horizontal = 2
+grow_vertical = 2

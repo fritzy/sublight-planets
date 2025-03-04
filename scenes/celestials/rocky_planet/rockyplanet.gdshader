@@ -7,6 +7,7 @@
 // phong lighting based on star position in axis/orbit
 
 shader_type canvas_item; // 2D
+render_mode unshaded; // the only lights are ours
 // noise textures generated in rocky_planet.gd
 uniform sampler2D surface_texture: repeat_enable, filter_linear_mipmap;
 uniform sampler2D surface_normal: repeat_enable, filter_linear_mipmap;

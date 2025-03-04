@@ -1,0 +1,97 @@
+[gd_scene load_steps=3 format=3 uid="uid://5bjd4r16xccy"]
+
+[ext_resource type="PackedScene" uid="uid://bxlq620fm2nvu" path="res://scenes/planet_toy/stargizmo.tscn" id="1_aptio"]
+[ext_resource type="Script" uid="uid://2vngtjcso7qg" path="res://scenes/celestials/moon/moon_ui.gd" id="1_tuxi6"]
+
+[node name="MoonUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tuxi6")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -233.0
+offset_top = -170.0
+offset_bottom = 170.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="GizmoLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Local Star Position"
+horizontal_alignment = 1
+
+[node name="SunGizmo" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_aptio")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+columns = 2
+
+[node name="AxisLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Axis"
+horizontal_alignment = 1
+
+[node name="Axis" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -1.571
+max_value = 1.571
+step = 0.01
+value = -0.001
+
+[node name="OrbitLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Orbit"
+horizontal_alignment = 1
+
+[node name="Orbit" type="HSlider" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -3.142
+max_value = 3.142
+step = 0.01
+value = -0.002
+
+[node name="LockLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Tilt"
+horizontal_alignment = 1
+
+[node name="LockCamera" type="CheckButton" parent="PanelContainer/MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2

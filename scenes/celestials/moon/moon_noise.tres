@@ -1,0 +1,17 @@
+[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://bjxnuxkaynldf"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ttwx5"]
+noise_type = 2
+seed = 791435960
+frequency = 0.03
+fractal_lacunarity = 2.2
+fractal_gain = 0.7
+cellular_return_type = 4
+
+[resource]
+width = 1024
+invert = true
+seamless = true
+as_normal_map = true
+normalize = false
+noise = SubResource("FastNoiseLite_ttwx5")

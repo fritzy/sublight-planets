@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dkw7xp0d8w2us"]
+[gd_scene load_steps=17 format=3 uid="uid://dkw7xp0d8w2us"]
 
 [ext_resource type="PackedScene" uid="uid://de6r61odwfsr6" path="res://scenes/celestials/starfield/nebula.tscn" id="1_520vc"]
 [ext_resource type="Script" uid="uid://bkwyg1gky3eb4" path="res://scenes/planet_toy/planet_toy.gd" id="1_am71v"]
@@ -8,7 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://ddfh3ay7ud3fc" path="res://assets/right-white-icon.svg" id="4_am71v"]
 [ext_resource type="PackedScene" uid="uid://c53i6ba71k0hk" path="res://scenes/celestials/sun/sun.tscn" id="4_o2hnj"]
 [ext_resource type="PackedScene" uid="uid://dbjpjwjv0o42" path="res://scenes/celestials/rocky_planet/rocky_planet_ui.tscn" id="5_baf7r"]
+[ext_resource type="PackedScene" uid="uid://bktlyi66oe7r6" path="res://scenes/celestials/moon/moon.tscn" id="5_wbomp"]
 [ext_resource type="PackedScene" uid="uid://0gyn3hg8hjmn" path="res://scenes/celestials/gas_giant/gas_giant_ui.tscn" id="7_evwkc"]
+[ext_resource type="PackedScene" uid="uid://5bjd4r16xccy" path="res://scenes/celestials/moon/moon_ui.tscn" id="8_awv70"]
 [ext_resource type="Texture2D" uid="uid://dpjphqaiqxewx" path="res://assets/icon_eye_opened.svg" id="8_haptq"]
 [ext_resource type="Texture2D" uid="uid://dvd0e741j6d3q" path="res://assets/icon_eye_closed.svg" id="9_wbomp"]
 [ext_resource type="Texture2D" uid="uid://yfjg2ag3smdb" path="res://assets/icon_camera.svg" id="10_awv70"]
@@ -23,8 +25,8 @@ bg_color = Color(0.103744, 0.103744, 0.103743, 1)
 
 [node name="PlanetToy" type="Node2D"]
 script = ExtResource("1_am71v")
-planet_carousel = Array[PackedScene]([ExtResource("2_3qujd"), ExtResource("2_rxtas"), ExtResource("4_o2hnj")])
-planet_uis = Array[PackedScene]([ExtResource("5_baf7r"), ExtResource("7_evwkc"), null])
+planet_carousel = Array[PackedScene]([ExtResource("2_3qujd"), ExtResource("2_rxtas"), ExtResource("4_o2hnj"), ExtResource("5_wbomp")])
+planet_uis = Array[PackedScene]([ExtResource("5_baf7r"), ExtResource("7_evwkc"), null, ExtResource("8_awv70")])
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
