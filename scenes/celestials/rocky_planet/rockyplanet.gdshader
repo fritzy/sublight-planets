@@ -132,6 +132,11 @@ float calculate_cloud_density(vec2 uv, float cloud_alpha, vec2 offset1, vec2 off
 	return cloud_overlap * cloud_alpha * cloud_opacity;
 }
 
+float fresnel(float amount, vec3 normal, vec3 view)
+{
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0 )), amount);
+}
+
 void fragment() {
 	// Warp the UV to make it appear on a sphere
 	// use the ratio of our textures
@@ -290,13 +295,42 @@ void fragment() {
 	// --- Atmosphere
 	// get the atmosphere lighting at a different radius
 	// based on the ocean/sky color
-	vec3 atmos_diff = get_phong_light(get_globe_normal(UV, 0.9), star_pos, ocean_color.rgb, 1.0, 0.8);
+	vec3 atmos_normal = get_globe_normal(UV, 1.0);
+	vec3 sky_color = mix(
+		ocean_color.rgb,
+		// orange sunset
+		vec3(.8, 0.18, 0.0),
+		// at the edge of the star fresnel
+		min(1.0, fresnel(2.0, atmos_normal, star_pos)
+		* fresnel(0.15, vec3(0.0, 0.0, 1.0), star_pos)
+	));
+	// front phong and back fresnel lighting
+	vec3 atmos_diff = max(
+		// standard phong lighting
+		get_phong_light(atmos_normal, star_pos, sky_color, 1.0, 0.8),
+		// back lighting effect
+		// fresnel opposite of light
+		fresnel(3.0, atmos_normal, -star_pos)
+			// only applying when the star is close to the back of the planet
+			* pow(dot(vec3(0.0, 0.0, -1.0), star_pos), 3.0)
+			// atmosphere bounce light from the sky color
+			* mix(ocean_color.rgb * 0.8, vec3(1.0), 0.12)
+			* atmosphere_opacity
+	);
 	// exponentially less in the middle than the edges
 	// apply how thick we want the atmosphere to show
-	atmos_diff *= pow(dist * 2.0, 6.0) * atmosphere_opacity;
-	// use a "screen blend" to add the atmosphere to the color so far
-	// https://godotshaders.com/snippet/blending-modes/
-	color = 1.0 - (1.0 - color) * (1.0 - atmos_diff);
+	// atmos_diff *= pow(dist * 2.0, 6.0) * atmosphere_opacity;
+	atmos_diff *= max(fresnel(0.7, atmos_normal, star_pos), 0.0);
+	color = mix(
+		// full opacity for planet
+		// use a "screen blend" to add the atmosphere to the color so far
+		// https://godotshaders.com/snippet/blending-modes/
+		1.0 - (1.0 - color) * (1.0 - atmos_diff * atmosphere_opacity),
+		// atmosphere opacity at the atmosphere layer
+		// full alpha beyond
+		atmos_diff * 1.0 * atmosphere_opacity,
+		step(0.477, dist)
+	);
 	// apply a lesser alpha to the atmosphere
 	// in case there are objects or stars behind this layer
 	float atmos_alpha = mix(
@@ -307,7 +341,6 @@ void fragment() {
 		mix(atmosphere_opacity, 0.0, step(0.5, dist)),
 		step(0.48, dist)
 	);
-
 	// final color + alpha of the current UV pixel
 	COLOR = vec4(color.r, color.g, color.b, atmos_alpha);
 }

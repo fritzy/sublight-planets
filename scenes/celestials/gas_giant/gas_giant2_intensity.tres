@@ -10,6 +10,6 @@ domain_warp_fractal_lacunarity = 10.0
 domain_warp_fractal_gain = 0.01
 
 [resource]
+noise = SubResource("FastNoiseLite_js7lx")
 seamless = true
 seamless_blend_skirt = 0.333
-noise = SubResource("FastNoiseLite_js7lx")

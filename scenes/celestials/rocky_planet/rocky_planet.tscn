@@ -9,8 +9,8 @@ frequency = 0.0175
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cpo5p"]
 width = 1024
-seamless = true
 noise = SubResource("FastNoiseLite_pt2n0")
+seamless = true
 
 [sub_resource type="Gradient" id="Gradient_f3vsn"]
 offsets = PackedFloat32Array(0.45, 0.719)
@@ -23,9 +23,9 @@ domain_warp_enabled = true
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_234o1"]
 width = 1024
-seamless = true
-color_ramp = SubResource("Gradient_f3vsn")
 noise = SubResource("FastNoiseLite_y7qev")
+color_ramp = SubResource("Gradient_f3vsn")
+seamless = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xdmfv"]
 seed = -174228524
@@ -33,8 +33,8 @@ frequency = 0.0087
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7arid"]
 width = 1024
-seamless = true
 noise = SubResource("FastNoiseLite_xdmfv")
+seamless = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_qs0cu"]
 noise_type = 2
@@ -47,16 +47,16 @@ cellular_return_type = 6
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tf0q4"]
 width = 1024
-invert = true
+noise = SubResource("FastNoiseLite_qs0cu")
 seamless = true
+invert = true
 as_normal_map = true
 bump_strength = 0.5
-noise = SubResource("FastNoiseLite_qs0cu")
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xqne2"]
 width = 1024
-seamless = true
 noise = SubResource("FastNoiseLite_qs0cu")
+seamless = true
 
 [sub_resource type="Gradient" id="Gradient_gc3go"]
 offsets = PackedFloat32Array(0.447, 1)
@@ -71,17 +71,17 @@ fractal_weighted_strength = 0.5
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k8vck"]
 width = 1024
+noise = SubResource("FastNoiseLite_ecbt1")
+color_ramp = SubResource("Gradient_gc3go")
 seamless = true
 as_normal_map = true
 bump_strength = 20.0
-color_ramp = SubResource("Gradient_gc3go")
-noise = SubResource("FastNoiseLite_ecbt1")
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_c4fhx"]
 width = 1024
-seamless = true
-color_ramp = SubResource("Gradient_gc3go")
 noise = SubResource("FastNoiseLite_ecbt1")
+color_ramp = SubResource("Gradient_gc3go")
+seamless = true
 
 [sub_resource type="Gradient" id="Gradient_3ncfq"]
 offsets = PackedFloat32Array(0.157, 0.357, 0.622, 0.891)
@@ -93,17 +93,17 @@ frequency = 0.0054
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6dtud"]
 width = 1024
+noise = SubResource("FastNoiseLite_v34om")
+color_ramp = SubResource("Gradient_3ncfq")
 seamless = true
 as_normal_map = true
 bump_strength = 40.0
-color_ramp = SubResource("Gradient_3ncfq")
-noise = SubResource("FastNoiseLite_v34om")
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4nbul"]
 width = 1024
-seamless = true
-color_ramp = SubResource("Gradient_3ncfq")
 noise = SubResource("FastNoiseLite_v34om")
+color_ramp = SubResource("Gradient_3ncfq")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0fwbt"]
 shader = ExtResource("1_qey08")
@@ -118,17 +118,17 @@ shader_parameter/ice_texture = SubResource("NoiseTexture2D_xqne2")
 shader_parameter/ice_normal = SubResource("NoiseTexture2D_tf0q4")
 shader_parameter/ocean_depth = 0.653
 shader_parameter/speed = 0.05
-shader_parameter/ice_coverage = 0.0
-shader_parameter/cloud_opacity = 0.559
-shader_parameter/cloud_density = 0.425
-shader_parameter/atmosphere_opacity = 0.936
-shader_parameter/mtn_snow_height = 0.5
+shader_parameter/ice_coverage = 0.6750000320625
+shader_parameter/cloud_opacity = 0.6750000320625
+shader_parameter/cloud_density = 0.526000024985
+shader_parameter/atmosphere_opacity = 1.0
+shader_parameter/mtn_snow_height = 0.59999999031412
 shader_parameter/desert_color = Color(0.6328, 0.6218, 0.2917, 1)
 shader_parameter/ground_color = Color(0.2131, 0.4805, 0.1276, 1)
 shader_parameter/ocean_color = Color(0, 0.2277, 0.5703, 1)
 shader_parameter/cloud_color = Color(1, 1, 1, 1)
-shader_parameter/axis = 0.0
-shader_parameter/orbit = 0.82541
+shader_parameter/axis = -0.27299991831784
+shader_parameter/orbit = 2.9154101692993
 shader_parameter/enable_city_lights = true
 
 [node name="RockyPlanet" type="Node2D" node_paths=PackedStringArray("celestial_body")]
